@@ -1,0 +1,25 @@
+{
+  "name": "@grottonetworking/bbs-signatures",
+  "version": "0.1.0",
+  "description": "\"Implementation of the BBS+\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[DJavaScript implementation of the BBS+ signature suite",
+  "type": "module",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Dr. Greg M. Bernstein",
+  "license": "BSD-3-Clause",
+  "engines": {
+    "node": ">=16"
+  },
+  "browser": {
+    "crypto": false,
+    "./lib/randomBytes.js": "./lib/randomBytes-browser.js"
+  },
+  "dependencies": {
+    "@noble/bls12-381": "^1.4.0"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0"
+  }
+}
