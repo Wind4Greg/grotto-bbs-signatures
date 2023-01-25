@@ -14,7 +14,7 @@ const h2s002 = JSON.parse(
   )
 );
 
-describe('hash to scalar', function() {
+describe('Hash to Scalar', function() {
     it(h2s001.caseName, async function(){
       let msg_octets = hexToBytes(h2s001.message);
       let dst = hexToBytes(h2s001.dst);

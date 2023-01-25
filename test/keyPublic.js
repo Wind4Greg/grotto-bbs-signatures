@@ -8,7 +8,7 @@ const keyPairFixture = JSON.parse(
   )
 );
 
-describe('public from private', function() {
+describe('Public from private', function() {
     let keyPairTest = keyPairFixture.keyPair;
     // console.log(keyPairTest);
     const privateBytes = hexToBytes(keyPairTest.secretKey);

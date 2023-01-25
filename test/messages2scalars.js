@@ -8,7 +8,7 @@ const msgs2scalarsVector = JSON.parse(
   )
 );
 
-describe('messages to scalars', function() {
+describe('Messages to Scalars', function() {
   let msgs_in_octets;
   let test_scalars;
   let result_scalars;

@@ -8,7 +8,7 @@ const generatorVector = JSON.parse(
   )
 );
 
-describe('generators', async function () {
+describe('Generators', async function () {
   const L = generatorVector.MsgGenerators.length;
   let gens;
   before(async function () {
