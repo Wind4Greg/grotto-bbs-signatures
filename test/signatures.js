@@ -35,7 +35,6 @@ describe('Signatures', function () {
       it("signature:" + testName, async function () {
         let messagesOctets = vector.messages.map(msg => hexToBytes(msg));
         let msg_scalars = await messages_to_scalars(messagesOctets);
-        let gens = await prepareGenerators(vector.messages.length); // Generate enough for all messages
         let headerBytes = hexToBytes(vector.header);
         let secretScalar = BigInt("0x" + vector.signerKeyPair.secretKey);
         let publicBytes = hexToBytes(vector.signerKeyPair.publicKey)
