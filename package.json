@@ -1,7 +1,7 @@
 {
   "name": "@grottonetworking/bbs-signatures",
   "version": "0.1.0",
-  "description": "\"Implementation of the BBS+\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[DJavaScript implementation of the BBS+ signature suite",
+  "description": "JavaScript implementation of the BBS+ signature suite for node or browser",
   "type": "module",
   "scripts": {
     "test": "mocha"
