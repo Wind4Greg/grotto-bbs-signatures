@@ -22,5 +22,8 @@
     "chai": "^4.3.7",
     "mocha": "^10.2.0"
   },
-  "exports": "./lib/BBS.js"
+  "exports": "./lib/BBS.js",
+  "files": [
+    "lib/**/*.js"
+  ]
 }
