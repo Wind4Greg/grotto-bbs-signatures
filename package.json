@@ -15,9 +15,6 @@
     "crypto": false,
     "./lib/randomBytes.js": "./lib/randomBytes-browser.js"
   },
-  "dependencies": {
-    "@noble/bls12-381": "^1.4.0"
-  },
   "devDependencies": {
     "chai": "^4.3.7",
     "mocha": "^10.2.0"
@@ -25,5 +22,8 @@
   "exports": "./lib/BBS.js",
   "files": [
     "lib/**/*.js"
-  ]
+  ],
+  "dependencies": {
+    "@noble/curves": "^0.6.2"
+  }
 }
