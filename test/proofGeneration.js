@@ -1,7 +1,8 @@
 /* 
-  Checks the generation of proofs and their subsequent verification.
+  Checks the generation of proofs and their subsequent algorithmic verification.
   This checks various different subsets of disclosed indices. Since during development
   we had some funky issues that arose with edge cases.
+  Does NOT check generated proofs against test vectors. See proofGenSeeded.js for that.
 */
 import { assert } from 'chai';
 import { bytesToHex, hexToBytes, proofGen, proofVerify, prepareGenerators, messages_to_scalars } from '../lib/BBS.js';
@@ -44,7 +45,7 @@ const disclosureTests = [
   [0, 1, 8, 9]
 ];
 
-describe('Proof Generation', function () {
+describe('Proof Generation/Verification Random Scalars', function () {
   let gens, msg_scalars, headerBytes, publicBytes, signature;
   before(async function () {
     gens = await prepareGenerators(L); // precompute generators
