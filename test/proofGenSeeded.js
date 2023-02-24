@@ -6,9 +6,7 @@ import { assert } from 'chai';
 import { hexToBytes, proofGen, prepareGenerators, messages_to_scalars, bytesToHex, seeded_random_scalars } from '../lib/BBS.js';
 import { readFile, readdir } from 'fs/promises';
 
-// Pseudo random (deterministic) scalar generation seed and function
-let seed = hexToBytes("332e313431353932363533353839373933323338343632363433333833323739");
-let rand_scalar_func = seeded_random_scalars.bind(null, seed);
+
 
 const maxL = 20; // Use when precomputing the generators
 
@@ -27,7 +25,9 @@ for (let hashType of ["SHA-256", "SHAKE-256"]) {
   if (hashType == "SHAKE-256") {
     path = SHAKE_PATH;
   }
-
+  // Pseudo random (deterministic) scalar generation seed and function
+  let seed = hexToBytes("332e313431353932363533353839373933323338343632363433333833323739");
+  let rand_scalar_func = seeded_random_scalars.bind(null, seed, hashType);
   // Read all the proof test files into JavaScript objects
   const sigPath = path + 'signature/';
   const proofPath = path + 'proof/';
