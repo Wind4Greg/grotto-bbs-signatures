@@ -55,10 +55,9 @@ for (let hashType of ["SHA-256", "SHAKE-256"]) {
         let disclosedMsgScalars = await messages_to_scalars(messagesOctets, hashType);
         let headerBytes = hexToBytes(vector.header);
         let publicBytes = hexToBytes(vector.signerPublicKey);
-        let L = vector.totalMessageCount;
         let proof = hexToBytes(vector.proof);
         let ph = hexToBytes(vector.presentationHeader);
-        let result = await proofVerify(publicBytes, proof, L, headerBytes, ph, disclosedMsgScalars,
+        let result = await proofVerify(publicBytes, proof, headerBytes, ph, disclosedMsgScalars,
           disclosedIndexes, gens, hashType);
         assert.equal(result, vector.result.valid);
       });

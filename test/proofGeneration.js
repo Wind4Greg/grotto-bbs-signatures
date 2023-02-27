@@ -88,7 +88,7 @@ for (let hashType of ["SHA-256", "SHAKE-256"]) {
         let proof = await proofGen(publicBytes, signature, headerBytes, ph, msg_scalars, disclosed, gens, hashType);
         let disclosedMsgScalars = msg_scalars.filter((msg, i) => disclosed.includes(i));
         // console.log(`proof: ${bytesToHex(proof)}`);
-        let result = await proofVerify(publicBytes, proof, L, headerBytes, ph, disclosedMsgScalars,
+        let result = await proofVerify(publicBytes, proof, headerBytes, ph, disclosedMsgScalars,
           disclosed, gens, hashType);
         assert.isTrue(result);
       });
