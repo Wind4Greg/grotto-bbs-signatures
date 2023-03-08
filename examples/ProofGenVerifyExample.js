@@ -25,7 +25,7 @@ let pk_bytes = pointPk.toRawBytes(true);
 let header = hexToBytes("11223344556677889900aabbccddeeff");
 // L = 10; // Try with all 10 messages
 // // From https://github.com/decentralized-identity/bbs-signature/blob/main/tooling/fixtures/fixture_data/bls12-381-sha-256/signature/signature004.json
-let signature = hexToBytes("b13ae29b49e313b1c0983056e80cfb8d84a81985ca7488557aaf9b923f1e67994cab0e5ab05c75ffcf3fde1c23207ce5218dcfec42e9cc0063ff488100f89ba08296ced4923052e597279e1f775b157c55ed6b32ba777c3eec754bda4ab096e4147f2587248ba47b22226aee2aeafd85");
+let signature = hexToBytes("b058678021dba2313c65fadc469eb4f030264719e40fb93bbf68bdf79079317a0a36193288b7dcb983fae0bc3e4c077f145f99a66794c5d0510cb0e12c0441830817822ad4ba74068eb7f34eb11ce3ee606d86160fecd844dda9d04bed759a676b0c8868d3f97fbe2e8b574169bd73a3");
 let ph = new Uint8Array();
 let disclosed_indexes = [0, 1, 2, 3, 6, 7, 8, 9];
 let result = await proofGen(pk_bytes, signature, header, ph, msg_scalars, disclosed_indexes, gens);
@@ -41,7 +41,6 @@ let proofBundle = {
     ph: bytesToHex(ph),
     disclosedIndexes: disclosed_indexes,
     disclosedMsgs: disclosedMsgs,
-    totalMsgs: msg_scalars.length,
     proof: bytesToHex(result)
 }
 
@@ -50,7 +49,6 @@ console.log(proofBundle);
 // Verify proof
 let pk = hexToBytes(proofBundle.pk);
 let proof = hexToBytes(proofBundle.proof);
-let L = proofBundle.totalMsgs;
 let headerV = hexToBytes(proofBundle.header);
 let phV = hexToBytes(proofBundle.ph);
 
@@ -58,5 +56,5 @@ let phV = hexToBytes(proofBundle.ph);
 let dis_msg_octets = proofBundle.disclosedMsgs.map(hex => hexToBytes(hex));
 let disclosed_msgs = await messages_to_scalars(dis_msg_octets);
 let disclosed_indexesV = proofBundle.disclosedIndexes;
-result = await proofVerify(pk, proof, L, headerV, phV, disclosed_msgs, disclosed_indexesV, gens);
+result = await proofVerify(pk, proof, headerV, phV, disclosed_msgs, disclosed_indexesV, gens);
 console.log(`Proof verified: ${result}`);

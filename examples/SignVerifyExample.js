@@ -34,7 +34,7 @@ console.log("Complete signature single message:")
 let resultString = bytesToHex(signature);
 console.log(resultString);
 // From https://github.com/decentralized-identity/bbs-signature/blob/main/tooling/fixtures/fixture_data/bls12-381-sha-256/signature/signature001.json
-let expected = "8e65ee0ea2d5f8ccb5fe03e1f985960dab25cfd1f4035cddd74f1b48d12fe24c621c5f9f56f23845ecee82ae207371ac39f37eb451b7a1ea7e41afb1436d28eef1016674ff320f70ab1537d3da8ed48d201594558a35a8503b12abbe02b5ed805baec5d20c263134934f1991dd4d3125";
+let expected = "8fb17415378ec4462bc167be75583989e0528913da142239848ae88309805bfb3656bcff322e5d8fd1a7e40a660a62266099f27fa81ff5010443f36285f6f0758e4d701c444b20447cded906a3f2001714087f165f760369b901ccbe5173438b32ad195b005e2747492cf002cf51e498";
 console.log(`Test vector verified: ${resultString === expected}`);
 let verified = await verify(pk_bytes, signature, header, msg_scalars.slice(0,L), gens);
 console.log(`Algorithm verified: ${verified}`);
@@ -45,7 +45,7 @@ console.log("Complete signature 10 messages:")
 resultString = bytesToHex(signature);
 console.log(resultString);
 // From https://github.com/decentralized-identity/bbs-signature/blob/main/tooling/fixtures/fixture_data/bls12-381-sha-256/signature/signature004.json
-expected = "b13ae29b49e313b1c0983056e80cfb8d84a81985ca7488557aaf9b923f1e67994cab0e5ab05c75ffcf3fde1c23207ce5218dcfec42e9cc0063ff488100f89ba08296ced4923052e597279e1f775b157c55ed6b32ba777c3eec754bda4ab096e4147f2587248ba47b22226aee2aeafd85";
+expected = "b058678021dba2313c65fadc469eb4f030264719e40fb93bbf68bdf79079317a0a36193288b7dcb983fae0bc3e4c077f145f99a66794c5d0510cb0e12c0441830817822ad4ba74068eb7f34eb11ce3ee606d86160fecd844dda9d04bed759a676b0c8868d3f97fbe2e8b574169bd73a3";
 console.log(`Test vector verified: ${resultString === expected}`);
 verified = await verify(pk_bytes, signature, header, msg_scalars.slice(0,L), gens);
 console.log(`Algorithm verified: ${verified}`);
