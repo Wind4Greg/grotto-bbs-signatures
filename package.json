@@ -24,6 +24,6 @@
     "lib/**/*.js"
   ],
   "dependencies": {
-    "@noble/curves": "^0.6.2"
+    "@noble/curves": "^0.8.3"
   }
 }
