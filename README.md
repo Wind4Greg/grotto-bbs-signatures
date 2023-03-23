@@ -19,12 +19,12 @@ BBS signatures are different from other common digital signatures schemes such a
 
 Both the original *signature* and any *proofs* generated are verified with the original issuers *public key*.  The contents of individual messages covered by a signature may not be changed, nor can new messages be added to a *proof* only messages can be withheld from a *proof* and still have the *proof* verify.
 
-One prime example of the use of BBS signatures is in a three party *issuer*, *holder*, *verifier* model. For example suppose the issuer is the department of motor vehicles (DMV) and wants to issue the digital equivalent of a drivers license which contains an assortment of information. A fictitious set of information is shown below in JSON format for a tree living in northern California:
+One prime example of the use of BBS signatures is in a three party *issuer*, *holder*, *verifier* model. For example suppose the issuer is the department of motor vehicles (DMV) and wants to issue the digital equivalent of a drivers license which contains an assortment of information. A fictitious set of information is shown below in JSON format for a **tree** living in northern California:
 
 ``` json
 [   "FirstName: Sequoia",
     "LastName: Sempervirens",
-    "Address: Jedediah Smith Redwoods State Park",
+    "Address: Jedediah Smith Redwoods State Park, California",
     "Date of Birth: 1200/03/21",
     "Height: 296 feet",
     "Eyes: None",

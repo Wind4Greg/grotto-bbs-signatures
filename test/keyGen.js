@@ -1,5 +1,5 @@
 /* global describe, URL, it, console */
-import {hexToBytes, keyGen, numberToHex} from '../lib/BBS.js';
+import {hexToBytes, keyGen, bytesToHex} from '../lib/BBS.js';
 import {assert} from 'chai';
 import {readFile} from 'fs/promises';
 
@@ -17,8 +17,7 @@ describe('Key Generation', function() {
   for(const hashType of ['SHA-256', 'SHAKE-256']) {
     it('KeyGen ' + hashType, async function() {
       const sk = await keyGen(ikm, keyInfo, keyDST, hashType);
-      console.log(`sk (bigInt): ${sk}`);
-      console.log(`sk (hex): ${numberToHex(sk, 32)}`);
+      console.log(`sk (hex): ${bytesToHex(sk)}`);
       assert.equal(sk, sk);
     });
   }
