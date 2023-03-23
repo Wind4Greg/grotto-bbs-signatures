@@ -1,13 +1,14 @@
-import { assert } from 'chai';
-import { hexToBytes, hash_to_scalar, os2ip, bytesToHex } from '../lib/BBS.js';
-import { readFile } from 'fs/promises';
+/* global describe, URL, it*/
+import {hash_to_scalar, hexToBytes, os2ip} from '../lib/BBS.js';
+import {assert} from 'chai';
+import {readFile} from 'fs/promises';
 
 const SHA_PATH = './fixture_data/bls12-381-sha-256/';
 const SHAKE_PATH = './fixture_data/bls12-381-shake-256/';
 
-for (let hash of ["SHA-256", "SHAKE-256"]) {
+for(const hash of ['SHA-256', 'SHAKE-256']) {
   let path = SHA_PATH;
-  if (hash == "SHAKE-256") {
+  if(hash == 'SHAKE-256') {
     path = SHAKE_PATH;
   }
   const h2s = JSON.parse(
@@ -16,16 +17,15 @@ for (let hash of ["SHA-256", "SHAKE-256"]) {
     )
   );
 
-
-  describe('Hash to Scalar ' + hash, function () {
-    it(h2s.caseName, async function () {
+  describe('Hash to Scalar ' + hash, function() {
+    it(h2s.caseName, async function() {
       // console.log(h2s);
-      let msg_octets = hexToBytes(h2s.message);
-      let dst = hexToBytes(h2s.dst);
-      let result = await hash_to_scalar(msg_octets, dst, hash);
+      const msg_octets = hexToBytes(h2s.message);
+      const dst = hexToBytes(h2s.dst);
+      const result = await hash_to_scalar(msg_octets, dst, hash);
       // console.log("Computed scalar:");
       // console.log(result.toString(16));
-      let expected = os2ip(hexToBytes(h2s.scalar));
+      const expected = os2ip(hexToBytes(h2s.scalar));
       assert.equal(result, expected);
     });
   });
