@@ -1,8 +1,7 @@
 /*global console*/
 /*eslint max-len: ["error", { "ignoreStrings": true, "ignoreComments": true }]*/
-import {bytesToHex, hexToBytes, messages_to_scalars, os2ip, prepareGenerators,
-  sign, verify} from '../lib/BBS.js';
-import {bls12_381 as bls} from '@noble/curves/bls12-381';
+import {bytesToHex, hexToBytes, messages_to_scalars, prepareGenerators,
+  publicFromPrivate, sign, verify} from '../lib/BBS.js';
 
 const test_msgs = [
   hexToBytes('9872ad089e452c7b6e283dfac2a80d58e8d0ff71cc4d5e310a1debdda4a45f02'),
@@ -23,15 +22,13 @@ const gens = await prepareGenerators(test_msgs.length); // Generate enough for a
 
 // Prepare private and public keys
 const sk_bytes = hexToBytes('4a39afffd624d69e81808b2e84385cc80bf86adadf764e030caa46c231f2a8d7');
-const pointPk = bls.G2.ProjectivePoint.fromPrivateKey(sk_bytes);
-const pk_bytes = pointPk.toRawBytes(true);
-const sk_scalar = os2ip(sk_bytes);
+const pk_bytes = publicFromPrivate(sk_bytes);
 
 const header = hexToBytes('11223344556677889900aabbccddeeff');
 
 // Try signing with a single message
 let L = 1;
-let signature = await sign(sk_scalar, pk_bytes, header, msg_scalars.slice(0, L),
+let signature = await sign(sk_bytes, pk_bytes, header, msg_scalars.slice(0, L),
   gens);
 console.log('Complete signature single message:');
 let resultString = bytesToHex(signature);
@@ -44,7 +41,7 @@ let verified = await verify(pk_bytes, signature, header,
 console.log(`Algorithm verified: ${verified}`);
 
 L = 10; // Try with all 10 messages
-signature = await sign(sk_scalar, pk_bytes, header, msg_scalars.slice(0, L),
+signature = await sign(sk_bytes, pk_bytes, header, msg_scalars.slice(0, L),
   gens);
 console.log('Complete signature 10 messages:');
 resultString = bytesToHex(signature);

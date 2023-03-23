@@ -1,7 +1,6 @@
-import {bytesToHex, hexToBytes, messages_to_scalars, prepareGenerators,
-  proofGen, proofVerify} from '../lib/BBS.js';
-import {bls12_381 as bls} from '@noble/curves/bls12-381';
 /*global console*/
+import {bytesToHex, hexToBytes, messages_to_scalars, prepareGenerators,
+  proofGen, proofVerify, publicFromPrivate} from '../lib/BBS.js';
 // Some test messages in hex string format from draft
 const hex_msgs = [
   '9872ad089e452c7b6e283dfac2a80d58e8d0ff71cc4d5e310a1debdda4a45f02',
@@ -22,8 +21,7 @@ const gens = await prepareGenerators(test_msgs.length); // Enough for all msgs
 
 const sk_bytes = hexToBytes(
   '4a39afffd624d69e81808b2e84385cc80bf86adadf764e030caa46c231f2a8d7');
-const pointPk = bls.G2.ProjectivePoint.fromPrivateKey(sk_bytes);
-const pk_bytes = pointPk.toRawBytes(true);
+const pk_bytes = publicFromPrivate(sk_bytes);
 const header = hexToBytes('11223344556677889900aabbccddeeff');
 /*eslint max-len: ["error", { "ignoreStrings": true, "ignoreComments": true }]*/
 // From https://github.com/decentralized-identity/bbs-signature/blob/main/tooling/fixtures/fixture_data/bls12-381-sha-256/signature/signature004.json

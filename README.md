@@ -37,12 +37,12 @@ The DMV would use its secret key to produce a signature on this list of *message
 
 ```json
 {
-  "publicKey": "b79263bb3177955a347b8d4dd25f8dc08990687b61af88014f78f17dd24f4b13154785fd797a540e0f7e87abcbfca5b3143c9f6db5b117b2c28f8f1f449ef8327c8c15952ed118d098966f434c67cc15671de7d95d860393c0362b55608fe457",
+  "publicKey": "b65b7cbff4e81b723456a13936b6bcc77a078bf6291765f3ae13170072249dd7daa7ec1bd82b818ab60198030b45b8fa159c155fc3841a9ad4045e37161c9f0d9a4f361b93cfdc67d365f3be1a398e56aa173d7a55e01b4a8dd2494e7fb90da7",
   "header": "11223344556677889900aabbccddeeff",
   "messages": [
-    "FirstName: Sequoia             ",
+    "FirstName: Sequoia",
     "LastName: Sempervirens",
-    "Address: Jedediah Smith Redwoods State Park ",
+    "Address: Jedediah Smith Redwoods State Park, California",
     "Date of Birth: 1200/03/21",
     "Height: 296 feet",
     "Eyes: None",
@@ -50,7 +50,7 @@ The DMV would use its secret key to produce a signature on this list of *message
     "Picture: Encoded photo",
     "License Class: None, Trees can't drive"
   ],
-  "signature": "b712c3c1c9f134bdea96134845a8c4d7afe3335673241738d39d060a2d87a77d93110cb4022a2a8fd7ff24c3c1715ebe48f2e6bf1ff31f7ddd74a84136b01a8c2a595d2d6132b85f264cbf874b3bf2581fbdc263d65164c475e6482b27cc56d3c2413dc69958daa4dee264a8f0cfc6cd"
+  "signature": "94bb93062e05bc702d0ab222b861fd0311533d6dcbcad4050e45dd2392de951a912915af08bd87b2284807432245f9960e1f59680a59cd9fae490dee659d63fd3922a728e2ba3ee33db6bcc806ec2cea3d7264489a42ca09deeac7ca88b1811c2158b51d81560832daf6a0000037a87a"
 }
 ```
 
@@ -67,7 +67,7 @@ It then uses the BBS proof generation algorithm to generate proof information su
 
 ```json
 {
-  "pk": "b79263bb3177955a347b8d4dd25f8dc08990687b61af88014f78f17dd24f4b13154785fd797a540e0f7e87abcbfca5b3143c9f6db5b117b2c28f8f1f449ef8327c8c15952ed118d098966f434c67cc15671de7d95d860393c0362b55608fe457",
+  "pk": "b65b7cbff4e81b723456a13936b6bcc77a078bf6291765f3ae13170072249dd7daa7ec1bd82b818ab60198030b45b8fa159c155fc3841a9ad4045e37161c9f0d9a4f361b93cfdc67d365f3be1a398e56aa173d7a55e01b4a8dd2494e7fb90da7",
   "header": "11223344556677889900aabbccddeeff",
   "ph": "",
   "disclosedIndexes": [
@@ -78,16 +78,16 @@ It then uses the BBS proof generation algorithm to generate proof information su
     "Date of Birth: 1200/03/21",
     "Picture: Encoded photo"
   ],
-  "proof": "80bbc63a921617243b2e7ef845c2e62aaae2b0b8030ad851f03d3880606c1473ff25ce3d50e9a76475cbf9d4920c13edb1ad86a066aa9b9a18518e7a649d89681ef145a104548cee1e732ef2958949f86e7f835abbbb14d6b823b9275dc8fd28a080457971a5412fd7134b42ac5e1dab73f3a8079e31ef26787dcf7761099ff2c4baafcf8e5907fb8f7df53acd53b6d83af1943205cb2d94461b1532a118186a38580080bb25b9d12867ae51ab6ff10f053d267fb152b9bebe58b12e7183f0b95ddce2d417ec2871048e8bf1e78791a1497bf2e5b0820b3a96a1ce9264b80f6791e9da1efbabc28c68b747cbe8edd7e73b3cdd9bec8b222e0f7b454f777b198debe304929a797c854ea2f5086a54ac612ee9c61d761f9fa65574b0498615110124be606b153f15da8549e73ed359c045037480ff15a66453d2c8a2c4dc6c312d34389c0ef7864f691361918950060c3c3fb5aa53513e33c120b622fc8320e4d609444e578eac93e6b23a40cae8768ebf1e833d400234f999f3c88b94fa4025d2e4a64634ac0a5849165b0beda77a29ec34333512b2aca2c42af73f8590a0929b5fedc4d3a5666301fa1faafb58ad37ed5c349f7f8c9539cbeaebffdfc46addc578abc7df925dec9291375841721241271e64cdfa88bfe584811368cbddf5bffb5e6613d91afba66dc67c87dfb2fa017145ce24648b624a0588682e7bb92709531dcdc7bca0345b19ce535c90f2e3afc0"
+  "proof": "8432472ce9cb174043856753306c290d87ecc8564038d34f18f5ac0127166aefd2e0c67b680285aff3401efc0c834a9ca133d85e8695d9085847c5d537cda5c37740df5d9eb5abf3d8e5f1242336d01eaf11dd80a06efd43e887ade2c3f5352ca8c53d8b7217d90c46af1f45a70ebeff512e6dc689bea361c91c2d1bc38b063ae78958d6e3a09d88a3cd3d78bc94c6c96f8788dad9c17e8afac3e0bb1a8c2e83f6c3d718c723ea36a06c9ac0b81561b66bacbf68b56ff09007df6b5258f36eb2ff1886e081702b829cd43da22510e1b35f07bc316f391f88807843d9a81ccfd42731196f5d3ac377c0679e7a0e58d30a5529e7d04bc350769bbe44d26416a77b7d799594e570370c649ddfbabbfc3e830e223ba53d86b19a9a3291038e425419af90f5ecd9c25d309cf6ce17b8339177363eb113a065b853cd4a6b47ff8b04ac7799fb931f4a42d754685c81852c34734aba447ec2a414df702e66dc67570b4603d2cd1f0af406925e4525738fbd4b8a4799d9fd6cd0a2c7761f49c76cb048f004cf09939621a7368da2ae5ac671b16a00f108fd57002bd835c9760758ef11f6b074ab40e7e47eb3fc31ecb1af00cf033c8dd2cfba0ea4d36388d9f15f8e58813988abe14b89075b37a3caa98cb4328e4daf98253ce16b1f4152358ef86f34695997086a1927f67fe69d7df94391a3661a9cd0340cf5618d9334f97cf6db5f25c203b55c866a014bc7981668fd208f55"
 }
 ```
 
 The bouncer at the door, the *verifier*, verifies this against the DMV's public key, i.e., the two messages disclosed were part of the orginal signed information and have not been modified.
 
-Now suppose this tree is very thirsty and visits another bar, given California's issue with drought the next bar states it will only serve trees from state or national parks. So the tree includes its address information as well as its photo and date of birth as follows:
+Now suppose this tree is very thirsty and visits another bar, given California's issue with drought the next bar states it will only serve trees from a state or national parks. So the tree includes its address information as well as its photo and date of birth as follows:
 
 ``` json
-[   "Address: Jedediah Smith Redwoods State Park",
+[   "Address: Jedediah Smith Redwoods State Park, California",
     "Date of Birth: 1200/03/21",
     "Picture: Encoded photo" ]
 ```
@@ -96,7 +96,7 @@ It produces another BBS proof such as:
 
 ```json
 {
-  "pk": "b79263bb3177955a347b8d4dd25f8dc08990687b61af88014f78f17dd24f4b13154785fd797a540e0f7e87abcbfca5b3143c9f6db5b117b2c28f8f1f449ef8327c8c15952ed118d098966f434c67cc15671de7d95d860393c0362b55608fe457",
+  "pk": "b65b7cbff4e81b723456a13936b6bcc77a078bf6291765f3ae13170072249dd7daa7ec1bd82b818ab60198030b45b8fa159c155fc3841a9ad4045e37161c9f0d9a4f361b93cfdc67d365f3be1a398e56aa173d7a55e01b4a8dd2494e7fb90da7",
   "header": "11223344556677889900aabbccddeeff",
   "ph": "",
   "disclosedIndexes": [
@@ -105,16 +105,15 @@ It produces another BBS proof such as:
     7
   ],
   "disclosedMsgs": [
-    "Address: Jedediah Smith Redwoods State Park ",
+    "Address: Jedediah Smith Redwoods State Park, California",
     "Date of Birth: 1200/03/21",
     "Picture: Encoded photo"
   ],
-  "totalMsgs": 9,
-  "proof": "b735b3b81cd2f69f7e37444b6a99206748aa7b2e2dc77b01f07ffe5462d9c228fd967dcef936577dd06b7ef07908443d83a19b13959d3815e1ddd6b8690cfd7e0d9767f2d7cd5b97520a8e5b1ec44e8a098cf4e540904ed8ff6e44902382b7dbae76fdede3c319ee11cd6de5c1405fea46d954990ca87a9755e045b9d8a82e6686edbb6a61ad025d1e2d43ea833dc5d04e33a875ab53e609122e73ad50d23b8775ba8398b8904d493a3582276e5f8e102218bd71a0aeb4e635b552b9b7454a089d95e5548cbae4720b50af55ba45e40a05955e53fbe170f9131b4d9cf40b03dacc3203874b1eb9959e479203e27992773913d5a4c293f3e7db58bd9085e1072dd68d524caaf55541b7a6ae928a0b96374126816ce1ed79c108c2be8f0114898f3b7b2ae7194515bae3132edfb6928fd446ff97a142549df1451f1f73b5fa99c80cc8a2969f25bdb2f54be2dc8fb121912724a068c713f579d193d6a65f6d9acc8bfccec55c26fc5cb1541f6af9c8cb5869ca9a1608668bd3e474b0455ee56763e9f505455c38a32ba05e05b5d7fa1c405eee9d066bdabdf0331cb9dc0c08525c42b37172e6631a684382cffbad815ca96730c109e325b4b4c79927cd6c06a233a64274e53ce2fd769161e68dde6c6f8c0b7d0136f864502beb48b102a771f66b5d2838ec128f3dbd9a0e9b9f6233d075"
+  "proof": "80c4b1301cd5964e1e69fd1a95d074fb30b085a733ae56d4bc427da89dfaf9dc63bf32e6d5d027d9ba6d3f59091aeb8e92e3baead45b9be6d501013478d4fbdd6cdbf637f201bd2c8c840cc55b2b33562e6429c88b96866e0ca86ce242408e8aaf3abb41d8c89bf436058504f43f8e7f31bec5a28a571666421201971341e731cafba531188d67f40553166c616a7c4839f7a605b3a774c158e1a45841d1eb07bd8534390010027f14bae9dc59bd75a63b6b532940d1ea98bdfb2354bf25b464f8b685fd4723aca13fbb58a5b3c8a1f143cba92acda6a731ba876b12b55b4c1fffa79699d3cc3f271f27b4a34ef4b356582147fdd19477c9bd9cfc7ba270de1bbe3c68038df39bebc289e265008631720b17aa4ca2bc89769f791b78bec9bcf7b19886f14130a232f7368649ea2fa2c843ecb9014ba4d622e80cef0fcbbc557aad02e3e5fac75569e6d0428662034ba93c2a50c4c17336656d4b44c3d9170e22460f699b514af2583e9011877443d30d50515db20845242b2d55a0a8960ae4b19cb6604bca7c47cd3fbef486a0ed76953eb450096123121826fa12a5b45a7a57554d92ab1d6b0c9e1df880504093f7a87159173ade25480fdce339611c96ad0dcf8b83543bbded15b21af56f8aff918957743e4ca81a5113be17b0a834807b374df76a1196b3152cca3646acc7055667"
 }
 ```
 
-Which the bartender at the second bar can verify with the DMV's public key. By *unlinkable* we mean the cryptographic *proof* field in these two *proofs* are uncorrelated and can't be used to track the tree from bar to bar, however, the tree has disclosed its "date of birth" and "photo" to both bars which could be used for tracking purpose.
+Which the bartender at the second bar can verify with the DMV's public key. By *unlinkable* we mean the cryptographic *proof* field in these two *proofs* are uncorrelated and can't be used to track the tree from bar to bar. The tree, however, has disclosed its "date of birth" and "photo" to both bars which could be used for tracking purpose.
 
 You may have noticed that the proofs in these two examples have different sizes. Currently BBS *signatures* have a size of 112 bytes, while BBS *proofs* have a size of $304 + U*32$ bytes where *U* is the number of undisclosed messages. We say currently since [new work](https://eprint.iacr.org/2023/275) may reduce these numbers a bit while preserving security properties.
 
@@ -122,12 +121,293 @@ You may have noticed that the proofs in these two examples have different sizes.
 
 ### Key Generation
 
+For signing a *secret* (also known as a private) key is needed. For signature and proof verification the verifiers need the corresponding *public* key. A recomended procedure for deriving an appropriate secret key from some initial random bytes is given in the BBS specification and available via the `keyGen()` function. See the [KeyGenExample.js](examples/KeyGenExample.js) file for details.
+
+```javascript
+import {bytesToHex, keyGen, publicFromPrivate} from '@grottonetworking/bbs-signatures';
+import crypto from 'crypto';
+
+const bytesLength = 40; // >= 32 bytes
+// Generate random initial key material -- Node.js
+const keyMaterial = new Uint8Array(crypto.randomBytes(bytesLength).buffer);
+const keyInfo = new TextEncoder().encode('BBS-Example Key info');
+const sk_bytes = await keyGen(keyMaterial, keyInfo);
+console.log(`Private key, length ${sk_bytes.length}, (hex):`);
+console.log(bytesToHex(sk_bytes));
+const pub_bytes = publicFromPrivate(sk_bytes);
+console.log(`Public key, length ${pub_bytes.length}, (hex):`);
+console.log(bytesToHex(pub_bytes));
+```
+
 ### Message Encoding
+
+Since BBS works works with multiple *messages* the encoding (really cryptographic processing) of the messages is done as separate step. This is accomplished with the `messages_to_scalars()` function. For example:
+
+```javascript
+import {messages_to_scalars, numberToHex} from '@grottonetworking/bbs-signatures';
+
+const messages = [
+  'FirstName: Sequoia',
+  'LastName: Sempervirens',
+  'Address: Jedediah Smith Redwoods State Park, California',
+  'Date of Birth: 1200/03/21',
+  'Height: 296 feet',
+  'Eyes: None',
+  'Hair: Brown bark, green needles',
+  'Picture: Encoded photo',
+  'License Class: None, Trees can\'t drive'
+];
+
+const te = new TextEncoder(); // To convert strings to byte arrays
+const messagesOctets = messages.map(msg => te.encode(msg));
+const msg_scalars = await messages_to_scalars(messagesOctets);
+for(let i = 0; i < messages.length; i++) {
+  console.log(`msg ${i} ${messages[i]}`);
+  console.log(`scalar (hex): ${numberToHex(msg_scalars[i], 32)}`);
+}
+```
 
 ### Generator Preparation
 
+All major BBS operations (signing, signature verification, proof generation, and proof verification) require the use of cryptographic group "generators". There need to be as many "generators" as messages that are or were originally signed. These take a bit of time to compute but can be reused in all the aforementioned operations and do not take up too much space. Hence we break out the preparation of these "generators" into a separate step via the `prepareGenerators()` function. 
+
+Below we show an example that creates the generators and these can be confirmed against the "message generator" test vectors given in the specification. You would never have a need to look at these in a real application.
+
+```javascript
+import {prepareGenerators} from '@grottonetworking/bbs-signatures';
+
+const L = 10;
+const gens = await prepareGenerators(L); // Default SHA-256 hash
+console.log(`Q1:${gens.Q1.toHex(true)}`); // Elliptic point to compressed hex
+console.log(`Q2:${gens.Q2.toHex(true)}`);
+for(let i = 0; i < gens.H.length; i++) {
+  console.log(`H${i}:${gens.H[i].toHex(true)}`);
+}
+```
+
 ### Signing and Verifying
+
+Generate a signature for a list of messages we need the following: (1) private/public key pair, (2) list of encoded messages, (3) prepared generators. Optionally a "header" (as a byte array) maybe supplied that contains context or application information. To verify a signature we need all of the above but not the private key. This is shown below with the full example given in [TreeDMVExample.js](examples/TreeDMVExample.js). An additional example is given in [SignVerifyExaple.js](examples/SignVerifyExample.js).
+
+```javascript
+// Excerp from TreeDMVExample.js
+const header = hexToBytes('11223344556677889900aabbccddeeff');
+const signature = await sign(sk_bytes, pk_bytes, header, msg_scalars, gens);
+console.log('Signature:');
+console.log(bytesToHex(signature));
+
+const verified = await verify(pk_bytes, signature, header, msg_scalars, gens);
+console.log(`Algorithm verified: ${verified}`);
+```
 
 ### Proof Generation and Verification
 
+For proof generation the *holder* needs the signature, messages, and public key. Then they need to decide which messages they want to disclose. This can be done in code as shown below with the full example given in [TreeDMVExample.js](examples/TreeDMVExample.js). An additional example is contained in [ProofGenVerifyExample.js](examples/ProofGenVerifyExample.js).
+
+```javascript
+const ph = new Uint8Array();
+const disclosed_indexes = [3, 7]; // Selective disclosure
+const proof = await proofGen(pk_bytes, signature, header, ph, msg_scalars,
+  disclosed_indexes, gens);
+console.log(`Proof for selective disclosure of messages ${disclosed_indexes}:`);
+console.log(bytesToHex(proof));
+
+const disclosedMsgs = msg_scalars.filter(
+  (m, i) => disclosed_indexes.includes(i)); // Only the disclosed messages!
+const proofValid = await proofVerify(pk_bytes, proof, header, ph, disclosedMsgs,
+  disclosed_indexes, gens);
+console.log(`Proof verified: ${proofValid}`);
+```
+
+# API
+
+## Functions
+
+<dl>
+<dt><a href="#keyGen">keyGen(key_material, key_info, key_dst, hashType)</a> ⇒ <code>Uint8Array</code></dt>
+<dd><p>Produces an appropriate secret key starting from initial key material. This
+procedure enhances the entropy of the key material but is deterministic so
+initial key material must be kept secret.</p>
+</dd>
+<dt><a href="#publicFromPrivate">publicFromPrivate(privateBytes)</a> ⇒ <code>Uint8Array</code></dt>
+<dd></dd>
+<dt><a href="#sign">sign(SK, PK, header, messages, generators, hashType)</a></dt>
+<dd><p>Creates a BBS signature over a list of &quot;messages&quot;.</p>
+</dd>
+<dt><a href="#verify">verify(PK, signature, header, messages, generators, hashType)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Verify a BBS signature against a public key.</p>
+</dd>
+<dt><a href="#proofGen">proofGen(PK, signature, header, ph, messages, disclosed_indexes, generators, hashType, rand_scalars)</a> ⇒ <code>Uint8Array</code></dt>
+<dd><p>Generates an unlinkable, selective disclosure proof based on a
+signature and message set, and related information.</p>
+</dd>
+<dt><a href="#proofVerify">proofVerify(PK, proof, header, ph, disclosed_messages, disclosed_indexes, generators, hashType)</a> ⇒ <code>boolean</code></dt>
+<dd><p>Verifies a previously generated proof against original signers public key,
+and additional information.</p>
+</dd>
+<dt><a href="#numUndisclosed">numUndisclosed(proofOctets)</a> ⇒ <code>number</code></dt>
+<dd><p>Helper function to give the number of undisclosed messages in a proof. This
+can be added to the number of disclosed messages to calculate the number of
+generators needed in proof verification.</p>
+</dd>
+<dt><a href="#messages_to_scalars">messages_to_scalars(messages, hashType)</a> ⇒ <code>Array</code></dt>
+<dd><p>This function converts (hashes) byte array messages into scalars representing
+the messages for use in signature/proof operations.</p>
+</dd>
+<dt><a href="#prepareGenerators">prepareGenerators(L, hashType)</a> ⇒ <code>Array</code></dt>
+<dd><p>Prepares the &quot;group G1 generators&quot; used by the BBS signature suite.
+These values can be reused in many calls to the sign, verify, proofGen, and
+proofVerify functions. You must have enough generators for the number of
+messages. You do not need to know what the &quot;group G1&quot; or a &quot;generator&quot; is!
+These take a while to compute so we prepare them separately and reuse them.</p>
+</dd>
+</dl>
+
+<a name="keyGen"></a>
+
+## keyGen(key_material, key_info, key_dst, hashType) ⇒ <code>Uint8Array</code>
+Produces an appropriate secret key starting from initial key material. This
+procedure enhances the entropy of the key material but is deterministic so
+initial key material must be kept secret.
+
+**Kind**: global function  
+**Returns**: <code>Uint8Array</code> - Derived secret key as an array of bytes.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| key_material | <code>Uint8Array</code> | Secret key material. Must be >= 32 bytes long. |
+| key_info | <code>Uint8Array</code> | Optional key information. |
+| key_dst | <code>string</code> | Key domain separation tag, defaults to 'KEYGEN_DST_'. |
+| hashType | <code>string</code> | The hash type for the signature suite. |
+
+<a name="publicFromPrivate"></a>
+
+## publicFromPrivate(privateBytes) ⇒ <code>Uint8Array</code>
+**Kind**: global function  
+**Returns**: <code>Uint8Array</code> - Containing encoded public key in G2.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| privateBytes | <code>Uint8Array</code> | Private key bytes must have length 32. |
+
+<a name="sign"></a>
+
+## sign(SK, PK, header, messages, generators, hashType)
+Creates a BBS signature over a list of "messages".
+
+**Kind**: global function  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| SK | <code>bigint</code> \| <code>Uint8Array</code> | A scalar or byte array for the secret key. |
+| PK | <code>Uint8Array</code> | Public key as a compressed G2 point raw bytes. |
+| header | <code>Uint8Array</code> | Header as a byte array. |
+| messages | <code>Array</code> | Array of scalars (bigint) derived from actual  messages. Computed by [messages_to_scalars](#messages_to_scalars). |
+| generators | <code>Array</code> | Array of group G1 generators created by the  [prepareGenerators](#prepareGenerators) function. |
+| hashType | <code>string</code> | The hash type for the signature suite. |
+
+<a name="verify"></a>
+
+## verify(PK, signature, header, messages, generators, hashType) ⇒ <code>boolean</code>
+Verify a BBS signature against a public key.
+
+**Kind**: global function  
+**Returns**: <code>boolean</code> - - True or False depending on whether the signature
+ is valid.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| PK | <code>Uint8Array</code> | Public key as a compressed G2 point raw bytes. |
+| signature | <code>Uint8Array</code> | A previously computed signature. |
+| header | <code>Uint8Array</code> | Header used when signature was created. |
+| messages | <code>Array</code> | Array of scalars (bigint) derived from actual  messages. Computed by [messages_to_scalars](#messages_to_scalars). |
+| generators | <code>Array</code> | Array of group G1 generators created by the  [prepareGenerators](#prepareGenerators) function. |
+| hashType | <code>string</code> | The hash type for the signature suite. |
+
+<a name="proofGen"></a>
+
+## proofGen(PK, signature, header, ph, messages, disclosed_indexes, generators, hashType, rand_scalars) ⇒ <code>Uint8Array</code>
+Generates an unlinkable, selective disclosure proof based on a
+signature and message set, and related information.
+
+**Kind**: global function  
+**Returns**: <code>Uint8Array</code> - - The proof as an byte array.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| PK | <code>Uint8Array</code> | Public key as a compressed G2 point raw bytes. |
+| signature | <code>Uint8Array</code> | A previously computed signature. |
+| header | <code>Uint8Array</code> | Header used when signature was created. |
+| ph | <code>Uint8Array</code> | Presentation header, used during proof creation. |
+| messages | <code>Array</code> | Array of scalars (bigint) derived from actual  messages. Computed by [messages_to_scalars](#messages_to_scalars). |
+| disclosed_indexes | <code>Array</code> | Array of sorted (non-repeating) zero based indices of the messages to be disclosed. |
+| generators | <code>Array</code> | Array of group G1 generators created by the  [prepareGenerators](#prepareGenerators) function. |
+| hashType | <code>string</code> | The hash type for the signature suite. |
+| rand_scalars | <code>function</code> | A function for generating cryptographically  secure random or pseudo random scalars. |
+
+<a name="proofVerify"></a>
+
+## proofVerify(PK, proof, header, ph, disclosed_messages, disclosed_indexes, generators, hashType) ⇒ <code>boolean</code>
+Verifies a previously generated proof against original signers public key,
+and additional information.
+
+**Kind**: global function  
+**Returns**: <code>boolean</code> - - True or False depending on whether the proof is valid.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| PK | <code>Uint8Array</code> | Public key as a compressed G2 point raw bytes. |
+| proof | <code>Uint8Array</code> | The proof as a byte array. |
+| header | <code>Uint8Array</code> | Header used when original signature was created. |
+| ph | <code>Uint8Array</code> | Presentation header that was used during proof creation. |
+| disclosed_messages | <code>Array</code> | Array of scalars (bigint) derived from  actual  disclosed messages. Computed by [messages_to_scalars](#messages_to_scalars). |
+| disclosed_indexes | <code>Array</code> | Array of sorted (non-repeating) zero based indices corresponding to the disclosed messages. |
+| generators | <code>Array</code> | Array of group G1 generators created by the  [prepareGenerators](#prepareGenerators) function. |
+| hashType | <code>string</code> | The hash type for the signature suite. |
+
+<a name="numUndisclosed"></a>
+
+## numUndisclosed(proofOctets) ⇒ <code>number</code>
+Helper function to give the number of undisclosed messages in a proof. This
+can be added to the number of disclosed messages to calculate the number of
+generators needed in proof verification.
+
+**Kind**: global function  
+**Returns**: <code>number</code> - - The number of undisclosed messages, U.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| proofOctets | <code>Uint8Array</code> | Byte array containing the raw bytes of a proof. |
+
+<a name="messages_to_scalars"></a>
+
+## messages\_to\_scalars(messages, hashType) ⇒ <code>Array</code>
+This function converts (hashes) byte array messages into scalars representing
+the messages for use in signature/proof operations.
+
+**Kind**: global function  
+**Returns**: <code>Array</code> - - An array of scalars (bigint) representing the messages.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| messages | <code>Array</code> | Messages as an Array of Uint8Arrays, i.e., these byte arrays not strings. |
+| hashType | <code>string</code> | The hash type for the signature suite. |
+
+<a name="prepareGenerators"></a>
+
+## prepareGenerators(L, hashType) ⇒ <code>Array</code>
+Prepares the "group G1 generators" used by the BBS signature suite.
+These values can be reused in many calls to the sign, verify, proofGen, and
+proofVerify functions. You must have enough generators for the number of
+messages. You do not need to know what the "group G1" or a "generator" is!
+These take a while to compute so we prepare them separately and reuse them.
+
+**Kind**: global function  
+**Returns**: <code>Array</code> - - A array of group generators used by the signature/proof
+ suite.  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| L | <code>number</code> | An integer that indicates the number of generators to be created. This number must be large than the total number of messages in a signature or proof. |
+| hashType | <code>string</code> | The hash type for the signature suite. |
 
