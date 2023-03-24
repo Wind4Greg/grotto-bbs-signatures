@@ -1,6 +1,6 @@
 {
   "name": "@grottonetworking/bbs-signatures",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "JavaScript implementation of the BBS+ signature suite for node or browser",
   "type": "module",
   "scripts": {
