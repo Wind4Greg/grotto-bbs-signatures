@@ -25,9 +25,14 @@
     "jsdoc-to-markdown": "^8.0.0",
     "mocha": "^10.2.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wind4Greg/grotto-bbs-signatures.git"
+  },
   "exports": "./lib/BBS.js",
   "files": [
-    "lib/**/*.js"
+    "lib/**/*.js",
+    "examples/**/*.js"
   ],
   "dependencies": {
     "@noble/curves": "^0.8.3",
