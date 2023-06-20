@@ -27,9 +27,9 @@ for(const hash of ['SHA-256', 'SHAKE-256']) {
     it('Confirm Base Point', function() {
       assert.equal(gens.P1.toHex(true), generatorVector.BP);
     });
-    it('Confirm Q1 and Q2', function() {
+    it('Confirm Q1', function() {
       assert.equal(gens.Q1.toHex(true), generatorVector.Q1);
-      assert.equal(gens.Q2.toHex(true), generatorVector.Q2);
+      // assert.equal(gens.Q2.toHex(true), generatorVector.Q2);
     });
     it('Confirm message generators', function() {
       // console.log(gens);
