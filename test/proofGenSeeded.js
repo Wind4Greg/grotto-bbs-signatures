@@ -4,8 +4,8 @@
   Uses seeded random pseudo random generator in proof generation to check
   against generated proof test vectors.
 */
-import {bytesToHex, hexToBytes, messages_to_scalars, prepareGenerators,
-  proofGen, seeded_random_scalars} from '../lib/BBS.js';
+import {bytesToHex, hexToBytes, messages_to_scalars, octets_to_proof,
+  prepareGenerators, proofGen, seeded_random_scalars} from '../lib/BBS.js';
 import {assert} from 'chai';
 import {readFile} from 'fs/promises';
 
@@ -72,8 +72,13 @@ for(const hashType of ['SHA-256', 'SHAKE-256']) {
         const proof = await proofGen(publicBytes, signature, headerBytes, ph,
           msg_scalars, disclosedIndexes, gens, hashType, rand_scalar_func);
         // console.log(bytesToHex(proof));
+        console.log('Computed proof raw values:');
+        console.log(octets_to_proof(proof));
+        console.log('Test Vector proof raw values:');
+        console.log(octets_to_proof(hexToBytes(proofBundle.proof)));
         assert.equal(bytesToHex(proof), proofBundle.proof);
       });
+      break; //TEMPORARY FOR DEBUGGING
     }
   });
 }
