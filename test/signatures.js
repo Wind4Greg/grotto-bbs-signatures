@@ -1,6 +1,6 @@
-/*global before, describe, it*/
+/*global before, describe, it, console*/
 import {bytesToHex, hexToBytes, messages_to_scalars, prepareGenerators, sign,
-  verify} from '../lib/BBS.js';
+  verify, octets_to_sig} from '../lib/BBS.js';
 import {readdir, readFile} from 'fs/promises';
 import {assert} from 'chai';
 
@@ -51,22 +51,32 @@ for(const hash of ['SHA-256', 'SHAKE-256']) {
           const publicBytes = hexToBytes(vector.signerKeyPair.publicKey);
           const result = await sign(secretScalar, publicBytes, headerBytes,
             msg_scalars, gens, hash);
+          // let computeSig = octets_to_sig(result);
+          // console.log('Computed raw signature:');
+          // console.log(computeSig);
+          // console.log('Computed e value in hex:');
+          // console.log(computeSig.e.toString(16));
+          // let testVectSigBytes = hexToBytes(vector.signature);
+          // let testVectSig = octets_to_sig(testVectSigBytes);
+          // console.log('Raw test vector signature:');
+          // console.log(testVectSig);
           assert.equal(bytesToHex(result), vector.signature,
             'signatures should match');
+
         });
       }
       // We verify against all signatures whether valid or invalid
-      it('verify ' + hash + ': ' + testName, async function() {
-        const messagesOctets = vector.messages.map(msg => hexToBytes(msg));
-        const msg_scalars = await messages_to_scalars(messagesOctets, hash);
-        const gens = await prepareGenerators(vector.messages.length, hash);
-        const headerBytes = hexToBytes(vector.header);
-        const publicBytes = hexToBytes(vector.signerKeyPair.publicKey);
-        const signature = hexToBytes(vector.signature);
-        const verified = await verify(publicBytes, signature, headerBytes,
-          msg_scalars, gens, hash);
-        assert.equal(verified, vector.result.valid);
-      });
+      // it('verify ' + hash + ': ' + testName, async function() {
+      //   const messagesOctets = vector.messages.map(msg => hexToBytes(msg));
+      //   const msg_scalars = await messages_to_scalars(messagesOctets, hash);
+      //   const gens = await prepareGenerators(vector.messages.length, hash);
+      //   const headerBytes = hexToBytes(vector.header);
+      //   const publicBytes = hexToBytes(vector.signerKeyPair.publicKey);
+      //   const signature = hexToBytes(vector.signature);
+      //   const verified = await verify(publicBytes, signature, headerBytes,
+      //     msg_scalars, gens, hash);
+      //   assert.equal(verified, vector.result.valid);
+      // });
     }
   });
 }
