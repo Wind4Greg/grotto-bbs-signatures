@@ -66,17 +66,17 @@ for(const hash of ['SHA-256', 'SHAKE-256']) {
         });
       }
       // We verify against all signatures whether valid or invalid
-      // it('verify ' + hash + ': ' + testName, async function() {
-      //   const messagesOctets = vector.messages.map(msg => hexToBytes(msg));
-      //   const msg_scalars = await messages_to_scalars(messagesOctets, hash);
-      //   const gens = await prepareGenerators(vector.messages.length, hash);
-      //   const headerBytes = hexToBytes(vector.header);
-      //   const publicBytes = hexToBytes(vector.signerKeyPair.publicKey);
-      //   const signature = hexToBytes(vector.signature);
-      //   const verified = await verify(publicBytes, signature, headerBytes,
-      //     msg_scalars, gens, hash);
-      //   assert.equal(verified, vector.result.valid);
-      // });
+      it('verify ' + hash + ': ' + testName, async function() {
+        const messagesOctets = vector.messages.map(msg => hexToBytes(msg));
+        const msg_scalars = await messages_to_scalars(messagesOctets, hash);
+        const gens = await prepareGenerators(vector.messages.length, hash);
+        const headerBytes = hexToBytes(vector.header);
+        const publicBytes = hexToBytes(vector.signerKeyPair.publicKey);
+        const signature = hexToBytes(vector.signature);
+        const verified = await verify(publicBytes, signature, headerBytes,
+          msg_scalars, gens, hash);
+        assert.equal(verified, vector.result.valid);
+      });
     }
   });
 }
