@@ -72,13 +72,12 @@ for(const hashType of ['SHA-256', 'SHAKE-256']) {
         const proof = await proofGen(publicBytes, signature, headerBytes, ph,
           msg_scalars, disclosedIndexes, gens, hashType, rand_scalar_func);
         // console.log(bytesToHex(proof));
-        console.log('Computed proof raw values:');
-        console.log(octets_to_proof(proof));
-        console.log('Test Vector proof raw values:');
-        console.log(octets_to_proof(hexToBytes(proofBundle.proof)));
+        // console.log('Computed proof raw values:');
+        // console.log(octets_to_proof(proof));
+        // console.log('Test Vector proof raw values:');
+        // console.log(octets_to_proof(hexToBytes(proofBundle.proof)));
         assert.equal(bytesToHex(proof), proofBundle.proof);
       });
-      break; //TEMPORARY FOR DEBUGGING
     }
   });
 }
