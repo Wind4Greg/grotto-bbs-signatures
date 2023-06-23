@@ -21,7 +21,7 @@ const msg_scalars = await messages_to_scalars(test_msgs);
 const gens = await prepareGenerators(test_msgs.length); // Generate enough for all messages
 
 // Prepare private and public keys
-const sk_bytes = hexToBytes('4a39afffd624d69e81808b2e84385cc80bf86adadf764e030caa46c231f2a8d7');
+const sk_bytes = hexToBytes('57887f6e42cbf2a76fae89370474abe3d0f2e9db5d66c3f60b13e4fc724cde4e');
 const pk_bytes = publicFromPrivate(sk_bytes);
 
 const header = hexToBytes('11223344556677889900aabbccddeeff');
@@ -34,7 +34,7 @@ console.log('Complete signature single message:');
 let resultString = bytesToHex(signature);
 console.log(resultString);
 // From https://github.com/decentralized-identity/bbs-signature/blob/main/tooling/fixtures/fixture_data/bls12-381-sha-256/signature/signature001.json
-let expected = '8fb17415378ec4462bc167be75583989e0528913da142239848ae88309805bfb3656bcff322e5d8fd1a7e40a660a62266099f27fa81ff5010443f36285f6f0758e4d701c444b20447cded906a3f2001714087f165f760369b901ccbe5173438b32ad195b005e2747492cf002cf51e498';
+let expected = '997e314ef7aba8c416719faafd2ec389a6d6fcc224a8a679a1f504f141242287a87166c3c90c1aacc989f08e303fde125977bc9cfbdbc4beb12ae4b12af757a75b1b8e245f2595b191078741bb533064';
 console.log(`Test vector verified: ${resultString === expected}`);
 let verified = await verify(pk_bytes, signature, header,
   msg_scalars.slice(0, L), gens);
@@ -47,7 +47,7 @@ console.log('Complete signature 10 messages:');
 resultString = bytesToHex(signature);
 console.log(resultString);
 // From https://github.com/decentralized-identity/bbs-signature/blob/main/tooling/fixtures/fixture_data/bls12-381-sha-256/signature/signature004.json
-expected = 'b058678021dba2313c65fadc469eb4f030264719e40fb93bbf68bdf79079317a0a36193288b7dcb983fae0bc3e4c077f145f99a66794c5d0510cb0e12c0441830817822ad4ba74068eb7f34eb11ce3ee606d86160fecd844dda9d04bed759a676b0c8868d3f97fbe2e8b574169bd73a3';
+expected = '8f34cef031ce533fc060186a11ae01816499753e654cae2ec22158555e9a0e6fadb963661c73a0ccb1d3786702b1cad70bd529fafdc3ceff1ee5471091f7565f6f01324b7f08c546a4531a5ed722283e';
 console.log(`Test vector verified: ${resultString === expected}`);
 verified = await verify(pk_bytes, signature, header, msg_scalars.slice(0, L),
   gens);
