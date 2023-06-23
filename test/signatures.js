@@ -1,6 +1,6 @@
 /*global before, describe, it, console*/
 import {bytesToHex, hexToBytes, messages_to_scalars, prepareGenerators, sign,
-  verify, octets_to_sig} from '../lib/BBS.js';
+  verify} from '../lib/BBS.js';
 import {readdir, readFile} from 'fs/promises';
 import {assert} from 'chai';
 

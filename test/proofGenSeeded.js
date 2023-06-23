@@ -4,7 +4,7 @@
   Uses seeded random pseudo random generator in proof generation to check
   against generated proof test vectors.
 */
-import {bytesToHex, hexToBytes, messages_to_scalars, octets_to_proof,
+import {bytesToHex, hexToBytes, messages_to_scalars,
   prepareGenerators, proofGen, seeded_random_scalars} from '../lib/BBS.js';
 import {assert} from 'chai';
 import {readFile} from 'fs/promises';
