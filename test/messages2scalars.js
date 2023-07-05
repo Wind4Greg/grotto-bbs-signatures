@@ -33,6 +33,7 @@ for(const hash of ['SHA-256', 'SHAKE-256']) {
         assert.equal(result_scalars[i], test_scalars[i]);
         // console.log(`computed scalar: ${result_scalars[i]}`);
         // console.log(`test scalar: ${test_scalars[i]}`);
+        // console.log(`test scalar hex: ${test_scalars[i].toString(16)}`);
       }
     });
   });
