@@ -118,6 +118,17 @@ This paper almost has all the details for the computations. However it leaves so
 
 For this they point to the CYK09
 
+### Formulas
+
+**Key Generation**: $(h_0, \dots, h_L) \xleftarrow[]{\$}\mathbb{G}_1^{L+1}$, $x \xleftarrow[]{\$} \mathbb{Z}_p^*$, $w \gets g_2^x$, and set $sk = x$ and $pk = (w, h_0,\dots, h_L)$
+
+**Signature**: On input message $(m_1, \dots, m_L) \in \mathbb{Z}_p^L$ and secret key $x$, pick $e, s \xleftarrow[]{\$} \mathbb{Z}_p$ and compute $A \gets (g_1 h_0^s \prod_{i=1}^L h_i^{m_i})^{\frac{1}{e + x}}$. Output signature $\sigma \gets (A, e, s)$.
+
+**Verification**: On input a pulic key $(w, h_0,\dots, h_L) \in \mathbb{G}_2 \times \mathbb{G}_1^{L+1}$, message $(m_1, \dots, m_L) \in \mathbb{Z}_p^L$, and  purported signature $(A, e, s) \in \mathbb{G} \times \mathbb{Z}_p^2$, check $e(A, w g_2^e) =e(g_1 h_0^s \prod_{i=1}^L h_i^{m_i}, g_2)$
+
+**Lemma 1**. The BBS+ signature scheme is existentially unforgeable against adaptive chosen message attacks under the JOC version of the qSDH assumption, in particular in pairing groups where no efficient isomorphism between $\mathbb{G}_2$ and $\mathbb{G}_1$ exists.
+
+
 ## AnonCreds
 
 References:
