@@ -12,11 +12,15 @@ This is the rough outline and notes for a guide to BBS signatures from applicati
 
 1. Application Scenarios and Benefits
    1. Verifiable Credentials, Anonymous Credentials (AnonCreds)
-   2. Three party model: Issuer, Holder, Verifier
-   3. Issuer Efficient Selective Disclosure (short issuer signature, holder proof grows linearly with number of messages not disclosed) -- quick comparison to other selective disclosure approaches
-   4. Unlinkable signatures (holder supplies "signature proof of knowledge" to verifier instead of original signature from issuer)
-   5. Tracking/Linking Threat Model: Verifier-Verifier collusion, Issuer-Verifier collusion
-   6. Other signature schemes that provide unlinkability (quick review)
+      1. Three party model: Issuer, Holder, Verifier
+   2. Selective Disclosure
+      1. What is it
+      2. Examples: CLR
+      3. Quick comparison to other high level selective disclosure approaches
+      4. Size characteristics of general selective disclosure approaches
+   3. Unlinkable signatures (holder supplies "signature proof of knowledge" to verifier instead of original signature from issuer)
+      1. Tracking/Linking Threat Model: Verifier-Verifier collusion, Issuer-Verifier collusion
+      2. Other signature schemes that provide unlinkability (quick review)
 2. Key Theoretical Techniques
    1. Elliptic Curves and Pairings
    2. Sigma Protocols for General Linear Relations for ZKP
@@ -37,11 +41,67 @@ This is the rough outline and notes for a guide to BBS signatures from applicati
    5. CDL2016 *Anonymous attestation using the strong Diffie-Hellman assumption revisited*
    6. TZ2023 *Revisiting BBS Signatures*
 4. Key Supplemental Techniques
-   1. ZKP via Sigma Protocols for general linear relations
-      1. CKY2009 *On the portability of generalized Schnorr proofs*
+   1. ZKP via Sigma Protocols for general linear relations (simplest to most general)
+      1. [Schnorr Non-interactive Zero-Knowledge Proof (RFC8235)](https://www.rfc-editor.org/rfc/rfc8235.html), 2017. Provides full details.
       2. CS1997 *Efficient group signature schemes for large groups*
+      3. CKY2009 *On the portability of generalized Schnorr proofs*
    2. Fiat-Shamir heuristic: FS1987 *How to prove yourself: Practical solution to identification and signature problems*
    3. Pedersen Commitments: Ped1992 *Non-interactive and information-theoretic secure verifiable secret sharing*
+
+# Applications and Desired Features
+
+## Verifiable Credentials
+
+W3C Verifiable Credentials:
+
+* [Wikipedia: Verifiable Credentials](https://en.wikipedia.org/wiki/Verifiable_credentials)
+* [Verifiable Credentials Data Model v2.0 W3C Editor's Draft](https://w3c.github.io/vc-data-model/)
+* [Verifiable Credential Data Integrity 1.0 Securing the Integrity of Verifiable Credential Data](https://w3c.github.io/vc-data-integrity/) W3C Candidate Recommendation Snapshot. *Caveat 1*
+* [Data Integrity ECDSA Cryptosuites v1.0 Achieving Data Integrity using ECDSA with NIST-compliant curves](https://w3c.github.io/vc-di-ecdsa/) W3C Candidate Recommendation Snapshot. Includes selective disclosure functionality. *Caveat 1*
+* [Data Integrity EdDSA Cryptosuites v1.0 Achieving Data Integrity using EdDSA with Edwards curves](https://w3c.github.io/vc-di-eddsa/), W3C Candidate Recommendation Snapshot. *Caveat 1*
+* [BBS Cryptosuite v2023 Securing Verifiable Credentials with Selective Disclosure using BBS Signatures](https://w3c.github.io/vc-di-bbs/)
+* [Securing Verifiable Credentials using JOSE and COSE W3C Working Draft](https://w3c.github.io/vc-jose-cose/)
+
+*Caveat 1*: I'm and editor on these specifications.
+
+Hyperledger AnonCreds:
+
+* [AnonCreds project page/overview](https://wiki.hyperledger.org/display/anoncreds)
+* [AnonCreds Specification v1.0 Draft](https://hyperledger.github.io/anoncreds-spec/) Uses CL signatures, i.e., Jan Camenisch, Anna Lysyanskaya: A Signature Scheme with Efficient Protocols. SCN 2002: 268-289.
+* Draft document [Anonymous credentials 2.0 version 0.2](https://wiki.hyperledger.org/download/attachments/6426712/Anoncreds2.1.pdf), Michael Lodder, Dmitry Khovratovich, 26 February 2019. Uses BBS+
+* A critique of state of AnonCreds: [Being “Real” about Hyperledger Indy & Aries/Anoncreds ](https://identitywoman.net/being-real-about-hyperledger-indy-aries-anoncreds/), Kaliya Young · September 7, 2022
+* Uses [Trust over IP Model](https://trustoverip.org/wp-content/toip-model/) of Issuer, Holder, Verifier
+
+## Selective Disclosure
+
+Go over selective disclosure in the three party model. Multiple statements (messages)
+
+General approaches:
+
+* Sign individual statements **Individual Signing**
+* Hash (salted) individual statements arrange in a list and hash, or arrange in a tree hashing intermediate results **Merkel Tree**
+* BBS like, i.e., the signature system works with multiple messages and directly works with selective disclosure **BBS**
+
+Sizing of general approaches (signature, proof, M messages, D disclosed messages)
+
+* **Individual Signing**: Signature -- M*signature size; Proof: D*signature size
+* **Merkel Tree**: Signature -- 1 * signature size + overheads for salts (if used); Proof: 1 * signature size + worst case a hash value for every non-disclosed statement (M-D)
+* **BBS**: Signature single relatively short signature independent of M; Proof: basic algorithm overhead + (M-D) scalars
+
+Some Higher Level Selective Disclosure Protocols:
+
+* [Selective Disclosure for JWTs (SD-JWT)](https://www.ietf.org/archive/id/draft-ietf-oauth-selective-disclosure-jwt-05.html#name-sd-jwt-structure) IETF Draft.
+* [JSON Web Proof](https://www.ietf.org/archive/id/draft-ietf-jose-json-web-proof-01.html) IETF Draft, (supports BBS as well as other cryptographic approaches).
+* ECDSA-SD and SD-primitives in [Data Integrity ECDSA Cryptosuites v1.0 Achieving Data Integrity using ECDSA with NIST-compliant curves](https://w3c.github.io/vc-di-ecdsa/).
+
+## Unlinkable Proofs
+
+Why? Tracking! Unique identifiers! Finger printing!
+
+Threat models:
+
+
+# Paper Summaries
 
 ## References
 
@@ -67,6 +127,45 @@ CRYPTO 2004, volume 3152 of LNCS, pages 41–55. Springer, Heidelberg, August 20
 * Amos Fiat and Adi Shamir. How to prove yourself: Practical solution to identification and signature problems. In Andrew M. Odlyzko, editor, Advances in Cryptology — CRYPTO ’86, volume 263 of Lecture Notes in Computer Science, pages 186–194. Springer Verlag, 1987. **Fundamental** widely cited. PDF in Zotero.
 
 Note for general, modern, rigorous, but readable cryptograpic background I'm reviewing [A Graduate Course in Applied Cryptography](https://toc.cryptobook.us/).
+
+## BBS 2004 Notes
+
+From the introduction:
+
+> Group signatures, introduced by Chaum and van Heyst, provide **anonymity for signers**. Any member of the group can sign messages, but the resulting signature keeps the identity of the signer secret. In some systems there is a third party that can trace the signature, or undo its anonymity, using a special trapdoor. Some systems support revocation where group membership can be selectively disabled without affecting the signing ability of unrevoked members.
+
+Properties of group signatures from paper:
+
+* correctness, which ensures that honestly-generated signatures verify and trace correctly;
+* full-anonymity, which ensures that signatures do not reveal their signer’s identity; and
+* full-traceability, which ensures that all signatures, even those created by the collusion of multiple users and the group manager, trace to a member of the forging coalition.
+
+In section 6 they define their "Short Group Signatures from SDH" which consists of the following processes:
+
+* Key generation which takes as parameter $n$ the number of members of the group. This generates the group public key, private keys for each group member, and a private key for the group manager (the party that is allowed to trace signatures)
+* Sign a message with a group members private key
+* Verify a message and signature against the group public key
+* *Open*: This algorithm is used for tracing a signature to a signer and requires the group managers secret key along with the message and signature
+
+They prove the following properties about their group signature scheme:
+
+* Theorem 2. The SDH group signature scheme is correct.
+* Theorem 3. If Linear encryption is (t′,′)-semantically secure on G1 then the SDH group signature scheme is (t, qH,)-CPA-fully-anonymous, where  = ′ and t = t′ − qHO(1).Here qH is the number of hash function queries made by the adversary and n is the number of members of the group.
+* Theorem 4. If SDH is (q, t′,′)-hard on (G1,G2), then the SDH group signature scheme is (t, qH,qS,n,)-fully-traceable, where n = q − 1,  =4n√2′qH + n/p, and t = Θ(1) · t′.HereqH is the number of hash function queries made by the adversary, qS is the number of signing queries made by the adversary, and n is the number of members of the group.
+
+
+"The security of our scheme is based on the Strong Diffie-Hellman (SDH) assumption in groups with a bilinear map."
+
+"Our system is based on a new Zero-Knowledge Proof of Knowledge (ZKPK) of the solution to an SDH problem. We convert this ZKPK to a group signature via the Fiat-Shamir heuristic and prove security in the *random oracle model*."
+
+Key definitions in paper: "Bilinear Group", "q-Strong Diffie-Hellman Problem"
+
+**TODO** summarize linear DH assumption and zero knowledge protocol 1.
+
+Key results: "Theorem 1. Protocol 1 is an honest-verifier zero-knowledge proof of knowledge of an SDH pair under the Decision Linear assumption."
+
+
+
 
 ## Camenisch and Lysyanskaya 2004 Notes
 
@@ -96,7 +195,7 @@ With formal definitions of *correctness* and *security* given in the paper. Note
 
 They let $q$ be a prime number of roughly the order of $2^k$. They have two different groups of order $q$. $\mathbb{G}$, $G$, they have a bilinear pairing $e: \mathbb{G} \times \mathbb{G}\rightarrow G$.
 
-### LRSW Assumptioins
+### LRSW Assumptions
 
 **LRSW Assumption**. Suppose that $G = 〈g〉$ is a group chosen by the setup algorithm Setup. Let X, Y ∈ G, $X = g^x$, $Y = g^y$. Let OX,Y (·) be an oracle that, on input a value $m ∈ Z_q$, outputs a triple $A = (a, a^y, a^{x+mxy})$ for a randomly chosen a.
 
@@ -128,6 +227,7 @@ For this they point to the CYK09
 
 **Lemma 1**. The BBS+ signature scheme is existentially unforgeable against adaptive chosen message attacks under the JOC version of the qSDH assumption, in particular in pairing groups where no efficient isomorphism between $\mathbb{G}_2$ and $\mathbb{G}_1$ exists.
 
+**Proof of knowledge of a BBS+ signature**: Prover has signature $\sigma \gets (A, e, s)$ with $A = (g_1 h_0^s \prod_{i=1}^L h_i^{m_i})^{\frac{1}{e + x}}$. Prover selectively discloses messages $m_i$ with $i \in D$. Randomization: $r_1 \xleftarrow[]{\$} \mathbb{Z}_p^*$, set $A' =A^{r_1}$, and set $r_3 \gets \frac{1}{r_1}$. Set $\bar{A} \gets A^{\prime - e}\cdot b^{r_1}$. Where $b = g_1 h_0^s \prod_{i=1}^L h_i^{m_i} = A^{e + x}$> Note that $\bar{A} = A^{\prime x}$. *STOPPED HERE*
 
 ## AnonCreds
 
