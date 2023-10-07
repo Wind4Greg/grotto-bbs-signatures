@@ -10,12 +10,12 @@ Tentative Title: BBS+ Signatures: Applications, Standardizations, and a bit of T
 
 Presenters: Dr. Greg M. Bernstein, Dr. Vasilis Kalos
 
-Abstract: In this talk we present an overview of BBS+ signatures from an applications and standardization perspective. In addition we will review its cryptographic/ZKP underpinnings. Verifiable credentials are currently undergoing standardization as an electronic substitute/adjunct to many traditional types of credentials such as passports, educational transcripts, etc... BBS+ signatures can provide the key features of selective disclosure and unlinkability to verifiable credentials. However the road from academic papers to multi-vendor interoperable deployment requires working through multiple standards development organizations. We describe this process for BBS+ via our work at the IETF, DIF, and W3C.
+Abstract: In this talk we present an overview of BBS+ signatures from an applications and standardization perspective. In addition we will review its cryptographic/ZKP underpinnings. Verifiable credentials are currently undergoing standardization at the W3C as an electronic substitute/adjunct to many traditional types of credentials such as passports, educational transcripts, etc... BBS+ signatures can provide the key features of selective disclosure and unlinkability to verifiable credentials. However the road from academic papers to multi-vendor interoperable deployment requires working through multiple standards development organizations. We describe this process for BBS+ via our work at the IETF, DIF, and W3C.
 
 1. Application Scenarios and Benefits  (Greg)
-   1. Intro: Applications to Standards to Papers
-      1. Applications Drives Standards which "shop for results" which can lead to more results or refinements
-      2. BBS+ Draft Standard and Papers
+   1. Intro:
+      1. Who am I
+      2. BBS+ Draft Standard and fundamental Papers
    2. Verifiable Credentials (W3C) and AnonCreds (HyperLedger)
       1. Three party model: Issuer, Holder, Verifier
       2. VC and Cryptography: current specifications in progress
