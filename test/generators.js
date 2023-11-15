@@ -24,8 +24,8 @@ for(const hash of ['SHA-256', 'SHAKE-256']) {
     before(async function() {
       gens = await prepareGenerators(L, hash);
     });
-    it('Confirm Base Point', function() {
-      assert.equal(gens.P1.toHex(true), generatorVector.BP);
+    it('Confirm P1', function() {
+      assert.equal(gens.P1.toHex(true), generatorVector.P1);
     });
     it('Confirm Q1', function() {
       assert.equal(gens.Q1.toHex(true), generatorVector.Q1);
