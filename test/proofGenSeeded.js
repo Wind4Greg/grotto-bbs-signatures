@@ -62,16 +62,19 @@ for(const hashType of ['SHA-256', 'SHAKE-256']) {
 
         // From the test vector get the disclosed indices and messages
         const proofBundle = vector.proofBundle;
-        const msgsObject = proofBundle.revealedMessages;
-        const disclosedIndexes = [];
-        for(const field in msgsObject) {
-          disclosedIndexes.push(parseInt(field));
-        }
+        const disclosedIndexes = proofBundle.disclosedIndexes;
+        // for(const field in msgsObject) {
+        //   disclosedIndexes.push(parseInt(field));
+        // }
 
         const ph = hexToBytes(proofBundle.presentationHeader);
         const proof = await proofGen(publicBytes, signature, headerBytes, ph,
           msg_scalars, disclosedIndexes, gens, hashType, rand_scalar_func);
-        // console.log(bytesToHex(proof));
+        console.log("Computed Proof:");
+        console.log(bytesToHex(proof));
+        console.log("Test vector Proof:");
+        console.log(proofBundle.proof);
+        console.log(`is equal?: ${bytesToHex(proof) === proofBundle.proof}`);
         // console.log('Computed proof raw values:');
         // console.log(octets_to_proof(proof));
         // console.log('Test Vector proof raw values:');
