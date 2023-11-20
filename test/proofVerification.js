@@ -25,6 +25,10 @@ for(const hashType of ['SHA-256', 'SHAKE-256']) {
   for(const fn of testFiles) {
     const testVector = JSON.parse(await readFile(vectorPath + fn));
     testVectors.push(testVector);
+    // for debugging only remove
+    // if(fn === 'proof003.json') {
+    //   break;
+    // }
     // console.log(testVector);
   }
 
@@ -45,13 +49,13 @@ for(const hashType of ['SHA-256', 'SHAKE-256']) {
 
       it(testName + ' ' + hashType, async function() {
         // From the test vector get the disclosed indices and messages
-        const msgsObject = vector.revealedMessages;
-        const disclosedIndexes = [];
-        const messagesOctets = [];
-        for(const field in msgsObject) {
-          disclosedIndexes.push(parseInt(field));
-          messagesOctets.push(hexToBytes(msgsObject[field]));
-        }
+        const disclosedIndexes = vector.disclosedIndexes;
+        // Test vector contains all the messages, NOT just the disclosed
+        // messages!!!
+        const disclosed_messages = vector.messages.filter((msg, i) =>
+          disclosedIndexes.includes(i)
+        );
+        const messagesOctets = disclosed_messages.map(msg => hexToBytes(msg));
         // console.log(disclosedIndexes);
         // console.log(messagesOctets);
         const disclosedMsgScalars = await messages_to_scalars(messagesOctets,
