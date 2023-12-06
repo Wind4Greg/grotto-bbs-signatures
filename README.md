@@ -121,21 +121,19 @@ You may have noticed that the proofs in these two examples have different sizes.
 
 ## Library Usage
 
-**TODO**: Update for version 5 API.
-
 ### Key Generation
 
 For signing a *secret* (also known as a private) key is needed. For signature and proof verification the verifiers need the corresponding *public* key. A recomended procedure for deriving an appropriate secret key from some initial random bytes is given in the BBS specification and available via the `keyGen()` function. See the [KeyGenExample.js](examples/KeyGenExample.js) file for details.
 
 ```javascript
-import {bytesToHex, keyGen, publicFromPrivate} from '@grottonetworking/bbs-signatures';
+import {API_ID_BBS_SHAKE, bytesToHex, keyGen, publicFromPrivate} from '@grottonetworking/bbs-signatures';
 import crypto from 'crypto';
 
 const bytesLength = 40; // >= 32 bytes
 // Generate random initial key material -- Node.js
 const keyMaterial = new Uint8Array(crypto.randomBytes(bytesLength).buffer);
 const keyInfo = new TextEncoder().encode('BBS-Example Key info');
-const sk_bytes = await keyGen(keyMaterial, keyInfo);
+const sk_bytes = await keyGen(keyMaterial, keyInfo, API_ID_BBS_SHAKE);
 console.log(`Private key, length ${sk_bytes.length}, (hex):`);
 console.log(bytesToHex(sk_bytes));
 const pub_bytes = publicFromPrivate(sk_bytes);
@@ -148,7 +146,7 @@ console.log(bytesToHex(pub_bytes));
 Since BBS works works with multiple *messages* the encoding (really cryptographic processing) of the messages is done as separate step. This is accomplished with the `messages_to_scalars()` function. For example:
 
 ```javascript
-import {messages_to_scalars, numberToHex} from '@grottonetworking/bbs-signatures';
+import {API_ID_BBS_SHAKE, messages_to_scalars, numberToHex} from '@grottonetworking/bbs-signatures';
 
 const messages = [
   'FirstName: Sequoia',
@@ -164,7 +162,7 @@ const messages = [
 
 const te = new TextEncoder(); // To convert strings to byte arrays
 const messagesOctets = messages.map(msg => te.encode(msg));
-const msg_scalars = await messages_to_scalars(messagesOctets);
+const msg_scalars = await messages_to_scalars(messagesOctets, API_ID_BBS_SHAKE);
 for(let i = 0; i < messages.length; i++) {
   console.log(`msg ${i} ${messages[i]}`);
   console.log(`scalar (hex): ${numberToHex(msg_scalars[i], 32)}`);
@@ -178,10 +176,10 @@ All major BBS operations (signing, signature verification, proof generation, and
 Below we show an example that creates the generators and these can be confirmed against the "message generator" test vectors given in the specification. You would never have a need to look at these in a real application.
 
 ```javascript
-import {prepareGenerators} from '@grottonetworking/bbs-signatures';
+import {API_ID_BBS_SHAKE, prepareGenerators} from '@grottonetworking/bbs-signatures';
 
 const L = 10;
-const gens = await prepareGenerators(L); // Default SHA-256 hash
+const gens = await prepareGenerators(L, API_ID_BBS_SHAKE); // Default SHA-256 hash
 console.log(`Q1:${gens.Q1.toHex(true)}`); // Elliptic point to compressed hex
 console.log(`Q2:${gens.Q2.toHex(true)}`);
 for(let i = 0; i < gens.H.length; i++) {
@@ -196,11 +194,11 @@ Generate a signature for a list of messages we need the following: (1) private/p
 ```javascript
 // Excerp from TreeDMVExample.js
 const header = hexToBytes('11223344556677889900aabbccddeeff');
-const signature = await sign(sk_bytes, pk_bytes, header, msg_scalars, gens);
+const signature = await sign(sk_bytes, pk_bytes, header, msg_scalars, gens, API_ID_BBS_SHAKE);
 console.log('Signature:');
 console.log(bytesToHex(signature));
 
-const verified = await verify(pk_bytes, signature, header, msg_scalars, gens);
+const verified = await verify(pk_bytes, signature, header, msg_scalars, gens, API_ID_BBS_SHAKE);
 console.log(`Algorithm verified: ${verified}`);
 ```
 
@@ -212,7 +210,7 @@ For proof generation the *holder* needs the signature, messages, and public key.
 const ph = new Uint8Array();
 const disclosed_indexes = [3, 7]; // Selective disclosure
 const proof = await proofGen(pk_bytes, signature, header, ph, msg_scalars,
-  disclosed_indexes, gens);
+  disclosed_indexes, gens, API_ID_BBS_SHAKE);
 console.log(`Proof for selective disclosure of messages ${disclosed_indexes}:`);
 console.log(bytesToHex(proof));
 
