@@ -3,7 +3,8 @@
 /*
   Checks the generation of mocked random scalars.
 */
-import {hexToBytes, seeded_random_scalars} from '../lib/BBS.js';
+import {API_ID_BBS_SHA, API_ID_BBS_SHAKE, hexToBytes, seeded_random_scalars}
+  from '../lib/BBS.js';
 import {assert} from 'chai';
 import {readFile} from 'fs/promises';
 
@@ -22,7 +23,7 @@ describe('Mocked Random Scalars ', function() {
     testScalars = testScalarsSHA;
     const seed = hexToBytes(testScalars.seed);
     const count = testScalars.count;
-    const scalars = await seeded_random_scalars(seed, 'SHA-256', count);
+    const scalars = await seeded_random_scalars(seed, API_ID_BBS_SHA, count);
     // console.log(scalars.map(x => x.toString(16)));
 
     const testScalarsBig = testScalars.mockedScalars.map(tst => BigInt('0x' + tst));
@@ -33,7 +34,7 @@ describe('Mocked Random Scalars ', function() {
     testScalars = testScalarsSHAKE;
     const seed = hexToBytes(testScalars.seed);
     const count = testScalars.count;
-    const scalars = await seeded_random_scalars(seed, 'SHAKE-256', count);
+    const scalars = await seeded_random_scalars(seed, API_ID_BBS_SHAKE, count);
     // console.log(scalars.map(x => x.toString(16)));
 
     const testScalarsBig = testScalars.mockedScalars.map(tst => BigInt('0x' + tst));
