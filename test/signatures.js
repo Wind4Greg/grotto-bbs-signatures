@@ -1,4 +1,4 @@
-/*global before, describe, it, console*/
+/*global before, describe, it */
 import {API_ID_BBS_SHA, API_ID_BBS_SHAKE, bytesToHex, hexToBytes,
   messages_to_scalars, prepareGenerators, sign, verify} from '../lib/BBS.js';
 import {readdir, readFile} from 'fs/promises';
