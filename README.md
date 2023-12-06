@@ -419,3 +419,4 @@ These take a while to compute so we prepare them separately and reuse them.
 | --- | --- | --- |
 | L | <code>number</code> | An integer that indicates the number of generators to be created. This number must be large than the total number of messages in a signature or proof. |
 | api_id | <code>string</code> | The API id for the signature suite. |
+
