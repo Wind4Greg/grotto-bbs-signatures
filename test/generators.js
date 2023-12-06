@@ -1,14 +1,16 @@
 /* global describe, URL, it, before */
+
+import {API_ID_BBS_SHA, API_ID_BBS_SHAKE, prepareGenerators}
+  from '../lib/BBS.js';
 import {assert} from 'chai';
-import {prepareGenerators} from '../lib/BBS.js';
 import {readFile} from 'fs/promises';
 
 const SHA_PATH = './fixture_data/bls12-381-sha-256/';
 const SHAKE_PATH = './fixture_data/bls12-381-shake-256/';
 
-for(const hash of ['SHA-256', 'SHAKE-256']) {
+for(const api_id of [API_ID_BBS_SHA, API_ID_BBS_SHAKE]) {
   let path = SHA_PATH;
-  if(hash == 'SHAKE-256') {
+  if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
   }
 
@@ -18,11 +20,11 @@ for(const hash of ['SHA-256', 'SHAKE-256']) {
     )
   );
 
-  describe('Generators ' + hash, async function() {
+  describe('Generators ' + api_id, async function() {
     const L = generatorVector.MsgGenerators.length;
     let gens;
     before(async function() {
-      gens = await prepareGenerators(L, hash);
+      gens = await prepareGenerators(L, api_id);
     });
     it('Confirm P1', function() {
       assert.equal(gens.P1.toHex(true), generatorVector.P1);
