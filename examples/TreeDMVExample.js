@@ -1,7 +1,8 @@
 /*global TextEncoder, console*/
 /*eslint max-len: ["error", { "ignoreStrings": true, "ignoreComments": true }]*/
-import {bytesToHex, hexToBytes, messages_to_scalars, prepareGenerators,
-  proofGen, proofVerify, publicFromPrivate, sign, verify} from '../lib/BBS.js';
+import {API_ID_BBS_SHAKE, bytesToHex, hexToBytes, messages_to_scalars,
+  prepareGenerators, proofGen, proofVerify, publicFromPrivate, sign, verify}
+  from '../lib/BBS.js';
 
 const messages = [
   'FirstName: Sequoia',
@@ -17,31 +18,33 @@ const messages = [
 
 const te = new TextEncoder(); // To convert strings to byte arrays
 const messagesOctets = messages.map(msg => te.encode(msg));
-const msg_scalars = await messages_to_scalars(messagesOctets);
+const msg_scalars = await messages_to_scalars(messagesOctets, API_ID_BBS_SHAKE);
 
-const gens = await prepareGenerators(messages.length); // Generate enough for all messages
+const gens = await prepareGenerators(messages.length, API_ID_BBS_SHAKE); // Generate enough for all messages
 
 // Prepare private and public keys
 const sk_bytes = hexToBytes('47d2ede63ab4c329092b342ab526b1079dbc2595897d4f2ab2de4d841cbe7d56');
 const pk_bytes = publicFromPrivate(sk_bytes);
 
 const header = hexToBytes('11223344556677889900aabbccddeeff');
-const signature = await sign(sk_bytes, pk_bytes, header, msg_scalars, gens);
+const signature = await sign(sk_bytes, pk_bytes, header, msg_scalars, gens,
+  API_ID_BBS_SHAKE);
 console.log('Signature:');
 console.log(bytesToHex(signature));
 
-const verified = await verify(pk_bytes, signature, header, msg_scalars, gens);
+const verified = await verify(pk_bytes, signature, header, msg_scalars, gens,
+  API_ID_BBS_SHAKE);
 console.log(`Algorithm verified: ${verified}`);
 
 const ph = new Uint8Array();
 const disclosed_indexes = [3, 7]; // Selective disclosure
 const proof = await proofGen(pk_bytes, signature, header, ph, msg_scalars,
-  disclosed_indexes, gens);
+  disclosed_indexes, gens, API_ID_BBS_SHAKE);
 console.log(`Proof for selective disclosure of messages ${disclosed_indexes}:`);
 console.log(bytesToHex(proof));
 
 const disclosedMsgs = msg_scalars.filter(
   (m, i) => disclosed_indexes.includes(i)); // Only the disclosed messages!
 const proofValid = await proofVerify(pk_bytes, proof, header, ph, disclosedMsgs,
-  disclosed_indexes, gens);
+  disclosed_indexes, gens, API_ID_BBS_SHAKE);
 console.log(`Proof verified: ${proofValid}`);

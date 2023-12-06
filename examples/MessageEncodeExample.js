@@ -1,5 +1,6 @@
 /*global TextEncoder, console*/
-import {messages_to_scalars, numberToHex} from '../lib/BBS.js';
+import {API_ID_BBS_SHAKE, messages_to_scalars, numberToHex}
+  from '../lib/BBS.js';
 
 const messages = [
   'FirstName: Sequoia',
@@ -15,7 +16,7 @@ const messages = [
 
 const te = new TextEncoder(); // To convert strings to byte arrays
 const messagesOctets = messages.map(msg => te.encode(msg));
-const msg_scalars = await messages_to_scalars(messagesOctets);
+const msg_scalars = await messages_to_scalars(messagesOctets, API_ID_BBS_SHAKE);
 for(let i = 0; i < messages.length; i++) {
   console.log(`msg ${i} ${messages[i]}`);
   console.log(`scalar (hex): ${numberToHex(msg_scalars[i], 32)}`);
