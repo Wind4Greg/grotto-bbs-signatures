@@ -1,10 +1,10 @@
 # JavaScript BBS Signatures
 
-This repository contains an all JavaScript implementation of the emerging BBS+ digital 
-signature standard being developed in conjunction with the 
-[Decentralized Identity Foundation (DIF)](https://identity.foundation/) and the [Crypto Forum Research Group (CFRG) of the IRTF](https://datatracker.ietf.org/rg/cfrg/about/). 
+This repository contains an all JavaScript implementation of the emerging BBS+ digital
+signature standard being developed in conjunction with the
+[Decentralized Identity Foundation (DIF)](https://identity.foundation/) and the [Crypto Forum Research Group (CFRG) of the IRTF](https://datatracker.ietf.org/rg/cfrg/about/).
 
-This version of our implementation *conforms* to the procedures and *validates* against the test vectors in the **03** draft, i.e., [draft-irtf-cfrg-bbs-signatures-03](https://datatracker.ietf.org/doc/draft-irtf-cfrg-bbs-signatures/03/).
+This version of our implementation *conforms* to the procedures and *validates* against the test vectors in the **05** draft, i.e., [draft-irtf-cfrg-bbs-signatures-5](https://datatracker.ietf.org/doc/draft-irtf-cfrg-bbs-signatures/05/).
 
 You can find the latest draft specification at [The BBS Signature Scheme (DIF)](https://identity.foundation/bbs-signature/draft-irtf-cfrg-bbs-signatures.html) this work then feeds into the IRTF draft which is available at [draft-irtf-cfrg-bbs-signatures](https://datatracker.ietf.org/doc/draft-irtf-cfrg-bbs-signatures/).
 
@@ -126,14 +126,14 @@ You may have noticed that the proofs in these two examples have different sizes.
 For signing a *secret* (also known as a private) key is needed. For signature and proof verification the verifiers need the corresponding *public* key. A recomended procedure for deriving an appropriate secret key from some initial random bytes is given in the BBS specification and available via the `keyGen()` function. See the [KeyGenExample.js](examples/KeyGenExample.js) file for details.
 
 ```javascript
-import {bytesToHex, keyGen, publicFromPrivate} from '@grottonetworking/bbs-signatures';
+import {API_ID_BBS_SHAKE, bytesToHex, keyGen, publicFromPrivate} from '@grottonetworking/bbs-signatures';
 import crypto from 'crypto';
 
 const bytesLength = 40; // >= 32 bytes
 // Generate random initial key material -- Node.js
 const keyMaterial = new Uint8Array(crypto.randomBytes(bytesLength).buffer);
 const keyInfo = new TextEncoder().encode('BBS-Example Key info');
-const sk_bytes = await keyGen(keyMaterial, keyInfo);
+const sk_bytes = await keyGen(keyMaterial, keyInfo, API_ID_BBS_SHAKE);
 console.log(`Private key, length ${sk_bytes.length}, (hex):`);
 console.log(bytesToHex(sk_bytes));
 const pub_bytes = publicFromPrivate(sk_bytes);
@@ -146,7 +146,7 @@ console.log(bytesToHex(pub_bytes));
 Since BBS works works with multiple *messages* the encoding (really cryptographic processing) of the messages is done as separate step. This is accomplished with the `messages_to_scalars()` function. For example:
 
 ```javascript
-import {messages_to_scalars, numberToHex} from '@grottonetworking/bbs-signatures';
+import {API_ID_BBS_SHAKE, messages_to_scalars, numberToHex} from '@grottonetworking/bbs-signatures';
 
 const messages = [
   'FirstName: Sequoia',
@@ -162,7 +162,7 @@ const messages = [
 
 const te = new TextEncoder(); // To convert strings to byte arrays
 const messagesOctets = messages.map(msg => te.encode(msg));
-const msg_scalars = await messages_to_scalars(messagesOctets);
+const msg_scalars = await messages_to_scalars(messagesOctets, API_ID_BBS_SHAKE);
 for(let i = 0; i < messages.length; i++) {
   console.log(`msg ${i} ${messages[i]}`);
   console.log(`scalar (hex): ${numberToHex(msg_scalars[i], 32)}`);
@@ -171,15 +171,15 @@ for(let i = 0; i < messages.length; i++) {
 
 ### Generator Preparation
 
-All major BBS operations (signing, signature verification, proof generation, and proof verification) require the use of cryptographic group "generators". There need to be as many "generators" as messages that are or were originally signed. These take a bit of time to compute but can be reused in all the aforementioned operations and do not take up too much space. Hence we break out the preparation of these "generators" into a separate step via the `prepareGenerators()` function. 
+All major BBS operations (signing, signature verification, proof generation, and proof verification) require the use of cryptographic group "generators". There need to be as many "generators" as messages that are or were originally signed. These take a bit of time to compute but can be reused in all the aforementioned operations and do not take up too much space. Hence we break out the preparation of these "generators" into a separate step via the `prepareGenerators()` function.
 
 Below we show an example that creates the generators and these can be confirmed against the "message generator" test vectors given in the specification. You would never have a need to look at these in a real application.
 
 ```javascript
-import {prepareGenerators} from '@grottonetworking/bbs-signatures';
+import {API_ID_BBS_SHAKE, prepareGenerators} from '@grottonetworking/bbs-signatures';
 
 const L = 10;
-const gens = await prepareGenerators(L); // Default SHA-256 hash
+const gens = await prepareGenerators(L, API_ID_BBS_SHAKE); // Default SHA-256 hash
 console.log(`Q1:${gens.Q1.toHex(true)}`); // Elliptic point to compressed hex
 console.log(`Q2:${gens.Q2.toHex(true)}`);
 for(let i = 0; i < gens.H.length; i++) {
@@ -194,11 +194,11 @@ Generate a signature for a list of messages we need the following: (1) private/p
 ```javascript
 // Excerp from TreeDMVExample.js
 const header = hexToBytes('11223344556677889900aabbccddeeff');
-const signature = await sign(sk_bytes, pk_bytes, header, msg_scalars, gens);
+const signature = await sign(sk_bytes, pk_bytes, header, msg_scalars, gens, API_ID_BBS_SHAKE);
 console.log('Signature:');
 console.log(bytesToHex(signature));
 
-const verified = await verify(pk_bytes, signature, header, msg_scalars, gens);
+const verified = await verify(pk_bytes, signature, header, msg_scalars, gens, API_ID_BBS_SHAKE);
 console.log(`Algorithm verified: ${verified}`);
 ```
 
@@ -210,7 +210,7 @@ For proof generation the *holder* needs the signature, messages, and public key.
 const ph = new Uint8Array();
 const disclosed_indexes = [3, 7]; // Selective disclosure
 const proof = await proofGen(pk_bytes, signature, header, ph, msg_scalars,
-  disclosed_indexes, gens);
+  disclosed_indexes, gens, API_ID_BBS_SHAKE);
 console.log(`Proof for selective disclosure of messages ${disclosed_indexes}:`);
 console.log(bytesToHex(proof));
 
@@ -223,27 +223,32 @@ console.log(`Proof verified: ${proofValid}`);
 
 # API
 
+<!-- Generate the API with jsdoc2md as follows:
+     Run: npx jsdoc2md lib/*.js > temp.md
+     Copy contents of temp.md below. Then remove temp.md
+ -->
+
 ## Functions
 
 <dl>
-<dt><a href="#keyGen">keyGen(key_material, key_info, key_dst, hashType)</a> ⇒ <code>Uint8Array</code></dt>
+<dt><a href="#keyGen">keyGen(key_material, key_info, key_dst, api_id)</a> ⇒ <code>Uint8Array</code></dt>
 <dd><p>Produces an appropriate secret key starting from initial key material. This
 procedure enhances the entropy of the key material but is deterministic so
 initial key material must be kept secret.</p>
 </dd>
 <dt><a href="#publicFromPrivate">publicFromPrivate(privateBytes)</a> ⇒ <code>Uint8Array</code></dt>
 <dd></dd>
-<dt><a href="#sign">sign(SK, PK, header, messages, generators, hashType)</a></dt>
+<dt><a href="#sign">sign(SK, PK, header, messages, generators, api_id)</a></dt>
 <dd><p>Creates a BBS signature over a list of &quot;messages&quot;.</p>
 </dd>
-<dt><a href="#verify">verify(PK, signature, header, messages, generators, hashType)</a> ⇒ <code>boolean</code></dt>
+<dt><a href="#verify">verify(PK, signature, header, messages, generators, api_id)</a> ⇒ <code>boolean</code></dt>
 <dd><p>Verify a BBS signature against a public key.</p>
 </dd>
-<dt><a href="#proofGen">proofGen(PK, signature, header, ph, messages, disclosed_indexes, generators, hashType, rand_scalars)</a> ⇒ <code>Uint8Array</code></dt>
+<dt><a href="#proofGen">proofGen(PK, signature, header, ph, messages, disclosed_indexes, generators, api_id, rand_scalars)</a> ⇒ <code>Uint8Array</code></dt>
 <dd><p>Generates an unlinkable, selective disclosure proof based on a
 signature and message set, and related information.</p>
 </dd>
-<dt><a href="#proofVerify">proofVerify(PK, proof, header, ph, disclosed_messages, disclosed_indexes, generators, hashType)</a> ⇒ <code>boolean</code></dt>
+<dt><a href="#proofVerify">proofVerify(PK, proof, header, ph, disclosed_messages, disclosed_indexes, generators, api_id)</a> ⇒ <code>boolean</code></dt>
 <dd><p>Verifies a previously generated proof against original signers public key,
 and additional information.</p>
 </dd>
@@ -252,11 +257,11 @@ and additional information.</p>
 can be added to the number of disclosed messages to calculate the number of
 generators needed in proof verification.</p>
 </dd>
-<dt><a href="#messages_to_scalars">messages_to_scalars(messages, hashType)</a> ⇒ <code>Array</code></dt>
+<dt><a href="#messages_to_scalars">messages_to_scalars(messages, api_id)</a> ⇒ <code>Array</code></dt>
 <dd><p>This function converts (hashes) byte array messages into scalars representing
 the messages for use in signature/proof operations.</p>
 </dd>
-<dt><a href="#prepareGenerators">prepareGenerators(L, hashType)</a> ⇒ <code>Array</code></dt>
+<dt><a href="#prepareGenerators">prepareGenerators(L, api_id)</a> ⇒ <code>Array</code></dt>
 <dd><p>Prepares the &quot;group G1 generators&quot; used by the BBS signature suite.
 These values can be reused in many calls to the sign, verify, proofGen, and
 proofVerify functions. You must have enough generators for the number of
@@ -267,26 +272,26 @@ These take a while to compute so we prepare them separately and reuse them.</p>
 
 <a name="keyGen"></a>
 
-## keyGen(key_material, key_info, key_dst, hashType) ⇒ <code>Uint8Array</code>
+## keyGen(key_material, key_info, key_dst, api_id) ⇒ <code>Uint8Array</code>
 Produces an appropriate secret key starting from initial key material. This
 procedure enhances the entropy of the key material but is deterministic so
 initial key material must be kept secret.
 
-**Kind**: global function  
-**Returns**: <code>Uint8Array</code> - Derived secret key as an array of bytes.  
+**Kind**: global function
+**Returns**: <code>Uint8Array</code> - Derived secret key as an array of bytes.
 
 | Param | Type | Description |
 | --- | --- | --- |
 | key_material | <code>Uint8Array</code> | Secret key material. Must be >= 32 bytes long. |
 | key_info | <code>Uint8Array</code> | Optional key information. |
 | key_dst | <code>string</code> | Key domain separation tag, defaults to 'KEYGEN_DST_'. |
-| hashType | <code>string</code> | The hash type for the signature suite. |
+| api_id | <code>string</code> | The API id for the signature suite. |
 
 <a name="publicFromPrivate"></a>
 
 ## publicFromPrivate(privateBytes) ⇒ <code>Uint8Array</code>
-**Kind**: global function  
-**Returns**: <code>Uint8Array</code> - Containing encoded public key in G2.  
+**Kind**: global function
+**Returns**: <code>Uint8Array</code> - Containing encoded public key in G2.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -294,10 +299,10 @@ initial key material must be kept secret.
 
 <a name="sign"></a>
 
-## sign(SK, PK, header, messages, generators, hashType)
+## sign(SK, PK, header, messages, generators, api_id)
 Creates a BBS signature over a list of "messages".
 
-**Kind**: global function  
+**Kind**: global function
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -306,16 +311,16 @@ Creates a BBS signature over a list of "messages".
 | header | <code>Uint8Array</code> | Header as a byte array. |
 | messages | <code>Array</code> | Array of scalars (bigint) derived from actual  messages. Computed by [messages_to_scalars](#messages_to_scalars). |
 | generators | <code>Array</code> | Array of group G1 generators created by the  [prepareGenerators](#prepareGenerators) function. |
-| hashType | <code>string</code> | The hash type for the signature suite. |
+| api_id | <code>string</code> | The API id for the signature suite. |
 
 <a name="verify"></a>
 
-## verify(PK, signature, header, messages, generators, hashType) ⇒ <code>boolean</code>
+## verify(PK, signature, header, messages, generators, api_id) ⇒ <code>boolean</code>
 Verify a BBS signature against a public key.
 
-**Kind**: global function  
+**Kind**: global function
 **Returns**: <code>boolean</code> - - True or False depending on whether the signature
- is valid.  
+ is valid.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -324,16 +329,16 @@ Verify a BBS signature against a public key.
 | header | <code>Uint8Array</code> | Header used when signature was created. |
 | messages | <code>Array</code> | Array of scalars (bigint) derived from actual  messages. Computed by [messages_to_scalars](#messages_to_scalars). |
 | generators | <code>Array</code> | Array of group G1 generators created by the  [prepareGenerators](#prepareGenerators) function. |
-| hashType | <code>string</code> | The hash type for the signature suite. |
+| api_id | <code>string</code> | The API id for the signature suite. |
 
 <a name="proofGen"></a>
 
-## proofGen(PK, signature, header, ph, messages, disclosed_indexes, generators, hashType, rand_scalars) ⇒ <code>Uint8Array</code>
+## proofGen(PK, signature, header, ph, messages, disclosed_indexes, generators, api_id, rand_scalars) ⇒ <code>Uint8Array</code>
 Generates an unlinkable, selective disclosure proof based on a
 signature and message set, and related information.
 
-**Kind**: global function  
-**Returns**: <code>Uint8Array</code> - - The proof as an byte array.  
+**Kind**: global function
+**Returns**: <code>Uint8Array</code> - - The proof as an byte array.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -344,17 +349,17 @@ signature and message set, and related information.
 | messages | <code>Array</code> | Array of scalars (bigint) derived from actual  messages. Computed by [messages_to_scalars](#messages_to_scalars). |
 | disclosed_indexes | <code>Array</code> | Array of sorted (non-repeating) zero based indices of the messages to be disclosed. |
 | generators | <code>Array</code> | Array of group G1 generators created by the  [prepareGenerators](#prepareGenerators) function. |
-| hashType | <code>string</code> | The hash type for the signature suite. |
+| api_id | <code>string</code> | The API id for the signature suite. |
 | rand_scalars | <code>function</code> | A function for generating cryptographically  secure random or pseudo random scalars. |
 
 <a name="proofVerify"></a>
 
-## proofVerify(PK, proof, header, ph, disclosed_messages, disclosed_indexes, generators, hashType) ⇒ <code>boolean</code>
+## proofVerify(PK, proof, header, ph, disclosed_messages, disclosed_indexes, generators, api_id) ⇒ <code>boolean</code>
 Verifies a previously generated proof against original signers public key,
 and additional information.
 
-**Kind**: global function  
-**Returns**: <code>boolean</code> - - True or False depending on whether the proof is valid.  
+**Kind**: global function
+**Returns**: <code>boolean</code> - - True or False depending on whether the proof is valid.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -365,7 +370,7 @@ and additional information.
 | disclosed_messages | <code>Array</code> | Array of scalars (bigint) derived from  actual  disclosed messages. Computed by [messages_to_scalars](#messages_to_scalars). |
 | disclosed_indexes | <code>Array</code> | Array of sorted (non-repeating) zero based indices corresponding to the disclosed messages. |
 | generators | <code>Array</code> | Array of group G1 generators created by the  [prepareGenerators](#prepareGenerators) function. |
-| hashType | <code>string</code> | The hash type for the signature suite. |
+| api_id | <code>string</code> | The API id for the signature suite. |
 
 <a name="numUndisclosed"></a>
 
@@ -374,8 +379,8 @@ Helper function to give the number of undisclosed messages in a proof. This
 can be added to the number of disclosed messages to calculate the number of
 generators needed in proof verification.
 
-**Kind**: global function  
-**Returns**: <code>number</code> - - The number of undisclosed messages, U.  
+**Kind**: global function
+**Returns**: <code>number</code> - - The number of undisclosed messages, U.
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -383,33 +388,33 @@ generators needed in proof verification.
 
 <a name="messages_to_scalars"></a>
 
-## messages\_to\_scalars(messages, hashType) ⇒ <code>Array</code>
+## messages\_to\_scalars(messages, api_id) ⇒ <code>Array</code>
 This function converts (hashes) byte array messages into scalars representing
 the messages for use in signature/proof operations.
 
-**Kind**: global function  
-**Returns**: <code>Array</code> - - An array of scalars (bigint) representing the messages.  
+**Kind**: global function
+**Returns**: <code>Array</code> - - An array of scalars (bigint) representing the messages.
 
 | Param | Type | Description |
 | --- | --- | --- |
 | messages | <code>Array</code> | Messages as an Array of Uint8Arrays, i.e., these byte arrays not strings. |
-| hashType | <code>string</code> | The hash type for the signature suite. |
+| api_id | <code>string</code> | The API id for the signature suite. |
 
 <a name="prepareGenerators"></a>
 
-## prepareGenerators(L, hashType) ⇒ <code>Array</code>
+## prepareGenerators(L, api_id) ⇒ <code>Array</code>
 Prepares the "group G1 generators" used by the BBS signature suite.
 These values can be reused in many calls to the sign, verify, proofGen, and
 proofVerify functions. You must have enough generators for the number of
 messages. You do not need to know what the "group G1" or a "generator" is!
 These take a while to compute so we prepare them separately and reuse them.
 
-**Kind**: global function  
+**Kind**: global function
 **Returns**: <code>Array</code> - - A array of group generators used by the signature/proof
- suite.  
+ suite.
 
 | Param | Type | Description |
 | --- | --- | --- |
 | L | <code>number</code> | An integer that indicates the number of generators to be created. This number must be large than the total number of messages in a signature or proof. |
-| hashType | <code>string</code> | The hash type for the signature suite. |
+| api_id | <code>string</code> | The API id for the signature suite. |
 

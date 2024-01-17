@@ -1,14 +1,15 @@
 /* global describe, URL, it, before */
-import {hexToBytes, messages_to_scalars} from '../lib/BBS.js';
+import {API_ID_BBS_SHA, API_ID_BBS_SHAKE, hexToBytes, messages_to_scalars}
+  from '../lib/BBS.js';
 import {assert} from 'chai';
 import {readFile} from 'fs/promises';
 
 const SHA_PATH = './fixture_data/bls12-381-sha-256/';
 const SHAKE_PATH = './fixture_data/bls12-381-shake-256/';
 
-for(const hash of ['SHA-256', 'SHAKE-256']) {
+for(const api_id of [API_ID_BBS_SHA, API_ID_BBS_SHAKE]) {
   let path = SHA_PATH;
-  if(hash == 'SHAKE-256') {
+  if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
   }
   const msgs2scalarsVector = JSON.parse(
@@ -17,7 +18,7 @@ for(const hash of ['SHA-256', 'SHAKE-256']) {
     )
   );
 
-  describe('Messages to Scalars ' + hash, function() {
+  describe('Messages to Scalars ' + api_id, function() {
     let msgs_in_octets;
     let test_scalars;
     let result_scalars;
@@ -26,7 +27,7 @@ for(const hash of ['SHA-256', 'SHAKE-256']) {
         tst => hexToBytes(tst.message));
       test_scalars = msgs2scalarsVector.cases.map(
         tst => BigInt('0x' + tst.scalar));
-      result_scalars = await messages_to_scalars(msgs_in_octets, hash);
+      result_scalars = await messages_to_scalars(msgs_in_octets, api_id);
     });
     it('Confirm messages to scalars', async function() {
       for(let i = 0; i < test_scalars.length; i++) {

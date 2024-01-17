@@ -1,6 +1,7 @@
 /*global console*/
-import {bytesToHex, hexToBytes, messages_to_scalars, prepareGenerators,
-  proofGen, proofVerify, publicFromPrivate} from '../lib/BBS.js';
+import {API_ID_BBS_SHAKE, bytesToHex, hexToBytes, messages_to_scalars,
+  prepareGenerators, proofGen, proofVerify, publicFromPrivate}
+  from '../lib/BBS.js';
 // Some test messages in hex string format from draft
 const hex_msgs = [
   '9872ad089e452c7b6e283dfac2a80d58e8d0ff71cc4d5e310a1debdda4a45f02',
@@ -16,20 +17,20 @@ const hex_msgs = [
 ];
 
 const test_msgs = hex_msgs.map(hex => hexToBytes(hex)); // Convert to byte array
-const msg_scalars = await messages_to_scalars(test_msgs); // hash to scalars
-const gens = await prepareGenerators(test_msgs.length); // Enough for all msgs
+const msg_scalars = await messages_to_scalars(test_msgs, API_ID_BBS_SHAKE); // hash to scalars
+const gens = await prepareGenerators(test_msgs.length, API_ID_BBS_SHAKE); // Enough for all msgs
 
 const sk_bytes = hexToBytes(
-  '60e55110f76883a13d030b2f6bd11883422d5abde717569fc0731f51237169fc');
+  '2eee0f60a8a3a8bec0ee942bfd46cbdae9a0738ee68f5a64e7238311cf09a079');
 const pk_bytes = publicFromPrivate(sk_bytes);
 const header = hexToBytes('11223344556677889900aabbccddeeff');
 /*eslint max-len: ["error", { "ignoreStrings": true, "ignoreComments": true }]*/
-// From https://github.com/decentralized-identity/bbs-signature/blob/main/tooling/fixtures/fixture_data/bls12-381-sha-256/signature/signature004.json
-const signature = hexToBytes('895cd9c0ccb9aca4de913218655346d718711472f2bf1f3e68916de106a0d93cf2f47200819b45920bbda541db2d91480665df253fedab2843055bdc02535d83baddbbb2803ec3808e074f71f199751e');
+// From https://github.com/decentralized-identity/bbs-signature/blob/main/tooling/fixtures/fixture_data/bls12-381-shake-256/signature/signature004.json
+const signature = hexToBytes('97a296c83ed3626fe254d26021c5e9a087b580f1e8bc91bb51efb04420bfdaca215fe376a0bc12440bcc52224fb33c696cca9239b9f28dcddb7bd850aae9cd1a9c3e9f3639953fe789dbba53b8f0dd6f');
 const ph = new Uint8Array();
 const disclosed_indexes = [0, 1, 2, 3, 6, 7, 8, 9];
 let result = await proofGen(pk_bytes, signature, header, ph, msg_scalars,
-  disclosed_indexes, gens);
+  disclosed_indexes, gens, API_ID_BBS_SHAKE);
 // console.log(`result length: ${result.length}`);
 // console.log(`expected length: ${3*48 + 5*32 + 32*(msg_scalars.length - disclosed_indexes.length)}`);
 console.log('Proof');
@@ -57,8 +58,9 @@ const phV = hexToBytes(proofBundle.ph);
 
 // In the proof bundle messages are hex strings, need scalars
 const dis_msg_octets = proofBundle.disclosedMsgs.map(hex => hexToBytes(hex));
-const disclosed_msgs = await messages_to_scalars(dis_msg_octets);
+const disclosed_msgs = await messages_to_scalars(dis_msg_octets,
+  API_ID_BBS_SHAKE);
 const disclosed_indexesV = proofBundle.disclosedIndexes;
 result = await proofVerify(pk, proof, headerV, phV, disclosed_msgs,
-  disclosed_indexesV, gens);
+  disclosed_indexesV, gens, API_ID_BBS_SHAKE);
 console.log(`Proof verified: ${result}`);

@@ -4,8 +4,9 @@
   Uses seeded random pseudo random generator in proof generation to check
   against generated proof test vectors.
 */
-import {bytesToHex, hexToBytes, messages_to_scalars,
-  prepareGenerators, proofGen, seeded_random_scalars} from '../lib/BBS.js';
+import {API_ID_BBS_SHA, API_ID_BBS_SHAKE, bytesToHex, hexToBytes,
+  messages_to_scalars, prepareGenerators, proofGen, seeded_random_scalars}
+  from '../lib/BBS.js';
 import {assert} from 'chai';
 import {readFile} from 'fs/promises';
 
@@ -18,14 +19,14 @@ const testFiles = ['proof001.json', 'proof002.json', 'proof003.json',
 const SHA_PATH = './test/fixture_data/bls12-381-sha-256/';
 const SHAKE_PATH = './test/fixture_data/bls12-381-shake-256/';
 
-for(const hashType of ['SHA-256', 'SHAKE-256']) {
+for(const api_id of [API_ID_BBS_SHA, API_ID_BBS_SHAKE]) {
   let path = SHA_PATH;
-  if(hashType == 'SHAKE-256') {
+  if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
   }
   // Pseudo random (deterministic) scalar generation seed and function
   const seed = hexToBytes('332e313431353932363533353839373933323338343632363433333833323739');
-  const rand_scalar_func = seeded_random_scalars.bind(null, seed, hashType);
+  const rand_scalar_func = seeded_random_scalars.bind(null, seed, api_id);
   // Read all the proof test files into JavaScript objects
   const proofPath = path + 'proof/';
   // console.log(testFiles);
@@ -36,20 +37,20 @@ for(const hashType of ['SHA-256', 'SHAKE-256']) {
   }
   // console.log(testVectors);
 
-  describe('Proof Generation Seeded Validation ' + hashType, function() {
+  describe('Proof Generation Seeded Validation ' + api_id, function() {
     let gens;
     before(async function() {
-      gens = await prepareGenerators(maxL, hashType); // precompute generators
+      gens = await prepareGenerators(maxL, api_id); // precompute generators
     });
 
     for(const proofBundle of testVectors) {
       // Create test name
       const testName = proofBundle.caseName;
 
-      it(testName + ' ' + hashType, async function() {
+      it(testName + ' ' + api_id, async function() {
         // Get all the signature related stuff
         const messagesOctets = proofBundle.messages.map(msg => hexToBytes(msg));
-        const msg_scalars = await messages_to_scalars(messagesOctets, hashType);
+        const msg_scalars = await messages_to_scalars(messagesOctets, api_id);
         const headerBytes = hexToBytes(proofBundle.header);
         const publicBytes = hexToBytes(proofBundle.signerPublicKey);
         const signature = hexToBytes(proofBundle.signature);
@@ -60,7 +61,7 @@ for(const hashType of ['SHA-256', 'SHAKE-256']) {
 
         const ph = hexToBytes(proofBundle.presentationHeader);
         const proof = await proofGen(publicBytes, signature, headerBytes, ph,
-          msg_scalars, disclosedIndexes, gens, hashType, rand_scalar_func);
+          msg_scalars, disclosedIndexes, gens, api_id, rand_scalar_func);
         // console.log("Computed Proof:");
         // console.log(bytesToHex(proof));
         // console.log("Test vector Proof:");

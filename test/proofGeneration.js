@@ -7,8 +7,8 @@
   Does NOT check generated proofs against test vectors. See proofGenSeeded.js
   for that.
 */
-import {hexToBytes, messages_to_scalars, prepareGenerators,
-  proofGen, proofVerify} from '../lib/BBS.js';
+import {API_ID_BBS_SHA, API_ID_BBS_SHAKE, hexToBytes, messages_to_scalars,
+  prepareGenerators, proofGen, proofVerify} from '../lib/BBS.js';
 import {assert} from 'chai';
 import {readFile} from 'fs/promises';
 
@@ -35,18 +35,18 @@ const disclosureTests = [
   [0, 1, 8, 9]
 ];
 
-for(const hashType of ['SHA-256', 'SHAKE-256']) {
+for(const api_id of [API_ID_BBS_SHA, API_ID_BBS_SHAKE]) {
   let sigBundle = sigBundleSHA;
-  if(hashType == 'SHAKE-256') {
+  if(api_id.includes('SHAKE-256')) {
     sigBundle = sigBundleSHAKE;
   }
   const L = sigBundle.messages.length;
-  describe('Proof Generation/Verification Random Scalars ' + hashType, function() {
+  describe('Proof Generation/Verification Random Scalars ' + api_id, function() {
     let gens; let msg_scalars; let headerBytes; let publicBytes; let signature;
     before(async function() {
-      gens = await prepareGenerators(L, hashType); // precompute generators
+      gens = await prepareGenerators(L, api_id); // precompute generators
       const messagesOctets = sigBundle.messages.map(msg => hexToBytes(msg));
-      msg_scalars = await messages_to_scalars(messagesOctets, hashType);
+      msg_scalars = await messages_to_scalars(messagesOctets, api_id);
       headerBytes = hexToBytes(sigBundle.header);
       publicBytes = hexToBytes(sigBundle.signerKeyPair.publicKey);
       signature = hexToBytes(sigBundle.signature);
@@ -55,12 +55,12 @@ for(const hashType of ['SHA-256', 'SHAKE-256']) {
     for(const disclosed of disclosureTests) {
       it(`Messages disclosed: ${disclosed}`, async function() {
         const proof = await proofGen(publicBytes, signature, headerBytes,
-          ph, msg_scalars, disclosed, gens, hashType);
+          ph, msg_scalars, disclosed, gens, api_id);
         const disclosedMsgScalars = msg_scalars.filter(
           (msg, i) => disclosed.includes(i));
         // console.log(`proof: ${bytesToHex(proof)}`);
         const result = await proofVerify(publicBytes, proof, headerBytes,
-          ph, disclosedMsgScalars, disclosed, gens, hashType);
+          ph, disclosedMsgScalars, disclosed, gens, api_id);
         assert.isTrue(result);
       });
     }
