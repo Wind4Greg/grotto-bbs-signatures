@@ -26,7 +26,8 @@ for(const api_id of [API_ID_BBS_SHA, API_ID_BBS_SHAKE]) {
   }
   // Pseudo random (deterministic) scalar generation seed and function
   const seed = hexToBytes('332e313431353932363533353839373933323338343632363433333833323739');
-  const rand_scalar_func = seeded_random_scalars.bind(null, seed, api_id);
+  const rng_dst = api_id + 'MOCK_RANDOM_SCALARS_DST_';
+  const rand_scalar_func = seeded_random_scalars.bind(null, seed, rng_dst);
   // Read all the proof test files into JavaScript objects
   const proofPath = path + 'proof/';
   // console.log(testFiles);
