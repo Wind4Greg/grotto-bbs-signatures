@@ -44,7 +44,7 @@ for(const api_id of [API_ID_BBS_SHA, API_ID_BBS_SHAKE]) {
   describe('Proof Generation/Verification Random Scalars ' + api_id, function() {
     let gens; let msg_scalars; let headerBytes; let publicBytes; let signature;
     before(async function() {
-      gens = await prepareGenerators(L, api_id); // precompute generators
+      gens = await prepareGenerators(L + 1, api_id); // precompute generators
       const messagesOctets = sigBundle.messages.map(msg => hexToBytes(msg));
       msg_scalars = await messages_to_scalars(messagesOctets, api_id);
       headerBytes = hexToBytes(sigBundle.header);

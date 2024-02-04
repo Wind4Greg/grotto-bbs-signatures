@@ -20,7 +20,7 @@ const te = new TextEncoder(); // To convert strings to byte arrays
 const messagesOctets = messages.map(msg => te.encode(msg));
 const msg_scalars = await messages_to_scalars(messagesOctets, API_ID_BBS_SHAKE);
 
-const gens = await prepareGenerators(messages.length, API_ID_BBS_SHAKE); // Generate enough for all messages
+const gens = await prepareGenerators(messages.length + 1, API_ID_BBS_SHAKE); // Generate enough for all messages
 
 // Prepare private and public keys
 const sk_bytes = hexToBytes('47d2ede63ab4c329092b342ab526b1079dbc2595897d4f2ab2de4d841cbe7d56');

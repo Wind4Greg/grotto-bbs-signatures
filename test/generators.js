@@ -22,21 +22,22 @@ for(const api_id of [API_ID_BBS_SHA, API_ID_BBS_SHAKE]) {
 
   describe('Generators ' + api_id, async function() {
     const L = generatorVector.MsgGenerators.length;
-    let gens;
+    let gens, Q1, H;
     before(async function() {
-      gens = await prepareGenerators(L, api_id);
+      gens = await prepareGenerators(L+1, api_id);
+      [Q1, ...H] = gens.generators;
     });
     it('Confirm P1', function() {
       assert.equal(gens.P1.toHex(true), generatorVector.P1);
     });
     it('Confirm Q1', function() {
-      assert.equal(gens.Q1.toHex(true), generatorVector.Q1);
+      assert.equal(Q1.toHex(true), generatorVector.Q1);
       // assert.equal(gens.Q2.toHex(true), generatorVector.Q2);
     });
     it('Confirm message generators', function() {
       // console.log(gens);
       for(let i = 0; i < L; i++) {
-        assert.equal(gens.H[i].toHex(true), generatorVector.MsgGenerators[i]);
+        assert.equal(H[i].toHex(true), generatorVector.MsgGenerators[i]);
         // console.log(`H[${i}]: ${gens.H[i].toHex(true)}`);
       }
     });

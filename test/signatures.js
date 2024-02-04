@@ -29,7 +29,7 @@ for(const api_id of [API_ID_BBS_SHA, API_ID_BBS_SHAKE]) {
   describe('Signatures ' + api_id, function() {
     let gens;
     before(async function() {
-      gens = await prepareGenerators(maxL, api_id); // precompute generators
+      gens = await prepareGenerators(maxL + 1, api_id); // precompute generators
     });
 
     for(const vector of testVectors) {
@@ -69,7 +69,8 @@ for(const api_id of [API_ID_BBS_SHA, API_ID_BBS_SHAKE]) {
       it('verify ' + api_id + ': ' + testName, async function() {
         const messagesOctets = vector.messages.map(msg => hexToBytes(msg));
         const msg_scalars = await messages_to_scalars(messagesOctets, api_id);
-        const gens = await prepareGenerators(vector.messages.length, api_id);
+        const gens = await prepareGenerators(vector.messages.length + 1,
+          api_id);
         const headerBytes = hexToBytes(vector.header);
         const publicBytes = hexToBytes(vector.signerKeyPair.publicKey);
         const signature = hexToBytes(vector.signature);

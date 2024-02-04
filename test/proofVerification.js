@@ -35,7 +35,7 @@ for(const api_id of [API_ID_BBS_SHA, API_ID_BBS_SHAKE]) {
   describe('Proof Verification ' + api_id, function() {
     let gens;
     before(async function() {
-      gens = await prepareGenerators(maxL, api_id); // precompute generators
+      gens = await prepareGenerators(maxL + 1, api_id); // precompute generators
     });
 
     for(const vector of testVectors) {
