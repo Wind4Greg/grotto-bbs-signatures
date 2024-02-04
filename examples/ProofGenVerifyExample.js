@@ -18,7 +18,7 @@ const hex_msgs = [
 
 const test_msgs = hex_msgs.map(hex => hexToBytes(hex)); // Convert to byte array
 const msg_scalars = await messages_to_scalars(test_msgs, API_ID_BBS_SHAKE); // hash to scalars
-const gens = await prepareGenerators(test_msgs.length, API_ID_BBS_SHAKE); // Enough for all msgs
+const gens = await prepareGenerators(test_msgs.length + 1, API_ID_BBS_SHAKE); // Enough for all msgs
 
 const sk_bytes = hexToBytes(
   '2eee0f60a8a3a8bec0ee942bfd46cbdae9a0738ee68f5a64e7238311cf09a079');
