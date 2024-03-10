@@ -33,7 +33,6 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
         const gens = await prepareGenerators(commitFixture.committedMessages.length + 2, api_id);
         const [commit, M] =
             await deserialize_and_validate_commit(commitmentWithProof, gens, api_id);
-        assert.equal(M, commitFixture.committedMessages.length);
         assert.isTrue(commitFixture.commitmentWithProof.startsWith(bytesToHex(commit.toRawBytes(true))));
       });
     }

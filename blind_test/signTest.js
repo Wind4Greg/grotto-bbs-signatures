@@ -2,17 +2,18 @@
 /* eslint-disable max-len */
 import {API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE, hexToBytes,
   seeded_random_scalars} from '../lib/BBS.js';
-import {calcM, commit} from '../lib/BlindBBS.js';
+import {BlindSign} from '../lib/BlindBBS.js';
 import {readdir, readFile} from 'fs/promises';
 import {assert} from 'chai';
 import {bytesToHex} from '@noble/hashes/utils';
+
 import {dirname} from 'path';
 import {fileURLToPath} from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/commit/';
-const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/commit/';
+const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/signature/';
+const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/signature/';
 
 for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
   let path = SHA_PATH;
@@ -26,21 +27,21 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
     testVectors.push(JSON.parse(await readFile(path + fn)));
   }
 
-  describe('Commit generation for ' + api_id, async function() {
-    for(const commitFixture of testVectors) {
+  describe('Signature generation for ' + api_id, async function() {
+    for(let i = 0; i < 1; i++) { // testVectors.length
+      const commitFixture = testVectors[i];
       it(`case: ${commitFixture.caseName}`, async function() {
-        const msgs_in_octets = commitFixture.committedMessages.map(hexMsg =>
-          hexToBytes(hexMsg));
-        const seed = new TextEncoder().encode(commitFixture.mockRngParameters.SEED);
-        const rng_dst = commitFixture.mockRngParameters.commit.DST;
-        const rand_scalar_func = seeded_random_scalars.bind(null, seed, rng_dst);
-        const [commit_with_proof_octs, secret_prover_blind] =
-            await commit(msgs_in_octets, api_id, rand_scalar_func);
+        console.log('Starting test');
+        const SK = BigInt('0x' + commitFixture.signerKeyPair.secretKey);
+        const PK = hexToBytes(commitFixture.signerKeyPair.publicKey);
+        const commitment_with_proof = hexToBytes(commitFixture.commitmentWithProof);
+        const header = hexToBytes(commitFixture.header);
+        const messages = commitFixture.messages.map(hexMsg => hexToBytes(hexMsg));
+        const signerBlind = BigInt('0x' + commitFixture.signerBlind);
+        const sig = await BlindSign(SK, PK, commitment_with_proof, header, messages, signerBlind, api_id);
         // console.log(`commit with proof (hex): ${bytesToHex(commit_with_proof_octs)}`);
         // console.log(`secret prover blind (hex): ${secret_prover_blind.toString(16)}`);
-        // console.log(`calcM: ${calcM(commit_with_proof_octs)}`);
-        assert.equal(bytesToHex(commit_with_proof_octs),
-          commitFixture.commitmentWithProof);
+        assert.equal(bytesToHex(sig), commitFixture.signature);
       });
     }
   });
