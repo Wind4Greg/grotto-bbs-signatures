@@ -28,19 +28,22 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
   }
 
   describe('Signature generation for ' + api_id, async function() {
-    for(let i = 0; i < 1; i++) { // testVectors.length
+    for(let i = 0; i < testVectors.length; i++) { // testVectors.length
       const commitFixture = testVectors[i];
       it(`case: ${commitFixture.caseName}`, async function() {
-        console.log('Starting test');
         const SK = BigInt('0x' + commitFixture.signerKeyPair.secretKey);
         const PK = hexToBytes(commitFixture.signerKeyPair.publicKey);
-        const commitment_with_proof = hexToBytes(commitFixture.commitmentWithProof);
+        let commitment_with_proof = null;
+        if(commitFixture.commitmentWithProof) {
+          commitment_with_proof = hexToBytes(commitFixture.commitmentWithProof);
+        }
         const header = hexToBytes(commitFixture.header);
         const messages = commitFixture.messages.map(hexMsg => hexToBytes(hexMsg));
-        const signerBlind = BigInt('0x' + commitFixture.signerBlind);
+        let signerBlind = 0n;
+        if(commitFixture.signerBlind) {
+          signerBlind = BigInt('0x' + commitFixture.signerBlind);
+        }
         const sig = await BlindSign(SK, PK, commitment_with_proof, header, messages, signerBlind, api_id);
-        // console.log(`commit with proof (hex): ${bytesToHex(commit_with_proof_octs)}`);
-        // console.log(`secret prover blind (hex): ${secret_prover_blind.toString(16)}`);
         assert.equal(bytesToHex(sig), commitFixture.signature);
       });
     }
