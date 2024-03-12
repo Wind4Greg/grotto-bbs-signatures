@@ -52,8 +52,10 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // , API_I
         const revealedMessages = proofFixture.revealedMessages;
         const disclosedIndexes = Object.keys(revealedMessages).map(s => parseInt(s));
         let disclosedCommittedIndexes = [];
+        let usedCommittedMessages = [];
         if(revealedCommittedMessages) {
           disclosedCommittedIndexes = Object.keys(revealedCommittedMessages).map(s => parseInt(s));
+          usedCommittedMessages = committedMessages;
         }
         // Pseudo random (deterministic) scalar generation seed and function
         const rngParams = proofFixture.mockRngParameters;
@@ -62,7 +64,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // , API_I
         const rng_dst = rngParams.proof.DST;
         const rand_scalar_func = seeded_random_scalars.bind(null, seed, rng_dst);
         const [proof, disclosed_msgs, disclosed_idxs] = await BlindProofGen(PK, signature, header, ph, messages,
-          committedMessages, disclosedIndexes, disclosedCommittedIndexes,
+          usedCommittedMessages, disclosedIndexes, disclosedCommittedIndexes,
           proverBlind, signerBlind, api_id,
           rand_scalar_func);
         // console.log(`proof: ${bytesToHex(proof)}`);
