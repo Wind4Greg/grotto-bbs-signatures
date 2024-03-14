@@ -1,10 +1,11 @@
 {
-  "caseName": "valid multi-message signature",
+  "caseName": "valid multi-message signature with pid",
   "signerKeyPair": {
     "secretKey": "2eee0f60a8a3a8bec0ee942bfd46cbdae9a0738ee68f5a64e7238311cf09a079",
     "publicKey": "92d37d1d6cd38fea3a873953333eab23a4c0377e3e049974eb62bd45949cdeb18fb0490edcd4429adff56e65cbce42cf188b31bddbd619e419b99c2c41b38179eb001963bc3decaae0d9f702c7a8c004f207f46c734a5eae2e8e82833f3e7ea5"
   },
   "header": "11223344556677889900aabbccddeeff",
+  "pid": "6830ea571e9fca0194d9ebd5c571369d8b81655afe0bbb9c6f5efe934f699418",
   "signature": "91508fb44986b5d361fde32fd615fdc8fac628ff29ef5871b5145b740593ae5b823aabff3ed9b2e872626a85b2ecac135ec86be8dbfc9176b7109e35587bc8180747c53d5e7a0e2692c89e9fac695edb",
   "result": {
     "valid": true
