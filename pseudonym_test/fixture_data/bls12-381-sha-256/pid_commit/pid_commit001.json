@@ -1,0 +1,28 @@
+{
+  "caseName": "pid as committed message commitment with proof",
+  "mockRngParameters": {
+    "SEED": "3.141592653589793238462643383279",
+    "commit": {
+      "DST": "BBS_BLS12381G1_XMD:SHA-256_SSWU_RO_H2G_HM2S_COMMIT_MOCK_RANDOM_SCALARS_DST_",
+      "count": 3
+    }
+  },
+  "committedMessages": [
+    "6830ea571e9fca0194d9ebd5c571369d8b81655afe0bbb9c6f5efe934f699418"
+  ],
+  "proverBlind": "3ba0a2583bc7229fa9f2ae3a6697091032947c3a48f302b7fd2b08ca9d193041",
+  "commitmentWithProof": "ab4116e074b8129e307d568745ce650f00576e785f1e2325cd42657fc401713e446ace16279abf073d8fb177bb6870420ff70432c1cdbaae20903d953bb05c64a3210d92190751244ce550270eb10a062472d1b6bed12756f31d023d8aa36ae382bbdf47aae2fcb9e2227a1e52cd3e714e52ee7412fedb85b42909a81c7a01ed425233968a764510cfcb2cdc9032a485",
+  "result": {
+    "valid": true
+  },
+  "trace": {
+    "M": 1,
+    "secret_prover_blind": "3ba0a2583bc7229fa9f2ae3a6697091032947c3a48f302b7fd2b08ca9d193041",
+    "s_tilde": "3a3b481c984f4396a13b1f65368aa393d08455fbfd351ab80f593aa5de8b4b1d",
+    "m_tildes": [
+      "5e82a40ae25e65fb04d7722f36ecd62fa4f07c8815e74f0a14a7e0a6547a36ce"
+    ],
+    "C": "ab4116e074b8129e307d568745ce650f00576e785f1e2325cd42657fc401713e446ace16279abf073d8fb177bb687042",
+    "Cbar": "97a193069a780df0450f57cc752720c5f4bf2d6dcac879412cb7f4996f8ac79dbd86ea20afbb394fcd8f097e238be683"
+  }
+}
