@@ -14,7 +14,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/commit/';
 const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/commit/';
 
-for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
+for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // , API_ID_BLIND_BBS_SHAKE
   let path = SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
@@ -34,6 +34,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
         const [commit, M] =
             await deserialize_and_validate_commit(commitmentWithProof, gens, api_id);
         assert.isTrue(commitFixture.commitmentWithProof.startsWith(bytesToHex(commit.toRawBytes(true))));
+        // console.log(`M = ${M}`);
       });
     }
   });
