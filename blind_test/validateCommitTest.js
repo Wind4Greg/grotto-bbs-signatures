@@ -32,7 +32,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // , API_I
         const commitmentWithProof = hexToBytes(commitFixture.commitmentWithProof);
         const M = commitFixture.committedMessages.length;
         const gens = await prepareGenerators(M + 1, 'BLIND_' + api_id);
-        const [commit, Mtemp] =
+        const commit =
             await deserialize_and_validate_commit(commitmentWithProof, gens, api_id);
         assert.isTrue(commitFixture.commitmentWithProof.startsWith(bytesToHex(commit.toRawBytes(true))));
         // console.log(`M = ${M}`);
