@@ -2,10 +2,10 @@
 /* eslint-disable max-len */
 import {API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE, hexToBytes,
   seeded_random_scalars} from '../lib/BBS.js';
-import {calcM, commit} from '../lib/BlindBBS.js';
 import {readdir, readFile} from 'fs/promises';
 import {assert} from 'chai';
 import {bytesToHex} from '@noble/hashes/utils';
+import {commit} from '../lib/BlindBBS.js';
 import {dirname} from 'path';
 import {fileURLToPath} from 'url';
 
