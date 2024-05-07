@@ -32,7 +32,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
   }
 
   describe('Proof generation for ' + api_id, async function() {
-    for(let i = 0; i < 1; i++) { // testVectors.length
+    for(let i = 0; i < 7; i++) { // testVectors.length -- not including proof008  right now.
       const proofFixture = testVectors[i];
       it(`case: ${proofFixture.caseName}`, async function() {
         const PK = hexToBytes(proofFixture.signerPublicKey);

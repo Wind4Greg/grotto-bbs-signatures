@@ -28,9 +28,10 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
   const testVectors = [];
   for(const fn of testFiles) {
     const testVector = JSON.parse(await readFile(vectorPath + fn));
-    testVectors.push(testVector);
+    testVectors.push(testVector); // Uncomment for regular testing
     // for debugging only remove
-    if(fn === 'proof001.json') {
+    if(fn === 'proof007.json') { // Right now we don't include proof008
+      // testVectors.push(testVector);
       break;
     }
     // console.log(testVector);
