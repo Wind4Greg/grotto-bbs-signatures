@@ -30,18 +30,15 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
     const testVector = JSON.parse(await readFile(vectorPath + fn));
     testVectors.push(testVector); // Uncomment for regular testing
     // for debugging only remove
-    if(fn === 'proof007.json') { // Right now we don't include proof008
-      // testVectors.push(testVector);
-      break;
-    }
+    // if(fn === 'proof008.json') { // Ca use to focus on a particular case
+    //   testVectors.push(testVector);
+    //   break;
+    // }
     // console.log(testVector);
   }
 
   describe('Proof Verification ' + api_id, function() {
-    let gens;
-    before(async function() {
-      // gens = await prepareGenerators(maxL + 1, api_id); // precompute generators
-    });
+
 
     for(const vector of testVectors) {
       // Create test name
@@ -58,10 +55,14 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
         const disclosedIndexes = Object.keys(revealedMessages).map(s => parseInt(s));
         const messagesOctets = Object.values(revealedMessages).map(msg => hexToBytes(msg));
         // Get the disclosed committed messages and indexes
-        const revealedCommittedMessages = vector.revealedCommittedMessages;
-        const disclosedCommittedIndexes = Object.keys(revealedCommittedMessages).map(s => parseInt(s));
-        const committedMessageOctets = Object.values(revealedCommittedMessages).map(msg => hexToBytes(msg));
-
+        let revealedCommittedMessages = [];
+        let disclosedCommittedIndexes = [];
+        let committedMessageOctets = [];
+        if(vector.revealedCommittedMessages) {
+          revealedCommittedMessages = vector.revealedCommittedMessages;
+          disclosedCommittedIndexes = Object.keys(revealedCommittedMessages).map(s => parseInt(s));
+          committedMessageOctets = Object.values(revealedCommittedMessages).map(msg => hexToBytes(msg));
+        }
         // console.log(disclosedIndexes);
         // console.log(messagesOctets);
         const headerBytes = hexToBytes(vector.header);
