@@ -42,7 +42,8 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) {
         const verifier_id = hexToBytes(proofFixture.verifier_id);
         const disclosedIndexes = proofFixture.disclosedIndexes;
         const disclosedMessages = disclosedIndexes.map(i => messages[i]);
-        const result = await ProofVerifyWithPseudonym(PK, proof, pseudonym_bytes, verifier_id,
+        const L = proofFixture.L;
+        const result = await ProofVerifyWithPseudonym(PK, proof, L, pseudonym_bytes, verifier_id,
           header, ph, disclosedMessages, disclosedIndexes, api_id);
         assert.isTrue(result);
       });

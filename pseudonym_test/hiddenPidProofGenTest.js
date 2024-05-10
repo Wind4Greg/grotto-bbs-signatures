@@ -18,7 +18,7 @@ const allMessagesFile = __dirname + '/fixture_data/messages.json';
 
 const allMessages = JSON.parse(await readFile(allMessagesFile));
 const messages = allMessages.map(hexMsg => hexToBytes(hexMsg));
-for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) {
+for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
   let path = SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
@@ -49,13 +49,10 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) {
         const seed = te.encode(rngParams.SEED);
         const rng_dst = rngParams.proof.DST;
         const rand_scalar_func = seeded_random_scalars.bind(null, seed, rng_dst);
-        const [proof, disclosed_msgs, disclosed_idxs] = await HiddenPidProofGen(PK, signature, pseudonym_bytes, verifier_id,
+        const proof = await HiddenPidProofGen(PK, signature, pseudonym_bytes, verifier_id,
           pid, header, ph, messages, disclosedIndexes, proverBlind,
           0n, api_id, rand_scalar_func);
         console.log(`proof: ${bytesToHex(proof)}`);
-        console.log(`dislosed_msgs:`);
-        console.log(disclosed_msgs.map(m => bytesToHex(m)));
-        console.log(disclosed_idxs);
         assert.equal(bytesToHex(proof), proofFixture.proof);
       });
     }
