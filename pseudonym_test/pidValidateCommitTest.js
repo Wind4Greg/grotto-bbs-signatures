@@ -3,7 +3,7 @@
 import {API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE, hexToBytes,
   prepareGenerators,
   seeded_random_scalars} from '../lib/BBS.js';
-import {calcM, deserialize_and_validate_commit} from '../lib/BlindBBS.js';
+import {deserialize_and_validate_commit} from '../lib/BlindBBS.js';
 import {readdir, readFile} from 'fs/promises';
 import {assert} from 'chai';
 import {bytesToHex} from '@noble/hashes/utils';
@@ -30,10 +30,9 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) {
   describe('Pid commit validation for ' + api_id, async function() {
     for(const commitFixture of testVectors) {
       it(`case: ${commitFixture.caseName}`, async function() {
-        const gens = await prepareGenerators(3, api_id);
-        const [commit, M] = await deserialize_and_validate_commit(hexToBytes(commitFixture.commitmentWithProof),
-          gens, api_id);
-        assert.equal(M, 2);
+        const gens = await prepareGenerators(2, 'BLIND_' + api_id);
+        const commitmentWithProof = hexToBytes(commitFixture.commitmentWithProof);
+        const commit = await deserialize_and_validate_commit(commitmentWithProof, gens, api_id);
         console.log(`commitment: ${bytesToHex(commit.toRawBytes(true))}`);
       });
     }

@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 import {API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE, hexToBytes,
   seeded_random_scalars} from '../lib/BBS.js';
-import {calcM, commit} from '../lib/BlindBBS.js';
+import {commit} from '../lib/BlindBBS.js';
 import {readdir, readFile} from 'fs/promises';
 import {assert} from 'chai';
 import {bytesToHex} from '@noble/hashes/utils';
@@ -36,9 +36,8 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) {
         const rand_scalar_func = seeded_random_scalars.bind(null, seed, rng_dst);
         const [commit_with_proof_octs, secret_prover_blind] =
             await commit(msgs_in_octets, api_id, rand_scalar_func);
-        console.log(`commit with proof (hex): ${bytesToHex(commit_with_proof_octs)}`);
-        console.log(`secret prover blind (hex): ${secret_prover_blind.toString(16)}`);
-        console.log(`calcM: ${calcM(commit_with_proof_octs)}`);
+        // console.log(`commit with proof (hex): ${bytesToHex(commit_with_proof_octs)}`);
+        // console.log(`secret prover blind (hex): ${secret_prover_blind.toString(16)}`);
         assert.equal(bytesToHex(commit_with_proof_octs),
           commitFixture.commitmentWithProof);
       });
