@@ -26,7 +26,7 @@ const pk_bytes = publicFromPrivate(sk_bytes);
 const header = hexToBytes('11223344556677889900aabbccddeeff');
 /*eslint max-len: ["error", { "ignoreStrings": true, "ignoreComments": true }]*/
 // From https://github.com/decentralized-identity/bbs-signature/blob/main/tooling/fixtures/fixture_data/bls12-381-shake-256/signature/signature004.json
-const signature = hexToBytes('97a296c83ed3626fe254d26021c5e9a087b580f1e8bc91bb51efb04420bfdaca215fe376a0bc12440bcc52224fb33c696cca9239b9f28dcddb7bd850aae9cd1a9c3e9f3639953fe789dbba53b8f0dd6f');
+const signature = hexToBytes('956a3427b1b8e3642e60e6a7990b67626811adeec7a0a6cb4f770cdd7c20cf08faabb913ac94d18e1e92832e924cb6e202912b624261fc6c59b0fea801547f67fb7d3253e1e2acbcf90ef59a6911931e');
 const ph = new Uint8Array();
 const disclosed_indexes = [0, 1, 2, 3, 6, 7, 8, 9];
 let result = await proofGen(pk_bytes, signature, header, ph, msg_scalars,
