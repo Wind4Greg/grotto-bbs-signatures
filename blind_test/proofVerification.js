@@ -16,7 +16,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/proof/';
 const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/proof/';
 
-for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
+for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // , API_ID_BLIND_BBS_SHAKE
   let path = SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
