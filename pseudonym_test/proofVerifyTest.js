@@ -30,7 +30,7 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) {
     testVectors.push(JSON.parse(await readFile(path + fn)));
   }
 
-  describe('Proof generation for ' + api_id, async function() {
+  describe('Proof verification for ' + api_id, async function() {
     for(let i = 0; i < testVectors.length; i++) { // testVectors.length
       const proofFixture = testVectors[i];
       it(`case: ${proofFixture.caseName}`, async function() {
