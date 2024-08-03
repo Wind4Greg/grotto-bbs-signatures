@@ -29,6 +29,7 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) {
   // get all the test vectors in the dir
   const testVectors = [];
   for(const fn of files) {
+    console.log(`working on  file:  ${fn}`);
     testVectors.push(JSON.parse(await readFile(path + fn)));
   }
 

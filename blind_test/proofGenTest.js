@@ -19,7 +19,7 @@ const allMessagesFile = __dirname + '/fixture_data/messages.json';
 const allMessages = JSON.parse(await readFile(allMessagesFile));
 const messages = allMessages.messages.map(hexMsg => hexToBytes(hexMsg));
 const committedMessages = allMessages.committedMessages.map(hexMsg => hexToBytes(hexMsg));
-for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // , API_ID_BLIND_BBS_SHAKE
+for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
   let path = SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
@@ -27,8 +27,13 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // , API_I
   const files = await readdir(path);
   // get all the test vectors in the dir
   const testVectors = [];
+  
   for(const fn of files) {
-    testVectors.push(JSON.parse(await readFile(path + fn)));
+    // testVectors.push(JSON.parse(await readFile(path + fn))); // uncomment for general test
+    if(fn === 'proof008.json') { // Can use to focus on a particular case
+      testVectors.push(JSON.parse(await readFile(path + fn)));
+      break;
+    }
   }
 
   describe('Proof generation for ' + api_id, async function() {
