@@ -30,7 +30,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
   
   for(const fn of files) {
     // testVectors.push(JSON.parse(await readFile(path + fn))); // uncomment for general test
-    if(fn === 'proof008.json') { // Can use to focus on a particular case
+    if(fn === 'proof003.json') { // Can use to focus on a particular case
       testVectors.push(JSON.parse(await readFile(path + fn)));
       break;
     }
@@ -46,10 +46,6 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
         let proverBlind = 0n;
         if(proofFixture.proverBlind) {
           proverBlind = BigInt('0x' + proofFixture.proverBlind);
-        }
-        let signerBlind = 0n;
-        if(proofFixture.signerBlind) {
-          signerBlind = BigInt('0x' + proofFixture.signerBlind);
         }
         const ph = hexToBytes(proofFixture.presentationHeader);
         // Get indexes from objects
@@ -72,7 +68,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
         console.log(`disclosed committed idxs: ${disclosedCommittedIndexes}`);
         const proof = await BlindProofGen(PK, signature, header, ph, messages,
           usedCommittedMessages, disclosedIndexes, disclosedCommittedIndexes,
-          proverBlind, signerBlind, api_id,
+          proverBlind, api_id,
           rand_scalar_func);
         // console.log(`proof: ${bytesToHex(proof)}`);
         // console.log(`indexes: ${disclosed_idxs}`);

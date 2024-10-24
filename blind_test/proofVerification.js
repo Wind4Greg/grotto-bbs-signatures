@@ -30,7 +30,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
     const testVector = JSON.parse(await readFile(vectorPath + fn));
     // testVectors.push(testVector); // Uncomment for regular testing
     // for debugging only remove
-    if(fn === 'proof008.json') { // Ca use to focus on a particular case
+    if(fn === 'proof003.json') { // Ca use to focus on a particular case
       testVectors.push(testVector);
       break;
     }
