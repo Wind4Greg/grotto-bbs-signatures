@@ -27,7 +27,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // API_ID_BLIND_BBS_SHA, API_ID_BL
   }
 
   describe('Signature generation for ' + api_id, async function() {
-    for(let i = 5; i < testVectors.length; i++) { // testVectors.length
+    for(let i = 0; i < testVectors.length; i++) { // testVectors.length
       const commitFixture = testVectors[i];
       it(`case: ${commitFixture.caseName}`, async function() {
         const SK = BigInt('0x' + commitFixture.signerKeyPair.secretKey);
@@ -42,7 +42,8 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // API_ID_BLIND_BBS_SHA, API_ID_BL
         if(commitFixture.signerBlind) {
           signerBlind = BigInt('0x' + commitFixture.signerBlind);
         }
-        const sig = await BlindSign(SK, PK, commitment_with_proof, header, messages, signerBlind, api_id);
+        // BlindSign(SK, PK, commitment_with_proof, header, messages,  api_id)
+        const sig = await BlindSign(SK, PK, commitment_with_proof, header, messages, api_id);
         assert.equal(bytesToHex(sig), commitFixture.signature);
       });
     }

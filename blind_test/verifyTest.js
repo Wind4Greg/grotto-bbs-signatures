@@ -27,7 +27,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
   }
 
   describe('Signature Verification for ' + api_id, async function() {
-    for(let i = 5; i < testVectors.length; i++) { // testVectors.length
+    for(let i = 0; i < testVectors.length; i++) { // testVectors.length
       const commitFixture = testVectors[i];
       it(`case: ${commitFixture.caseName}`, async function() {
         const PK = hexToBytes(commitFixture.signerKeyPair.publicKey);
@@ -38,16 +38,12 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
           committed_messages = commitFixture.committedMessages.map(hexMsg => hexToBytes(hexMsg));
         }
         const signature = hexToBytes(commitFixture.signature);
-        let signerBlind = 0n;
-        if(commitFixture.signerBlind) {
-          signerBlind = BigInt('0x' + commitFixture.signerBlind);
-        }
         let secret_prover_blind = 0n;
         if(commitFixture.proverBlind) {
           secret_prover_blind = BigInt('0x' + commitFixture.proverBlind);
         }
         const res = await BlindVerify(PK, signature, header, messages, committed_messages,
-          secret_prover_blind, signerBlind, api_id)
+          secret_prover_blind, api_id)
         assert.isTrue(res);
       });
     }

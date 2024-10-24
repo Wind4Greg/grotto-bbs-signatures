@@ -37,8 +37,7 @@
     ""
   ],
   "proverBlind": "4fba5396baa36b2fde81d46a9b9ee89c425dbc5e1ffd65c20249afb4abd37589",
-  "signerBlind": null,
-  "signature": "9391c79efcc8840774374b2463b28912ce2aad9dca39136746810c8563fa2dcae7dc88a454cfc2db5305831fe9c70b0f0cce199707ce1ae88a1d2828486c14d039c191c26bf3560a0f4e71e364d4781a",
+  "signature": "862eb2fedd0a2b76fb978035cb33952004bdd6136e107bb343cb2c5ea566eb0c3b0ba31b1d022ebf03d0abf050ab293c0afd9c96003331aa13f18a7a47e2e1ccaa8feb7f3a236e92b2da38462358c48a",
   "result": {
     "valid": true
   },

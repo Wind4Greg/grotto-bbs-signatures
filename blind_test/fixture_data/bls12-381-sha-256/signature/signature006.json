@@ -27,8 +27,7 @@
   ],
   "committedMessages": null,
   "proverBlind": null,
-  "signerBlind": null,
-  "signature": "ac477879f31a2fdb1256aaaef7880a080878ec7aa763e576d8a29ae25d1f531aa092aed33eca25c8858c5c4eba33076011f17025852ca737d12cd36df49a21cae48bd1a6ad0fdd213a2b847e9cecad1a",
+  "signature": "8aa8fdfb190987d1fe1c8e34e69eae25594701958064e4483d74580a4a0f51f058a87735d727383b864904aa7b5e4a9b3821a18319df0ccb2e351a9bf75bf1f34d8858dde57119bfafd8ff56e0c54fa4",
   "result": {
     "valid": true
   },
