@@ -3,7 +3,7 @@
 import {API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE, hexToBytes} from '../lib/BBS.js';
 import {readdir, readFile} from 'fs/promises';
 import {assert} from 'chai';
-import {BlindSign} from '../lib/BlindBBS.js';
+import {BlindSignWithNym} from '../lib/PseudonymBBS.js'
 import {bytesToHex} from '@noble/hashes/utils';
 
 import {dirname} from 'path';
@@ -37,8 +37,11 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         const PK = hexToBytes(sigFixture.signerKeyPair.publicKey);
         const header = hexToBytes(sigFixture.header);
         const commitmentWithProof = hexToBytes(sigFixture.commitmentWithProof);
-        const sig = await BlindSign(SK, PK, commitmentWithProof, header, messages, 0n, api_id)
-        console.log(`signature: ${bytesToHex(sig)}`);
+        const nym_entropy = BigInt('0x' + sigFixture.signer_nym_entropy);
+        // BlindSignWithNym(SK, PK, commitment_with_proof, header, messages, signer_nym_entropy, api_id) 
+        const res = await BlindSignWithNym(SK, PK, commitmentWithProof, header, messages, nym_entropy, api_id);
+        const [sig, back_entropy] = res;
+        console.log(`signature: ${bytesToHex(sig)}, signer entropy: ${back_entropy.toString(16)}`);
         assert.equal(bytesToHex(sig), sigFixture.signature);
       });
     }

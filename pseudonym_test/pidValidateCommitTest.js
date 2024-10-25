@@ -1,10 +1,12 @@
 /* global describe, URL, it, before, TextEncoder*/
 /* eslint-disable max-len */
-import {API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE, hexToBytes,
+import {
+  API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE, hexToBytes,
   prepareGenerators,
-  seeded_random_scalars} from '../lib/BBS.js';
-import {deserialize_and_validate_commit} from '../lib/BlindBBS.js';
+  seeded_random_scalars
+} from '../lib/BBS.js';
 import {readdir, readFile} from 'fs/promises';
+import {deserialize_and_validate_commit} from '../lib/BlindBBS.js';
 import {assert} from 'chai';
 import {bytesToHex} from '@noble/hashes/utils';
 import {dirname} from 'path';
