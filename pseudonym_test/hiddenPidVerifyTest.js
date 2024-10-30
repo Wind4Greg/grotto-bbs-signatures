@@ -4,6 +4,7 @@ import {API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE, hexToBytes} from '
 import {readdir, readFile} from 'fs/promises';
 import {assert} from 'chai';
 import {BlindVerify} from '../lib/BlindBBS.js';
+import {Finalize} from '../lib/PseudonymBBS.js';
 import {bytesToHex} from '@noble/hashes/utils';
 
 import {dirname} from 'path';
@@ -33,14 +34,22 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
     for(let i = 0; i < testVectors.length; i++) { // testVectors.length
       const sigFixture = testVectors[i];
       it(`case: ${sigFixture.caseName}`, async function() {
-        const pid = hexToBytes(sigFixture.pid);
+        const prover_nym = BigInt('0x' + sigFixture.proverNym);
         const proverBlind = BigInt('0x' + sigFixture.proverBlind);
+        const signer_nym_entropy = BigInt('0x' + sigFixture.signer_nym_entropy);
         const PK = hexToBytes(sigFixture.signerKeyPair.publicKey);
         const header = hexToBytes(sigFixture.header);
         const signature = hexToBytes(sigFixture.signature);
-        const result = await BlindVerify(PK, signature, header, messages, [pid],
-          proverBlind, 0n, api_id);
-        assert.isTrue(result);
+        // Finalize(PK, signature, header, messages, committed_messages, prover_nym, signer_nym_entropy, secret_prover_blind, api_id)
+        // const result = await BlindVerify(PK, signature, header, messages, [pid],
+        //   proverBlind, 0n, api_id);
+        const committed_messages = [];
+        // Finalize(PK, signature, header, messages, committed_messages, prover_nym, signer_nym_entropy, secret_prover_blind, api_id)
+        const result = await Finalize(PK, signature, header, messages, committed_messages,
+          prover_nym, signer_nym_entropy, proverBlind, api_id);
+        const [valid, nym_secret] = result;
+        assert.isTrue(valid);
+        console.log(`nym_secret: ${nym_secret.toString(16)}`);
       });
     }
   });

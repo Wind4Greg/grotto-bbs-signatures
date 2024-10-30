@@ -17,7 +17,7 @@ const message_file = __dirname + '/fixture_data/messages.json';
 const messages = (JSON.parse(await readFile(message_file))).map(m_hex => hexToBytes(m_hex));
 // console.log('messages:');
 // console.log(messages.map(m => bytesToHex(m)));
-for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { // , API_ID_PSEUDONYM_BBS_SHAKE
+for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { // API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE
   let path = SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
