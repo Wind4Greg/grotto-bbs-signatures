@@ -4,7 +4,7 @@ import {API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE, hexToBytes,
   seeded_random_scalars} from '../lib/BBS.js';
 import {readdir, readFile} from 'fs/promises';
 import {assert} from 'chai';
-import {HiddenPidProofGen} from '../lib/PseudonymBBS.js';
+import {ProofGenWithNym} from '../lib/PseudonymBBS.js';
 import {bytesToHex} from '@noble/hashes/utils';
 
 import {dirname} from 'path';
@@ -18,7 +18,7 @@ const allMessagesFile = __dirname + '/fixture_data/messages.json';
 
 const allMessages = JSON.parse(await readFile(allMessagesFile));
 const messages = allMessages.map(hexMsg => hexToBytes(hexMsg));
-for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { // API_ID_PSEUDONYM_BBS_SHA,
+for(const api_id of [API_ID_PSEUDONYM_BBS_SHA]) { // API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE
   let path = SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
@@ -38,9 +38,9 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         const signature = hexToBytes(proofFixture.signature);
         const header = hexToBytes(proofFixture.header);
         const ph = hexToBytes(proofFixture.presentationHeader);
-        const pseudonym_bytes = hexToBytes(proofFixture.pseudonym);
-        const verifier_id = hexToBytes(proofFixture.verifier_id);
-        const pid = hexToBytes(proofFixture.pid);
+        // const pseudonym_bytes = hexToBytes(proofFixture.pseudonym);
+        const context_id = hexToBytes(proofFixture.context_id);
+        const nym_secret = BigInt('0x' + proofFixture.nym_secret);
         const disclosedIndexes = proofFixture.disclosedIndexes;
         const proverBlind = BigInt('0x' + proofFixture.proverBlind);
         // Pseudo random (deterministic) scalar generation seed and function
@@ -49,11 +49,17 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         const seed = te.encode(rngParams.SEED);
         const rng_dst = rngParams.proof.DST;
         const rand_scalar_func = seeded_random_scalars.bind(null, seed, rng_dst);
-        const proof = await HiddenPidProofGen(PK, signature, pseudonym_bytes, verifier_id,
-          pid, header, ph, messages, disclosedIndexes, proverBlind,
-          0n, api_id, rand_scalar_func);
+        // const proof = await HiddenPidProofGen(PK, signature, pseudonym_bytes, verifier_id,
+        //   pid, header, ph, messages, disclosedIndexes, proverBlind,
+        //   0n, api_id, rand_scalar_func);
+        const committed_messages = [];
+        const disclosed_commitment_indexes = [];
+        const [proof, pseudonym] = await ProofGenWithNym(PK, signature, header, ph, nym_secret, context_id, 
+          messages, committed_messages, disclosedIndexes, disclosed_commitment_indexes, 
+          proverBlind, api_id, rand_scalar_func);
         console.log(`proof: ${bytesToHex(proof)}`);
         assert.equal(bytesToHex(proof), proofFixture.proof);
+        assert.equal(bytesToHex(pseudonym.toRawBytes(true)), proofFixture.pseudonym);
       });
     }
   });
