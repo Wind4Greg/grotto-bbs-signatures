@@ -10,8 +10,8 @@ import {dirname} from 'path';
 import {fileURLToPath} from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/hiddenPidSignature/';
-const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/hiddenPidSignature/';
+const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/nymSignature/';
+const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/nymSignature/';
 const message_file = __dirname + '/fixture_data/messages.json';
 
 const messages = (JSON.parse(await readFile(message_file))).map(m_hex => hexToBytes(m_hex));

@@ -15,8 +15,8 @@ import {fileURLToPath} from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/pid_commit/';
-const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/pid_commit/';
+const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/nymCommit/';
+const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/nymCommit/';
 
 for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE
   let path = SHA_PATH;

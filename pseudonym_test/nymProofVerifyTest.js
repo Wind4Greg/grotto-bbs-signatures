@@ -12,8 +12,8 @@ import {fileURLToPath} from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/hiddenPidProof/';
-const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/hiddenPidProof/';
+const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/nymProof/';
+const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/nymProof/';
 const allMessagesFile = __dirname + '/fixture_data/messages.json';
 
 const allMessages = JSON.parse(await readFile(allMessagesFile));
@@ -30,7 +30,7 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
     testVectors.push(JSON.parse(await readFile(path + fn)));
   }
 
-  describe('Proof generation for ' + api_id, async function() {
+  describe('Pseudonym Proof verification for ' + api_id, async function() {
     for(let i = 0; i < testVectors.length; i++) { // testVectors.length
       const proofFixture = testVectors[i];
       it(`case: ${proofFixture.caseName}`, async function() {
