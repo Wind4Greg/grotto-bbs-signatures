@@ -17,6 +17,7 @@
     4,
     6
   ],
+  "disclosedComIndexes": [],
   "nym_secret": "3183d923c36e56a823ea4ae0de4287ca87ff06e5785a57268b39a5fa0269bbdc",
   "proverBlind": "643a0c0bc86a50e0d8c00bfe6c8debd85373597e1aef6cc912838bf7dc376e48",
   "context_id": "bbb4750cdce6d2122bb4c4f039b6ad5a79f028eb448013a38636a95d63af360a",

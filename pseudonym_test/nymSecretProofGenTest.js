@@ -4,7 +4,7 @@ import {API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE, hexToBytes,
   seeded_random_scalars} from '../lib/BBS.js';
 import {readdir, readFile} from 'fs/promises';
 import {assert} from 'chai';
-import {ProofGenWithNym} from '../lib/PseudonymBBS.js';
+import {NymSecretProofGen, ProofGenWithNym} from '../lib/PseudonymBBS.js';
 import {bytesToHex} from '@noble/hashes/utils';
 
 import {dirname} from 'path';
@@ -12,8 +12,8 @@ import {fileURLToPath} from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/nymProof/';
-const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/nymProof/';
+const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/nymSecretProof/';
+const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/nymSecretProof/';
 const allMessagesFile = __dirname + '/fixture_data/messages.json';
 
 const allMessages = JSON.parse(await readFile(allMessagesFile));
@@ -30,7 +30,7 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
     testVectors.push(JSON.parse(await readFile(path + fn)));
   }
 
-  describe('Pseudonym Proof generation for ' + api_id, async function() {
+  describe('Nym Secret Proof generation for ' + api_id, async function() {
     for(let i = 0; i < testVectors.length; i++) { // testVectors.length
       const proofFixture = testVectors[i];
       it(`case: ${proofFixture.caseName}`, async function() {
@@ -39,7 +39,6 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         const header = hexToBytes(proofFixture.header);
         const ph = hexToBytes(proofFixture.presentationHeader);
         // const pseudonym_bytes = hexToBytes(proofFixture.pseudonym);
-        const context_id = hexToBytes(proofFixture.context_id);
         const nym_secret = BigInt('0x' + proofFixture.nym_secret);
         const disclosedIndexes = proofFixture.disclosedIndexes;
         const disclosed_commitment_indexes = proofFixture.disclosedComIndexes;
@@ -54,12 +53,17 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         //   pid, header, ph, messages, disclosedIndexes, proverBlind,
         //   0n, api_id, rand_scalar_func);
         const committed_messages = [];
-        const [proof, pseudonym] = await ProofGenWithNym(PK, signature, header, ph, nym_secret, context_id,
+        /*
+        NymSecretProofGen(PK, signature, header, ph, messages,
+  committed_messages, disclosed_indexes, disclosed_commitment_indexes,
+  secret_prover_blind, nym_secret, api_id,
+  rand_scalars = calculate_random_scalars)
+        */
+        const proof = await NymSecretProofGen(PK, signature, header, ph,
           messages, committed_messages, disclosedIndexes, disclosed_commitment_indexes,
-          proverBlind, api_id, rand_scalar_func);
+          proverBlind, nym_secret, api_id, rand_scalar_func);
         console.log(`proof: ${bytesToHex(proof)}`);
         assert.equal(bytesToHex(proof), proofFixture.proof);
-        assert.equal(bytesToHex(pseudonym.toRawBytes(true)), proofFixture.pseudonym);
       });
     }
   });
