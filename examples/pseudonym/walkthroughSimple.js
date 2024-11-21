@@ -8,10 +8,10 @@ import {API_ID_PSEUDONYM_BBS_SHA, hexToBytes} from '../../lib/BBS.js';
 import {BlindSignWithNym, BlindVerifyWithNym, NymCommit, ProofGenWithNym, ProofVerifyWithNym} from '../../lib/PseudonymBBS.js';
 import {bytesToHex} from '@noble/hashes/utils';
 
-
 const api_id = API_ID_PSEUDONYM_BBS_SHA;
 
-// **Prover** or **Holder**
+// **Prover** or **Holder**: commits and proves prover_nym
+// Prover knows their prover_nym. Generates commitment with proof.
 // Simple case no additional committed messages, e.g., no holder binding
 const committed_msgs = [];
 // To create the nym_secret the prover starts with their prover_nym
@@ -24,8 +24,10 @@ console.log(`commit with proof (hex): ${bytesToHex(commit_with_proof_octs)}`);
 console.log('To be retained and kept secret by prover:');
 console.log(`secret prover blind (hex): ${secret_prover_blind.toString(16)}`);
 
-// **Signer** or **Issuer**
-// Set up for and issue signature
+// **Signer** or **Issuer**: issues signature over messages, with nym_entropy added
+// Signer knows: PK, SK
+// Signer sets: messages, header, nym_entropy
+// Signer gets commitment_with_proof from prover
 const SK = BigInt('0x' + '60e55110f76883a13d030b2f6bd11883422d5abde717569fc0731f51237169fc');
 const PK = hexToBytes('a820f230f6ae38503b86c70dc50b61c58a77e45c39ab25c0652bbaa8fa136f2851bd4781c9dcde39fc9d1d52c9e60268061e7d7632171d91aa8d460acee0e96f1e7c4cfb12d3ff9ab5d5dc91c277db75c845d649ef3c4f63aebc364cd55ded0c');
 const messages = [
@@ -52,7 +54,8 @@ console.log(`signature (hex): ${bytesToHex(sig)}`);
 console.log(`nym_entropy (hex): ${nym_entropy.toString(16)}`);
 
 // **Prover** or **Holder** verifies the signature and obtains nym_secret
-// BlindVerifyWithNym(PK, signature, header, messages, committed_messages, prover_nym, signer_nym_entropy, secret_prover_blind, api_id)
+// Prover gets from Signer: PK, sig, header, messages, nym_entropy
+// Prover knows: prover_nym, committed messages, secret_prover_blind
 const result = await BlindVerifyWithNym(PK, sig, header, messagesOctets, committed_msgs,
   prover_nym, nym_entropy, secret_prover_blind, api_id);
 const [valid, nym_secret] = result;
@@ -61,6 +64,9 @@ console.log(`Is signature valid: ${valid}`);
 console.log(`nym_secret: ${nym_secret.toString(16)}`);
 
 // **Prover** or **Holder** selective disclosure proof with pseudonym
+// Prover gets: PK, sig, header, messages from Signer
+// Prover gets: context_id from verifier
+// Prover knows or sets: ph, nym_secret, committed messages/indexes, secret_prover_blind
 const ph = hexToBytes('bed231d880675ed101ead304512e043ade9958dd0241ea70b4b3957fba941501');
 const disclosedIndexes = [2]; // Tree reveals approximate address, see messages
 const disclosedComIndexes = [];
@@ -73,7 +79,8 @@ console.log(`message(s): ${messages.filter((val, i) => disclosedIndexes.includes
 console.log(`pseudonym: ${bytesToHex(pseudonym.toRawBytes(true))}`);
 console.log(`proof: ${bytesToHex(proof)}`);
 
-// Verifier verifies!
+// Verifier verifies! Gets: L, pseudonym, disclosed messages/indexes, proof from prover.
+// Knows: issuers PK, context_id
 const disComMsgs = []; // disclosed committed mesages
 const disComIndxs = []; // disclosed committed indexes
 const L = messages.length;
