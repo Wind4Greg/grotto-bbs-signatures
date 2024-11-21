@@ -5,7 +5,6 @@ import {
   seeded_random_scalars
 } from '../lib/BBS.js';
 import {readdir, readFile} from 'fs/promises';
-import {commit} from '../lib/BlindBBS.js';
 import {NymCommit} from '../lib/PseudonymBBS.js';
 
 import {assert} from 'chai';

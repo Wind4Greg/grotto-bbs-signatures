@@ -1,11 +1,11 @@
 /* Example code to test blind commitment functionality */
 /* global URL, console, TextEncoder */
 import {API_ID_BLIND_BBS_SHA, hexToBytes, seeded_random_scalars}
-  from '../lib/BBS.js';
+  from '../../lib/BBS.js';
 import {bytesToHex} from '@noble/hashes/utils';
-import {commit} from '../lib/BlindBBS.js';
+import {commit} from '../../lib/BlindBBS.js';
 import {readFile} from 'fs/promises';
-const path = '../blind_test/fixture_data/bls12-381-sha-256/commit/';
+const path = '../../blind_test/fixture_data/bls12-381-sha-256/commit/';
 
 const commitFixture = JSON.parse(await readFile(
   new URL(path + 'commit002.json', import.meta.url))
