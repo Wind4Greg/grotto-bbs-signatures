@@ -14,7 +14,8 @@ const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/nymSignature/';
 const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/nymSignature/';
 const message_file = __dirname + '/fixture_data/messages.json';
 
-const messages = (JSON.parse(await readFile(message_file))).map(m_hex => hexToBytes(m_hex));
+const allMessages = (JSON.parse(await readFile(message_file)));
+const messages = allMessages.messages.map(m_hex => hexToBytes(m_hex));
 // console.log('messages:');
 // console.log(messages.map(m => bytesToHex(m)));
 for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { // API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE

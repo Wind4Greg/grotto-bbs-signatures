@@ -17,7 +17,7 @@ const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/nymProof/';
 const allMessagesFile = __dirname + '/fixture_data/messages.json';
 
 const allMessages = JSON.parse(await readFile(allMessagesFile));
-const messages = allMessages.map(hexMsg => hexToBytes(hexMsg));
+const messages = allMessages.messages.map(hexMsg => hexToBytes(hexMsg));
 for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //, API_ID_PSEUDONYM_BBS_SHAKE
   let path = SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
