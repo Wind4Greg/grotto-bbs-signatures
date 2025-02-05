@@ -38,10 +38,10 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         const header = hexToBytes(sigFixture.header);
         const commitmentWithProof = hexToBytes(sigFixture.commitmentWithProof);
         const nym_entropy = BigInt('0x' + sigFixture.signer_nym_entropy);
-        // BlindSignWithNym(SK, PK, commitment_with_proof, header, messages, signer_nym_entropy, api_id) 
-        const res = await BlindSignWithNym(SK, PK, commitmentWithProof, header, messages, nym_entropy, api_id);
-        const [sig, back_entropy] = res;
-        console.log(`signature: ${bytesToHex(sig)}, signer entropy: ${back_entropy.toString(16)}`);
+        // BlindSignWithNym(SK, PK, commitment_with_proof, signer_nym_entropy, header, messages, api_id)
+        const res = await BlindSignWithNym(SK, PK, commitmentWithProof, nym_entropy, header, messages, api_id);
+        const sig = res;
+        console.log(`signature: ${bytesToHex(sig)}`);
         assert.equal(bytesToHex(sig), sigFixture.signature);
       });
     }

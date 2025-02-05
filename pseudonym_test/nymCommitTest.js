@@ -5,7 +5,7 @@ import {
   seeded_random_scalars
 } from '../lib/BBS.js';
 import {readdir, readFile} from 'fs/promises';
-import {NymCommit} from '../lib/PseudonymBBS.js';
+import {CommitWithNym} from '../lib/PseudonymBBS.js';
 
 import {assert} from 'chai';
 import {bytesToHex} from '@noble/hashes/utils';
@@ -38,9 +38,9 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         const seed = new TextEncoder().encode(commitFixture.mockRngParameters.SEED);
         const rng_dst = commitFixture.mockRngParameters.commit.DST;
         const rand_scalar_func = seeded_random_scalars.bind(null, seed, rng_dst);
-        // NymCommit(messages, prover_nym, api_id, and_scalars = calculate_random_scalars)
+        // CommitWithNym(messages, prover_nym, api_id, and_scalars = calculate_random_scalars)
         const [commit_with_proof_octs, secret_prover_blind] =
-          await NymCommit(msgs_in_octets, prover_nym,api_id, rand_scalar_func);
+          await CommitWithNym(msgs_in_octets, prover_nym,api_id, rand_scalar_func);
         // console.log(`commit with proof (hex): ${bytesToHex(commit_with_proof_octs)}`);
         // console.log(`secret prover blind (hex): ${secret_prover_blind.toString(16)}`);
         assert.equal(bytesToHex(commit_with_proof_octs),

@@ -3,8 +3,7 @@
 import {API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE, hexToBytes} from '../lib/BBS.js';
 import {readdir, readFile} from 'fs/promises';
 import {assert} from 'chai';
-import {BlindVerify} from '../lib/BlindBBS.js';
-import {BlindVerifyWithNym} from '../lib/PseudonymBBS.js';
+import {VerifyFinalizeWithNym} from '../lib/PseudonymBBS.js';
 import {bytesToHex} from '@noble/hashes/utils';
 
 import {dirname} from 'path';
@@ -40,12 +39,12 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         const PK = hexToBytes(sigFixture.signerKeyPair.publicKey);
         const header = hexToBytes(sigFixture.header);
         const signature = hexToBytes(sigFixture.signature);
-        // BlindVerifyWithNym(PK, signature, header, messages, committed_messages, prover_nym, signer_nym_entropy, secret_prover_blind, api_id)
+        // VerifyFinalizeWithNym(PK, signature, header, messages, committed_messages, prover_nym, signer_nym_entropy, secret_prover_blind, api_id)
         // const result = await BlindVerify(PK, signature, header, messages, [pid],
         //   proverBlind, 0n, api_id);
         const committed_messages = [];
-        // BlindVerifyWithNym(PK, signature, header, messages, committed_messages, prover_nym, signer_nym_entropy, secret_prover_blind, api_id)
-        const result = await BlindVerifyWithNym(PK, signature, header, messages, committed_messages,
+        // VerifyFinalizeWithNym(PK, signature, header, messages, committed_messages, prover_nym, signer_nym_entropy, secret_prover_blind, api_id)
+        const result = await VerifyFinalizeWithNym(PK, signature, header, messages, committed_messages,
           prover_nym, signer_nym_entropy, proverBlind, api_id);
         const [valid, nym_secret] = result;
         assert.isTrue(valid);
