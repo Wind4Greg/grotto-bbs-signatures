@@ -19,7 +19,7 @@ const allMessagesFile = __dirname + '/fixture_data/messages.json';
 const allMessages = JSON.parse(await readFile(allMessagesFile));
 const messages = allMessages.messages.map(hexMsg => hexToBytes(hexMsg));
 const committedMessages = allMessages.committedMessages.map(hexMsg => hexToBytes(hexMsg));
-for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
+for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE
   let path = SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
@@ -27,19 +27,17 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
   const files = await readdir(path);
   // get all the test vectors in the dir
   const testVectors = [];
-  
+
   for(const fn of files) {
-    // testVectors.push(JSON.parse(await readFile(path + fn))); // uncomment for general test
-    if(fn === 'proof003.json') { // Can use to focus on a particular case
-      testVectors.push(JSON.parse(await readFile(path + fn)));
-      break;
-    }
+    let vectorObj = JSON.parse(await readFile(path + fn));
+    vectorObj.filename = fn;
+    testVectors.push(vectorObj);
   }
 
   describe('Proof generation for ' + api_id, async function() {
-    for(let i = 0; i < testVectors.length; i++) { // testVectors.length -- not including proof008  right now.
+    for(let i = 0; i < testVectors.length; i++) { // testVectors.length
       const proofFixture = testVectors[i];
-      it(`case: ${proofFixture.caseName}`, async function() {
+      it(`file: ${proofFixture.filename}, case: ${proofFixture.caseName}`, async function() {
         const PK = hexToBytes(proofFixture.signerPublicKey);
         const signature = hexToBytes(proofFixture.signature);
         const header = hexToBytes(proofFixture.header);
@@ -64,8 +62,8 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
         const seed = te.encode(rngParams.SEED);
         const rng_dst = rngParams.proof.DST;
         const rand_scalar_func = seeded_random_scalars.bind(null, seed, rng_dst);
-        console.log(`disclosed idxs: ${disclosedIndexes}`);
-        console.log(`disclosed committed idxs: ${disclosedCommittedIndexes}`);
+        // console.log(`disclosed idxs: ${disclosedIndexes}`);
+        // console.log(`disclosed committed idxs: ${disclosedCommittedIndexes}`);
         const proof = await BlindProofGen(PK, signature, header, ph, messages,
           usedCommittedMessages, disclosedIndexes, disclosedCommittedIndexes,
           proverBlind, api_id,
