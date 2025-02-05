@@ -5,10 +5,6 @@
     "commit": {
       "DST": "BBS_BLS12381G1_XMD:SHA-256_SSWU_RO_H2G_HM2S_COMMIT_MOCK_RANDOM_SCALARS_DST_",
       "count": 7
-    },
-    "signature": {
-      "DST": "BBS_BLS12381G1_XMD:SHA-256_SSWU_RO_H2G_HM2S_SIGNATURE_MOCK_RANDOM_SCALARS_DST_",
-      "count": 1
     }
   },
   "signerKeyPair": {

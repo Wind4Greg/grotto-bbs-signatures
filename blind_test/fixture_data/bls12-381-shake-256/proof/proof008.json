@@ -2,10 +2,6 @@
   "caseName": "valid no commitment, half signer messages revealed proof",
   "mockRngParameters": {
     "SEED": "3.141592653589793238462643383279",
-    "signature": {
-      "DST": "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_H2G_HM2S_SIGNATURE_MOCK_RANDOM_SCALARS_DST_",
-      "count": 1
-    },
     "proof": {
       "DST": "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_H2G_HM2S_PROOF_MOCK_RANDOM_SCALARS_DST_",
       "count": 11

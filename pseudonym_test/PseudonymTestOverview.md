@@ -6,8 +6,8 @@ Exercises the API call:
 
 (commitment_with_proof, secret_prover_blind) = **Commit**(committed_messages, prover_nym, api_id)
 
-1. valid no committed messages, prover_nym, creates commitment with proof, secret prover blind
-2. valid multiple committed messages, prover_nym, creates commitment with proof, secret prover blind
+1. valid no committed messages, prover_nym, creates commitment with proof, secret prover blind **DONE**
+2. valid multiple committed messages, prover_nym, creates commitment with proof, secret prover blind **DONE**
 
 ## Blind Sign with Nym
 

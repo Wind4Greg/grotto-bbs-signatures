@@ -1,11 +1,7 @@
 {
   "caseName": "valid no commitment signature",
   "mockRngParameters": {
-    "SEED": "3.141592653589793238462643383279",
-    "signature": {
-      "DST": "BBS_BLS12381G1_XMD:SHA-256_SSWU_RO_H2G_HM2S_SIGNATURE_MOCK_RANDOM_SCALARS_DST_",
-      "count": 1
-    }
+    "SEED": "3.141592653589793238462643383279"
   },
   "signerKeyPair": {
     "secretKey": "60e55110f76883a13d030b2f6bd11883422d5abde717569fc0731f51237169fc",
