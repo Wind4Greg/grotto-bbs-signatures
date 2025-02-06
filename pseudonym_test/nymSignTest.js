@@ -27,17 +27,20 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
   // get all the test vectors in the dir
   const testVectors = [];
   for(const fn of files) {
-    testVectors.push(JSON.parse(await readFile(path + fn)));
+    const vectorObj = JSON.parse(await readFile(path + fn));
+    vectorObj.filename = fn;
+    testVectors.push(vectorObj);
   }
 
-  describe('Hidden pid Pseudonym Signature generation for ' + api_id, async function() {
+  describe('Pseudonym Signature generation for ' + api_id, async function() {
     for(let i = 0; i < testVectors.length; i++) { // testVectors.length
       const sigFixture = testVectors[i];
-      it(`case: ${sigFixture.caseName}`, async function() {
+      it(`file: ${sigFixture.filename}, case: ${sigFixture.caseName}`, async function() {
         const SK = BigInt('0x' + sigFixture.signerKeyPair.secretKey);
         const PK = hexToBytes(sigFixture.signerKeyPair.publicKey);
         const header = hexToBytes(sigFixture.header);
         const commitmentWithProof = hexToBytes(sigFixture.commitmentWithProof);
+        console.log(sigFixture.signer_nym_entropy);
         const nym_entropy = BigInt('0x' + sigFixture.signer_nym_entropy);
         // BlindSignWithNym(SK, PK, commitment_with_proof, signer_nym_entropy, header, messages, api_id)
         const res = await BlindSignWithNym(SK, PK, commitmentWithProof, nym_entropy, header, messages, api_id);
