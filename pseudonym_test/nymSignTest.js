@@ -12,10 +12,8 @@ import {fileURLToPath} from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/nymSignature/';
 const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/nymSignature/';
-const message_file = __dirname + '/fixture_data/messages.json';
 
-const allMessages = (JSON.parse(await readFile(message_file)));
-const messages = allMessages.messages.map(m_hex => hexToBytes(m_hex));
+
 // console.log('messages:');
 // console.log(messages.map(m => bytesToHex(m)));
 for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { // API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE
@@ -40,6 +38,7 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         const PK = hexToBytes(sigFixture.signerKeyPair.publicKey);
         const header = hexToBytes(sigFixture.header);
         const commitmentWithProof = hexToBytes(sigFixture.commitmentWithProof);
+        const messages = sigFixture.messages.map(m_hex => hexToBytes(m_hex));
         console.log(sigFixture.signer_nym_entropy);
         const nym_entropy = BigInt('0x' + sigFixture.signer_nym_entropy);
         // BlindSignWithNym(SK, PK, commitment_with_proof, signer_nym_entropy, header, messages, api_id)
