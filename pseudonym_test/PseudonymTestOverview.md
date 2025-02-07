@@ -22,16 +22,15 @@ blind_sig = **BlindSignWithNym**(SK, PK, commitment_with_proof, signer_nym_entro
 3. valid no prover committed messages only committed prover_nym, multiple signer messages signature
 4. valid multiple signer and committed prover_nym, and prover committed messages signature
 
+**DONE**
+
 ## Finalize Nym Secret and Verify
 
 Exercises the API call:
 
 nym_secret = **Finalize**(PK, signature, header, messages, committed_messages, prover_nym, signer_nym_entropy, secret_prover_blind)
 
-*Note*: hopefully we'll have a more descriptive name for the above API. Should be able to combine this into the same test vector file as the signature test vector files.
-
-1. Use "no prover committed messages only committed prover_nym, no signer messages signature" verify and compute *nym_secret*.
-2. Use "valid multi prover committed messages and committed prover_nym, no signer messages signature" verify and compute *nym_secret*.
+*Note*: hopefully we'll have a more descriptive name for the above API. Should be able to combine this into the same test vector file as the signature test vector files. Uses signature test vectors with nym_secret added to them. **DONE**
 
 ## Proof Generation with Nym
 
