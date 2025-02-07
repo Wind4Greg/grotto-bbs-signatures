@@ -20,7 +20,7 @@ const allMessages = JSON.parse(await readFile(allMessagesFile));
 const messages = allMessages.messages.map(hexMsg => hexToBytes(hexMsg));
 const committed_messages = allMessages.committedMessages.map(hexMsg => hexToBytes(hexMsg));
 
-for(const api_id of [API_ID_PSEUDONYM_BBS_SHA]) { // API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE
+for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { // API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE
   let path = SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;

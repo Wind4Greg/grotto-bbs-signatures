@@ -26,13 +26,16 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) {
   // get all the test vectors in the dir
   const testVectors = [];
   for(const fn of files) {
-    testVectors.push(JSON.parse(await readFile(path + fn)));
+    const vectorObj = JSON.parse(await readFile(path + fn));
+    vectorObj.filename = fn;
+    testVectors.push(vectorObj);
   }
 
   describe('prover_nym commit validation for ' + api_id, async function() {
     for(const commitFixture of testVectors) {
-      it(`case: ${commitFixture.caseName}`, async function() {
-        const gens = await prepareGenerators(2, 'BLIND_' + api_id);
+      it(`file: ${commitFixture.filename}, case: ${commitFixture.caseName}`, async function() {
+        const M = commitFixture.committedMessages.length;
+        const gens = await prepareGenerators(M + 2, 'BLIND_' + api_id);
         const commitmentWithProof = hexToBytes(commitFixture.commitmentWithProof);
         const commit = await deserialize_and_validate_commit(commitmentWithProof, gens, api_id);
         console.log(`commitment: ${bytesToHex(commit.toRawBytes(true))}`);
