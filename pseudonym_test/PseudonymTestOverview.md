@@ -38,7 +38,7 @@ Exercises the API call:
 
 (proof, Pseudonym) = **ProofGenWithNym**(PK, signature, header, ph, nym_secret, context_id, messages, committed_messages, disclosed_indexes, disclosed_commitment_indexes, secret_prover_blind)
 
-*Note* additional information over blind proof generation. Inputs: *nym_secret*, *context_id*, output: *pseudonym*.
+*Note* additional information over blind proof generation. Inputs: *nym_secret*, *context_id*, output: *pseudonym*. **DONE**
 
 1. valid all prover committed messages and signer messages revealed proof
 2. valid half prover committed messages and all signer messages revealed proof
