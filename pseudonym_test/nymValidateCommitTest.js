@@ -17,7 +17,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/nymCommit/';
 const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/nymCommit/';
 
-for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) {
+for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { // API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE
   let path = SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
@@ -34,7 +34,7 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) {
   describe('prover_nym commit validation for ' + api_id, async function() {
     for(const commitFixture of testVectors) {
       it(`file: ${commitFixture.filename}, case: ${commitFixture.caseName}`, async function() {
-        const M = commitFixture.committedMessages.length;
+        const M = commitFixture.committedMessages.length + commitFixture.proverNyms.length;
         const gens = await prepareGenerators(M + 2, 'BLIND_' + api_id);
         const commitmentWithProof = hexToBytes(commitFixture.commitmentWithProof);
         const commit = await deserialize_and_validate_commit(commitmentWithProof, gens, api_id);
