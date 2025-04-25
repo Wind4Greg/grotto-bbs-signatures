@@ -17,7 +17,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/nymCommit/';
 const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/nymCommit/';
 
-for(const api_id of [API_ID_PSEUDONYM_BBS_SHAKE]) { //API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE
+for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE
   let path = SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
@@ -28,10 +28,10 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHAKE]) { //API_ID_PSEUDONYM_BBS_SHA, 
   for(const fn of files) {
     const vectorObj = JSON.parse(await readFile(path + fn));
     vectorObj.filename = fn;
-    if(fn == "nymCommit004.json") {
-      testVectors.push(vectorObj);
-    }
-
+    // if(fn == "nymCommit004.json") {
+    //   testVectors.push(vectorObj);
+    // }
+    testVectors.push(vectorObj)
   }
 
   describe('Prover Nym commit generation for ' + api_id, async function () {
