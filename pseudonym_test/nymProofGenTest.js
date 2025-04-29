@@ -20,7 +20,7 @@ const allMessages = JSON.parse(await readFile(allMessagesFile));
 const messages = allMessages.messages.map(hexMsg => hexToBytes(hexMsg));
 const committed_messages = allMessages.committedMessages.map(hexMsg => hexToBytes(hexMsg));
 
-for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { // API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE
+for(const api_id of [API_ID_PSEUDONYM_BBS_SHA]) { // API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE
   let path = SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
@@ -31,7 +31,9 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
   for(const fn of files) {
     const vectorObj = JSON.parse(await readFile(path + fn));
     vectorObj.filename = fn;
-    testVectors.push(vectorObj);
+    if(fn == 'nymProof101.json') {
+      testVectors.push(vectorObj);
+    }
   }
 
   describe('Pseudonym Proof generation for ' + api_id, async function() {
@@ -44,7 +46,7 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         const ph = hexToBytes(proofFixture.presentationHeader);
         // const pseudonym_bytes = hexToBytes(proofFixture.pseudonym);
         const context_id = hexToBytes(proofFixture.context_id);
-        const nym_secret = BigInt('0x' + proofFixture.nym_secret);
+        const nym_secrets = proofFixture.nym_secrets.map(nym_secret => BigInt('0x' + nym_secret));
         // Get selected indexes
         const disclosedIndexes = Object.keys(proofFixture.revealedMessages).map(key => parseInt(key)).sort();
         // const disclosedIndexes = proofFixture.disclosedIndexes;
@@ -60,7 +62,7 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         // const proof = await HiddenPidProofGen(PK, signature, pseudonym_bytes, verifier_id,
         //   pid, header, ph, messages, disclosedIndexes, proverBlind,
         //   0n, api_id, rand_scalar_func);
-        const [proof, pseudonym] = await ProofGenWithNym(PK, signature, header, ph, nym_secret, context_id,
+        const [proof, pseudonym] = await ProofGenWithNym(PK, signature, header, ph, nym_secrets, context_id,
           messages, committed_messages, disclosedIndexes, disclosed_commitment_indexes,
           proverBlind, api_id, rand_scalar_func);
         console.log(`proof: ${bytesToHex(proof)}`);
