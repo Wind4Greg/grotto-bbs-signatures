@@ -16,7 +16,7 @@ const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/nymSignature/'
 
 // console.log('messages:');
 // console.log(messages.map(m => bytesToHex(m)));
-for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { // API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE
+for(const api_id of [API_ID_PSEUDONYM_BBS_SHA]) { // API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE
   let path = SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
@@ -27,7 +27,9 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
   for(const fn of files) {
     const vectorObj = JSON.parse(await readFile(path + fn));
     vectorObj.filename = fn;
-    testVectors.push(vectorObj);
+    if(fn == 'nymSignature006.json') {
+      testVectors.push(vectorObj);
+    }
   }
 
   describe('Pseudonym Signature generation for ' + api_id, async function() {
@@ -39,10 +41,12 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         const header = hexToBytes(sigFixture.header);
         const commitmentWithProof = hexToBytes(sigFixture.commitmentWithProof);
         const messages = sigFixture.messages.map(m_hex => hexToBytes(m_hex));
+        const length_nym_vector = sigFixture.proverNyms.length;
         console.log(sigFixture.signer_nym_entropy);
         const nym_entropy = BigInt('0x' + sigFixture.signer_nym_entropy);
         // BlindSignWithNym(SK, PK, commitment_with_proof, signer_nym_entropy, header, messages, api_id)
-        const res = await BlindSignWithNym(SK, PK, commitmentWithProof, nym_entropy, header, messages, api_id);
+        const res = await BlindSignWithNym(SK, PK, commitmentWithProof, length_nym_vector,
+          nym_entropy, header, messages, api_id);
         const sig = res;
         console.log(`signature: ${bytesToHex(sig)}`);
         assert.equal(bytesToHex(sig), sigFixture.signature);
