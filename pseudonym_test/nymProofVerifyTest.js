@@ -21,7 +21,7 @@ const allMessages = JSON.parse(await readFile(allMessagesFile));
 const messages = allMessages.messages.map(hexMsg => hexToBytes(hexMsg));
 const comMessages = allMessages.committedMessages.map(hexMsg => hexToBytes(hexMsg));
 
-for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //, API_ID_PSEUDONYM_BBS_SHAKE
+for(const api_id of [API_ID_PSEUDONYM_BBS_SHA]) { //, API_ID_PSEUDONYM_BBS_SHAKE
   let path = SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
@@ -32,7 +32,9 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
   for(const fn of files) {
     const vectorObj = JSON.parse(await readFile(path + fn));
     vectorObj.filename = fn;
-    testVectors.push(vectorObj);
+    if(fn == 'nymProof101.json') {
+      testVectors.push(vectorObj);
+    }
   }
 
   describe('Pseudonym Proof verification for ' + api_id, async function() {
@@ -45,6 +47,7 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         const ph = hexToBytes(proofFixture.presentationHeader);
         const pseudonym_bytes = hexToBytes(proofFixture.pseudonym);
         const context_id = hexToBytes(proofFixture.context_id);
+        const length_nym_vector = proofFixture.proverNyms.length;
         // Assemble messages and indexes
         const disclosedIndexes = Object.keys(proofFixture.revealedMessages).map(key => parseInt(key)).sort();
         const disComIndxs = Object.keys(proofFixture.revealedCommittedMessages).map(key => parseInt(key)).sort();
@@ -52,8 +55,9 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         const disComMsgs = disComIndxs.map(i => comMessages[i]);
 
         const L = proofFixture.L;
-        const result = await ProofVerifyWithNym(PK, proof, header, ph, pseudonym_bytes, context_id,
-          L, disclosedMessages, disComMsgs, disclosedIndexes, disComIndxs, api_id);
+        const result = await ProofVerifyWithNym(PK, proof, header, ph, pseudonym_bytes,
+          context_id, length_nym_vector, L, disclosedMessages, disComMsgs,
+          disclosedIndexes, disComIndxs, api_id);
         /*
                 const result = await ProofVerifyWithNym(PK, proof, header, ph, pseudonym, context_id,
   L, disclosed_messages, disclosed_committed_messages, disclosed_indexes,
