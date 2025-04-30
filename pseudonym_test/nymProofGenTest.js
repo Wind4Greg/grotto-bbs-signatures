@@ -31,7 +31,7 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA]) { // API_ID_PSEUDONYM_BBS_SHA, A
   for(const fn of files) {
     const vectorObj = JSON.parse(await readFile(path + fn));
     vectorObj.filename = fn;
-    if(fn == 'nymProof101.json') {
+    if(fn == 'nymProof005.json') {
       testVectors.push(vectorObj);
     }
   }
