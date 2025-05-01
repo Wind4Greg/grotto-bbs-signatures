@@ -1,5 +1,6 @@
 {
   "caseName": "valid all prover committed messages and signer messages revealed proof",
+  "notes": "Based on nymSignature004.json and messages.json",
   "mockRngParameters": {
     "SEED": "3.141592653589793238462643383279",
     "commit": {
