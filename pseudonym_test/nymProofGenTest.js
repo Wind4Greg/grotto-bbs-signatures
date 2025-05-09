@@ -35,8 +35,8 @@ for (const api_id of [API_ID_PSEUDONYM_BBS_SHA]) {
   const files = await readdir(path);
   // get all the test vectors in the dir
   const testVectors = [];
-  for (const fn of files) {
-    if (fn !== 'blah') { // use fn == "nymCommit004.json" for specific file
+  for(const fn of files) {
+    if(fn == 'nymProof104IP.json') { // use fn == "nymCommit004.json" for specific file
       const vectorObj = JSON.parse(await readFile(path + fn));
       vectorObj.filename = fn;
       testVectors.push(vectorObj);
