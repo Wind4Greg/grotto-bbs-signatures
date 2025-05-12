@@ -25,7 +25,7 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA]) { // API_ID_PSEUDONYM_BBS_SHA, A
   // get all the test vectors in the dir
   const testVectors = [];
   for(const fn of files) {
-    if(fn !== 'blah') { // use fn == 'nymSignature006.json' for a specific file
+    if(fn == 'nymSignature105.json') { // use fn == 'nymSignature006.json' for a specific file
       const vectorObj = JSON.parse(await readFile(path + fn));
       vectorObj.filename = fn;
       testVectors.push(vectorObj);
@@ -59,7 +59,7 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA]) { // API_ID_PSEUDONYM_BBS_SHA, A
           prover_nyms, signer_nym_entropy, proverBlind, api_id);
         const [valid, rnym_secrets] = result;
         assert.isTrue(valid);
-        // console.log(rnym_secrets.map(bi => bi.toString(16)));
+        console.log(rnym_secrets.at(-1).toString(16));
         assert.deepEqual(nym_secrets, rnym_secrets);
       });
     }

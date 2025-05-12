@@ -3,10 +3,11 @@
 import {
   API_ID_PSEUDONYM_BBS_SHA,
   API_ID_PSEUDONYM_BBS_SHAKE,
+  calculate_random_scalars,
   hexToBytes,
   seeded_random_scalars,
 } from "../lib/BBS.js";
-import { readdir, readFile } from "fs/promises";
+import { mkdir, readdir, readFile, writeFile } from "fs/promises";
 import { assert } from "chai";
 import { ProofGenWithNym } from "../lib/PseudonymBBS.js";
 import { bytesToHex } from "@noble/hashes/utils";
@@ -18,15 +19,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const SHA_PATH = __dirname + "/fixture_data/bls12-381-sha-256/nymProof/";
 const SHAKE_PATH = __dirname + "/fixture_data/bls12-381-shake-256/nymProof/";
-const allMessagesFile = __dirname + "/fixture_data/messages.json";
+// Used to hold supplemental data produced in test
+const SUPP_PATH = __dirname + '/fixture_data/bls12-381-sha-256/supplement/';
+await mkdir(SUPP_PATH, { recursive: true });
 
-const allMessages = JSON.parse(await readFile(allMessagesFile));
-const messages = allMessages.messages.map((hexMsg) => hexToBytes(hexMsg));
-const committed_messages = allMessages.committedMessages.map((hexMsg) =>
-  hexToBytes(hexMsg)
-);
-
-for (const api_id of [API_ID_PSEUDONYM_BBS_SHA]) {
+for(const api_id of [API_ID_PSEUDONYM_BBS_SHA]) {
   // API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE
   let path = SHA_PATH;
   if (api_id.includes("SHAKE-256")) {
@@ -36,7 +33,7 @@ for (const api_id of [API_ID_PSEUDONYM_BBS_SHA]) {
   // get all the test vectors in the dir
   const testVectors = [];
   for(const fn of files) {
-    if(fn == 'nymProof104IP.json') { // use fn == "nymCommit004.json" for specific file
+    if(fn == 'nymProof110IP.json') { // use fn == "nymCommit004.json" for specific file
       const vectorObj = JSON.parse(await readFile(path + fn));
       vectorObj.filename = fn;
       testVectors.push(vectorObj);
@@ -70,39 +67,39 @@ for (const api_id of [API_ID_PSEUDONYM_BBS_SHA]) {
           .sort();
         const proverBlind = BigInt("0x" + proofFixture.proverBlind);
         // Pseudo random (deterministic) scalar generation seed and function
-        const rngParams = proofFixture.mockRngParameters;
-        const te = new TextEncoder();
-        const seed = te.encode(rngParams.SEED);
-        const rng_dst = rngParams.proof.DST;
-        const rand_scalar_func = seeded_random_scalars.bind(
-          null,
-          seed,
-          rng_dst
-        );
+        let rand_scalar_func;
+        if(proofFixture.mockRngParameters) {
+          const rngParams = proofFixture.mockRngParameters;
+          const te = new TextEncoder();
+          const seed = te.encode(rngParams.SEED);
+          const rng_dst = rngParams.proof.DST;
+          rand_scalar_func = seeded_random_scalars.bind(null, seed, rng_dst);
+        } else {
+          rand_scalar_func = calculate_random_scalars;
+        }
+        const messages = proofFixture.messages.map(hexMsg => hexToBytes(hexMsg));
+        const committed_messages = proofFixture.committedMessages.map(hexMsg => hexToBytes(hexMsg));
         // const proof = await HiddenPidProofGen(PK, signature, pseudonym_bytes, verifier_id,
         //   pid, header, ph, messages, disclosedIndexes, proverBlind,
         //   0n, api_id, rand_scalar_func);
-        const [proof, pseudonym] = await ProofGenWithNym(
-          PK,
-          signature,
-          header,
-          ph,
-          nym_secrets,
-          context_id,
-          messages,
-          committed_messages,
-          disclosedIndexes,
-          disclosed_commitment_indexes,
-          proverBlind,
-          api_id,
-          rand_scalar_func
+        const [proof, pseudonym] = await ProofGenWithNym(PK, signature, header, ph,
+          nym_secrets, context_id, messages, committed_messages, disclosedIndexes,
+          disclosed_commitment_indexes, proverBlind, api_id, rand_scalar_func
         );
-        console.log(`proof: ${bytesToHex(proof)}`);
-        assert.equal(bytesToHex(proof), proofFixture.proof);
-        assert.equal(
-          bytesToHex(pseudonym.toRawBytes(true)),
-          proofFixture.pseudonym
-        );
+        if(proofFixture.mockRngParameters) {
+          console.log(`proof: ${bytesToHex(proof)}`);
+          assert.equal(bytesToHex(proof), proofFixture.proof);
+          assert.equal(
+            bytesToHex(pseudonym.toRawBytes(true)),
+            proofFixture.pseudonym
+          );
+        } else {
+          console.log('Writing supplement file for proof and pseudonym');
+          const myObject = {proof: bytesToHex(proof),
+            pseudonym: bytesToHex(pseudonym.toRawBytes(true))
+          };
+          await writeFile(SUPP_PATH + proofFixture.filename, JSON.stringify(myObject, null, 2));
+        }
       });
     }
   });
