@@ -25,7 +25,7 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA]) {
   // get all the test vectors in the dir
   const testVectors = [];
   for(const fn of files) {
-    if(fn == 'nymSignature105.json') { // change to something like fn == "nymSignature003.json"
+    if(fn !== 'nymSignature105.json') { // change to something like fn == "nymSignature003.json"
       const vectorObj = JSON.parse(await readFile(path + fn));
       vectorObj.filename = fn;
       testVectors.push(vectorObj);
