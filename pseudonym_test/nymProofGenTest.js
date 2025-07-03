@@ -23,7 +23,7 @@ const SHAKE_PATH = __dirname + "/fixture_data/bls12-381-shake-256/nymProof/";
 const SUPP_PATH = __dirname + '/fixture_data/bls12-381-sha-256/supplement/';
 await mkdir(SUPP_PATH, { recursive: true });
 
-for(const api_id of [API_ID_PSEUDONYM_BBS_SHAKE]) {
+for(const api_id of [API_ID_PSEUDONYM_BBS_SHA]) {
   // API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE
   let path = SHA_PATH;
   if (api_id.includes("SHAKE-256")) {
@@ -33,7 +33,7 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHAKE]) {
   // get all the test vectors in the dir
   const testVectors = [];
   for(const fn of files) {
-    if(fn == 'nymProof007.json') { // use fn == "nymCommit004.json" for specific file
+    if(fn !== 'nymProof110.json') { // use fn == "nymCommit004.json" for specific file
       const vectorObj = JSON.parse(await readFile(path + fn));
       vectorObj.filename = fn;
       testVectors.push(vectorObj);
