@@ -9,7 +9,7 @@ import {
 import { readdir, readFile } from "fs/promises";
 import { assert } from "chai";
 import { ProofVerifyWithNym } from "../lib/PseudonymBBS.js";
-import { bytesToHex } from "@noble/hashes/utils";
+import { bytesToHex } from "@noble/hashes/utils.js";
 
 import { dirname } from "path";
 import { fileURLToPath } from "url";

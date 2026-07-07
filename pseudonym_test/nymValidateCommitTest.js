@@ -8,7 +8,7 @@ import {
 import {readdir, readFile} from 'fs/promises';
 import {deserialize_and_validate_commit} from '../lib/BlindBBS.js';
 import {assert} from 'chai';
-import {bytesToHex} from '@noble/hashes/utils';
+import {bytesToHex} from '@noble/hashes/utils.js';
 import {dirname} from 'path';
 import {fileURLToPath} from 'url';
 
@@ -40,7 +40,7 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         const gens = await prepareGenerators(M + 2, 'BLIND_' + api_id);
         const commitmentWithProof = hexToBytes(commitFixture.commitmentWithProof);
         const commit = await deserialize_and_validate_commit(commitmentWithProof, gens, api_id);
-        console.log(`commitment: ${bytesToHex(commit.toRawBytes(true))}`);
+        console.log(`commitment: ${bytesToHex(commit.toBytes(true))}`);
       });
     }
   });

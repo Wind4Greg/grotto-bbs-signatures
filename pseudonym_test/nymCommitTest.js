@@ -6,7 +6,7 @@ import {readdir, mkdir, readFile, writeFile} from "fs/promises";
 import {CommitWithNym} from "../lib/PseudonymBBS.js";
 
 import {assert} from "chai";
-import {bytesToHex} from "@noble/hashes/utils";
+import {bytesToHex} from "@noble/hashes/utils.js";
 import {dirname} from "path";
 import {fileURLToPath} from "url";
 

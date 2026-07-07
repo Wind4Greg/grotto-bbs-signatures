@@ -10,7 +10,7 @@ import {
 import { mkdir, readdir, readFile, writeFile } from "fs/promises";
 import { assert } from "chai";
 import { ProofGenWithNym } from "../lib/PseudonymBBS.js";
-import { bytesToHex } from "@noble/hashes/utils";
+import { bytesToHex } from "@noble/hashes/utils.js";
 
 import { dirname } from "path";
 import { fileURLToPath } from "url";
@@ -90,13 +90,13 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) {
           console.log(`proof: ${bytesToHex(proof)}`);
           assert.equal(bytesToHex(proof), proofFixture.proof);
           assert.equal(
-            bytesToHex(pseudonym.toRawBytes(true)),
+            bytesToHex(pseudonym.toBytes(true)),
             proofFixture.pseudonym
           );
         } else {
           console.log('Writing supplement file for proof and pseudonym');
           const myObject = {proof: bytesToHex(proof),
-            pseudonym: bytesToHex(pseudonym.toRawBytes(true))
+            pseudonym: bytesToHex(pseudonym.toBytes(true))
           };
           await writeFile(SUPP_PATH + proofFixture.filename, JSON.stringify(myObject, null, 2));
         }
