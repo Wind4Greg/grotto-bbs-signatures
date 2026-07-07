@@ -4,7 +4,7 @@ import {API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE, hexToBytes,
   seeded_random_scalars} from '../lib/BBS.js';
 import {readdir, readFile} from 'fs/promises';
 import {assert} from 'chai';
-import {bytesToHex} from '@noble/hashes/utils';
+import {bytesToHex} from '@noble/hashes/utils.js';
 import {commit} from '../lib/BlindBBS.js';
 import {dirname} from 'path';
 import {fileURLToPath} from 'url';

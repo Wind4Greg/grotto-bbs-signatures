@@ -4,7 +4,7 @@ import {API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE, hexToBytes,
   prepareGenerators} from '../lib/BBS.js';
 import {readdir, readFile} from 'fs/promises';
 import {assert} from 'chai';
-import {bytesToHex} from '@noble/hashes/utils';
+import {bytesToHex} from '@noble/hashes/utils.js';
 import {deserialize_and_validate_commit} from '../lib/BlindBBS.js';
 import {dirname} from 'path';
 import {fileURLToPath} from 'url';
@@ -34,7 +34,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // , API_I
         const gens = await prepareGenerators(M + 1, 'BLIND_' + api_id);
         const commit =
             await deserialize_and_validate_commit(commitmentWithProof, gens, api_id);
-        assert.isTrue(commitFixture.commitmentWithProof.startsWith(bytesToHex(commit.toRawBytes(true))));
+        assert.isTrue(commitFixture.commitmentWithProof.startsWith(bytesToHex(commit.toBytes(true))));
         // console.log(`M = ${M}`);
       });
     }
