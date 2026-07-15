@@ -5,7 +5,7 @@ import {API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE, hexToBytes,
 import {readdir, readFile} from 'fs/promises';
 import {assert} from 'chai';
 import {bytesToHex} from '@noble/hashes/utils.js';
-import {commit} from '../lib/BlindBBS.js';
+import {Commit} from '../lib/BlindBBS.js';
 import {dirname} from 'path';
 import {fileURLToPath} from 'url';
 
@@ -35,7 +35,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
         const rng_dst = commitFixture.mockRngParameters.commit.DST;
         const rand_scalar_func = seeded_random_scalars.bind(null, seed, rng_dst);
         const [commit_with_proof_octs, secret_prover_blind] =
-            await commit(msgs_in_octets, api_id, rand_scalar_func);
+            await Commit(msgs_in_octets, api_id, rand_scalar_func);
         // console.log(`commit with proof (hex): ${bytesToHex(commit_with_proof_octs)}`);
         // console.log(`secret prover blind (hex): ${secret_prover_blind.toString(16)}`);
         // console.log(`calcM: ${calcM(commit_with_proof_octs)}`);
