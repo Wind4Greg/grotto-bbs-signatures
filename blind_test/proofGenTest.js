@@ -1,59 +1,85 @@
 /* global describe, it, TextEncoder */
 /* eslint-disable max-len */
-import {API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE, hexToBytes,
-  seeded_random_scalars} from '../lib/BBS.js';
-import {readdir, readFile} from 'fs/promises';
-import {assert} from 'chai';
-import {BlindProofGen} from '../lib/BlindBBS.js';
-import {bytesToHex} from '@noble/hashes/utils.js';
+/*
+  All these proof generation tests work with the same set of signer and prover (committed)
+  messages. The signature corresponds to the signature test vector file: signature004.json.
+*/
+import {
+  API_ID_BLIND_BBS_SHA,
+  API_ID_BLIND_BBS_SHAKE,
+  hexToBytes,
+  seeded_random_scalars,
+} from "../lib/BBS.js";
+import { readdir, readFile } from "fs/promises";
+import { assert } from "chai";
+import { BlindProofGen } from "../lib/BlindBBS.js";
+import { bytesToHex } from "@noble/hashes/utils.js";
 
-import {dirname} from 'path';
-import {fileURLToPath} from 'url';
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/proof/';
-const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/proof/';
-const allMessagesFile = __dirname + '/fixture_data/messages.json';
+const SHA_PATH = __dirname + "/fixture_data/bls12-381-sha-256/proof/";
+const SHAKE_PATH = __dirname + "/fixture_data/bls12-381-shake-256/proof/";
+const allMessagesFile = __dirname + "/fixture_data/messages.json";
 
 const allMessages = JSON.parse(await readFile(allMessagesFile));
-const messages = allMessages.messages.map(hexMsg => hexToBytes(hexMsg));
-const committedMessages = allMessages.committedMessages.map(hexMsg => hexToBytes(hexMsg));
-for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE
+const messages = allMessages.messages.map((hexMsg) => hexToBytes(hexMsg));
+const committedMessages = allMessages.committedMessages.map((hexMsg) =>
+  hexToBytes(hexMsg),
+);
+for (const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
+  // API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE
   let path = SHA_PATH;
-  if(api_id.includes('SHAKE-256')) {
+  if (api_id.includes("SHAKE-256")) {
     path = SHAKE_PATH;
   }
   const files = await readdir(path);
   // get all the test vectors in the dir
   const testVectors = [];
 
-  for(const fn of files) {
+  for (const fn of files) {
     let vectorObj = JSON.parse(await readFile(path + fn));
     vectorObj.filename = fn;
     testVectors.push(vectorObj);
   }
 
-  describe('Proof generation for ' + api_id, async function() {
-    for(let i = 0; i < testVectors.length; i++) { // testVectors.length
+  describe("Proof generation for " + api_id, async function () {
+    for (let i = 0; i < testVectors.length; i++) {
+      // testVectors.length
       const proofFixture = testVectors[i];
-      it(`file: ${proofFixture.filename}, case: ${proofFixture.caseName}`, async function() {
+      it(`file: ${proofFixture.filename}, case: ${proofFixture.caseName}`, async function () {
         const PK = hexToBytes(proofFixture.signerPublicKey);
         const signature = hexToBytes(proofFixture.signature);
         const header = hexToBytes(proofFixture.header);
         let proverBlind = 0n;
-        if(proofFixture.proverBlind) {
-          proverBlind = BigInt('0x' + proofFixture.proverBlind);
+        if (proofFixture.proverBlind) {
+          proverBlind = BigInt("0x" + proofFixture.proverBlind);
         }
         const ph = hexToBytes(proofFixture.presentationHeader);
+        // Transitioning from index lists to disclosure maps. For now check to see
+        // which are in the vector
         // Get indexes from objects
-        const revealedCommittedMessages = proofFixture.revealedCommittedMessages;
-        const revealedMessages = proofFixture.revealedMessages;
-        const disclosedIndexes = Object.keys(revealedMessages).map(s => parseInt(s));
-        let disclosedCommittedIndexes = [];
-        let usedCommittedMessages = [];
-        if(revealedCommittedMessages) {
-          disclosedCommittedIndexes = Object.keys(revealedCommittedMessages).map(s => parseInt(s));
+        let disclosedIndexes, disclosedCommittedIndexes, usedCommittedMessages;
+        if(proofFixture.revealedMessages) {
+          const revealedCommittedMessages =
+            proofFixture.revealedCommittedMessages;
+          const revealedMessages = proofFixture.revealedMessages;
+          disclosedIndexes = Object.keys(revealedMessages).map((s) =>
+            parseInt(s),
+          );
+          disclosedCommittedIndexes = [];
+          usedCommittedMessages = [];
+          if(revealedCommittedMessages) {
+            disclosedCommittedIndexes = Object.keys(
+              revealedCommittedMessages,
+            ).map((s) => parseInt(s));
+            usedCommittedMessages = committedMessages;
+          }
+        } else { // should have messageDisclosures and blindMessageDisclosures
+          disclosedIndexes = proofFixture.messageDisclosures;
+          disclosedCommittedIndexes = proofFixture.blindMessageDisclosures;
           usedCommittedMessages = committedMessages;
         }
         // Pseudo random (deterministic) scalar generation seed and function
@@ -61,13 +87,26 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // API_ID_
         const te = new TextEncoder();
         const seed = te.encode(rngParams.SEED);
         const rng_dst = rngParams.proof.DST;
-        const rand_scalar_func = seeded_random_scalars.bind(null, seed, rng_dst);
+        const rand_scalar_func = seeded_random_scalars.bind(
+          null,
+          seed,
+          rng_dst,
+        );
         // console.log(`disclosed idxs: ${disclosedIndexes}`);
         // console.log(`disclosed committed idxs: ${disclosedCommittedIndexes}`);
-        const proof = await BlindProofGen(PK, signature, header, ph, messages,
-          usedCommittedMessages, disclosedIndexes, disclosedCommittedIndexes,
-          proverBlind, api_id,
-          rand_scalar_func);
+        const proof = await BlindProofGen(
+          PK,
+          signature,
+          header,
+          ph,
+          messages,
+          usedCommittedMessages,
+          disclosedIndexes,
+          disclosedCommittedIndexes,
+          proverBlind,
+          api_id,
+          rand_scalar_func,
+        );
         // console.log(`proof: ${bytesToHex(proof)}`);
         // console.log(`indexes: ${disclosed_idxs}`);
         // console.log('disclosed_msgs:');
