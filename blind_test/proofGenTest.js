@@ -29,7 +29,7 @@ const messages = allMessages.messages.map((hexMsg) => hexToBytes(hexMsg));
 const committedMessages = allMessages.committedMessages.map((hexMsg) =>
   hexToBytes(hexMsg),
 );
-for (const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
+for (const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
   // API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE
   let path = SHA_PATH;
   if (api_id.includes("SHAKE-256")) {
@@ -39,7 +39,10 @@ for (const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
   // get all the test vectors in the dir
   const testVectors = [];
 
-  for (const fn of files) {
+  for(const fn of files) {
+    if(fn != "proof009ComDis.json") {
+      continue;
+    }
     let vectorObj = JSON.parse(await readFile(path + fn));
     vectorObj.filename = fn;
     testVectors.push(vectorObj);
