@@ -1,0 +1,67 @@
+{
+  "caseName": "valid all prover committed messages and half signer messages revealed proof",
+  "mockRngParameters": {
+    "SEED": "3.141592653589793238462643383279",
+    "commit": {
+      "DST": "BBS_BLS12381G1_XMD:SHA-256_SSWU_RO_H2G_HM2S_COMMIT_MOCK_RANDOM_SCALARS_DST_",
+      "count": 7
+    },
+    "proof": {
+      "DST": "BBS_BLS12381G1_XMD:SHA-256_SSWU_RO_H2G_HM2S_PROOF_MOCK_RANDOM_SCALARS_DST_",
+      "count": 11
+    }
+  },
+  "signerPublicKey": "a820f230f6ae38503b86c70dc50b61c58a77e45c39ab25c0652bbaa8fa136f2851bd4781c9dcde39fc9d1d52c9e60268061e7d7632171d91aa8d460acee0e96f1e7c4cfb12d3ff9ab5d5dc91c277db75c845d649ef3c4f63aebc364cd55ded0c",
+  "signatureFile": "signature004.json",
+  "header": "11223344556677889900aabbccddeeff",
+  "presentationHeader": "bed231d880675ed101ead304512e043ade9958dd0241ea70b4b3957fba941501",
+  "messageDisclosures": [
+    "DISCLOSE",
+    "HIDE",
+    "DISCLOSE",
+    "HIDE",
+    "DISCLOSE",
+    "HIDE",
+    "DISCLOSE",
+    "HIDE",
+    "DISCLOSE",
+    "HIDE"
+  ],
+  "blindMessageDisclosures": [
+    "DISCLOSE",
+    "DISCLOSE",
+    "DISCLOSE",
+    "DISCLOSE",
+    "DISCLOSE"
+  ],
+  "L": 10,
+  "proof": "82a7815ebceefbfb5c1728c940b8ec6efe0d64c6c53c5b7e5a01a598f3e904bf4eb43f94f3c41c2c73bf86ad6b4d9a6f87b89bb4c08ab7d0aa1afa52de982fb5f173b88db16b09a25358489da59d7d8da1f603aa83b55a6664e276e8b24985de93c5ee7b5fe52c329660f963fa3a26b9316aaddbdb83e764fdb4323be9870a9d7fa18c9136ad79d06f6de5e820631cd30a1739ba5dd8f204020cf071e8a1a5313e4a3eb1ba058c91f37f397976920eff270ff2bb79bdab9dd006752c915b22e2fff4f362a1dd663b2a178bb7ae08d1a6251e39fb11ff14b24a237ff2d8be9fe8d0db493dc019535e53dd31c0608543fb69f9fb31d1483514e65edc9c5111281409df08b88d333e4cc76fc41a45e49767523813f5e585c562933a6d7fd8b664102bd4822ba062ccee37ea50a3c9e03fc642b84c7d422155b61d69e5a832e41169bb08748ac245be18e159be1bb343afc170483a8887fe5b889adc43f410529c7fad530084b1cc90f8854d8bf402def3f90e525e4bc99b5b8b8095495651f2cb6844b91a7832744954ca5bbf9a4f9c863c6b3485ad58bdb54fa6c71058fe29296eab761ab1a2c4be2db749c40f173f8b2e03ec71a4d9d89d066763fd6a055e6a9e42a3b6a153732a42a5be5bfd2cf85b7d",
+  "result": {
+    "valid": true
+  },
+  "trace": {
+    "random_scalars": {
+      "r1": "034d543fdd164520876e558a77c102d4ad8bc99bf82ebe74590481473df2df56",
+      "r2": "4a8334929ba48d36eb4ebc7f8bfa701b4d3f30ef25bc01e2a45ef9611c16037f",
+      "e_tilde": "19726feed8e0e5ff22e4f5de19713977beceb12c3e85c1f3fb41cfe4a7237d1a",
+      "r1_tilde": "73012dc2f14039c8de5853b26baab7b51280a3f41425416d78a1a91fbaae9bf2",
+      "r3_tilde": "68263029bdc322a3d6460758135205dec58957ff3e5397276a2f0ffdc738d5e4",
+      "m_tilde_scalars": [
+        "52638b8d190f9fd439188b22c903507cfe5282296c2c9f605f1ef714afc14062",
+        "2cbc33e381cf6ae09dbb6f1d08e3ea93a5aa03c4a6574fd2fa2e879dc4deeca9",
+        "1ec36e6be1c702255d9aa4d590014b2b5de2f07d290c9551b66977cde157094b",
+        "5491612228a993693c79c11ae169dad9be4116a704ae9ed333ef96e3986373a0",
+        "6f4d920974d33c1e08c86b7f4b6bb7c58a5c0289d8d706a92d4855125ccedb70",
+        "279717a2b1e1d34cccfddfe9c8e3729f6e92e28197a09459c6dcd56e3920a0d7"
+      ]
+    },
+    "Abar": "82a7815ebceefbfb5c1728c940b8ec6efe0d64c6c53c5b7e5a01a598f3e904bf4eb43f94f3c41c2c73bf86ad6b4d9a6f",
+    "B": "8e1c3ee4b13e5936f9cb5f87342107ed9ab4417c04d6e5d712143a54bdb476aaf4240e8a4f11a67d81feb1398f889889",
+    "Bbar": "87b89bb4c08ab7d0aa1afa52de982fb5f173b88db16b09a25358489da59d7d8da1f603aa83b55a6664e276e8b24985de",
+    "D": "93c5ee7b5fe52c329660f963fa3a26b9316aaddbdb83e764fdb4323be9870a9d7fa18c9136ad79d06f6de5e820631cd3",
+    "T1": "a6c99db0835b219a11aa9782ebeac96b3c98b2efa8cc297ed635b2b2fb4368ba1dc2d2ddbc1e3b98da5dcb45b979b0cf",
+    "T2": "9978718786e319a6d7581746393970e1a31f001072bf9101aef8e7e4335b571ec43c76502f751d3e06fdeebf0768fb04",
+    "domain": "1207ed090723fa7e41c07e970ebb647d1d043079cc2a38c650c32234f1823936",
+    "challenge": "03ec71a4d9d89d066763fd6a055e6a9e42a3b6a153732a42a5be5bfd2cf85b7d"
+  }
+}

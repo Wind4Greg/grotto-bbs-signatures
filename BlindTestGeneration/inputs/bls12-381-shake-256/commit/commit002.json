@@ -1,0 +1,25 @@
+{
+  "caseName": "valid multiple committed messages commitment with proof",
+  "mockRngParameters": {
+    "SEED": "3.141592653589793238462643383279",
+    "commit": {
+      "DST": "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_H2G_HM2S_COMMIT_MOCK_RANDOM_SCALARS_DST_",
+      "count": null
+    }
+  },
+  "blindMessages": [
+    [
+      "HASH",
+      "5982967821da3c5983496214df36aa5e58de6fa25314af4cf4c00400779f08c3"
+    ],
+    ["RAW", "a75d8b634891af92282cc81a675972d1929d3149863c1fc0"],
+    ["HASH", "835889a40744813a892eff9deb1edaeb"],
+    ["RAW", "e1ca9729410dc6ba"],
+    ["HASH", ""]
+  ],
+  "proverBlind": "",
+  "commitmentWithProof": "",
+  "result": {
+    "valid": true
+  }
+}
