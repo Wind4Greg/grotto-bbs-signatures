@@ -28,12 +28,12 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // API_ID_
     let commit_with_proof_octs = null;
     let secret_prover_blind = null;
     if(sigFixture.blindMessages !== null) {
-      const msgs_in_octets = sigFixture.blindMessages.map(msg => [msg[0], hexToBytes(msg[1])]);
+      const blindMessages = sigFixture.blindMessages.map(msg => [msg[0], hexToBytes(msg[1])]);
       const seed = new TextEncoder().encode(sigFixture.mockRngParameters.SEED);
       const rng_dst = sigFixture.mockRngParameters.commit.DST;
       const rand_scalar_func = seeded_random_scalars.bind(null, seed, rng_dst);
       [commit_with_proof_octs, secret_prover_blind] =
-          await Commit(msgs_in_octets, api_id, rand_scalar_func);
+          await Commit(blindMessages, api_id, rand_scalar_func);
     }
     const SK = BigInt('0x' + sigFixture.signerKeyPair.secretKey);
     const PK = hexToBytes(sigFixture.signerKeyPair.publicKey);
