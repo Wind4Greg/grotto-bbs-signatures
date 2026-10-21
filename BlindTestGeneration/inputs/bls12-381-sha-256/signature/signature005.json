@@ -23,12 +23,8 @@
   ],
   "blindMessages": null,
   "proverBlind": null,
-  "signature": "8aa8fdfb190987d1fe1c8e34e69eae25594701958064e4483d74580a4a0f51f058a87735d727383b864904aa7b5e4a9b3821a18319df0ccb2e351a9bf75bf1f34d8858dde57119bfafd8ff56e0c54fa4",
+  "signature": "",
   "result": {
     "valid": true
-  },
-  "trace": {
-    "B": "874d657ff2b90023d18c8eb1d2fbc0beb8b9c1ae98a285db1076466edd7c0a3179bc572d4f7b0e15b39cbe298d2023cd",
-    "domain": "1430cf0a3d8a0519a9ecf47534b6026a7671935d9854ed5e68b42fdb543d5f7a"
   }
 }

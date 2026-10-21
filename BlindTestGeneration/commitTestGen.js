@@ -2,12 +2,12 @@
 /* eslint-disable max-len */
 import {API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE, hexToBytes,
   seeded_random_scalars} from '../lib/BBS.js';
-import {readdir, readFile, writeFile} from 'fs/promises';
-
-import {bytesToHex} from '@noble/hashes/utils.js';
 import {Commit, traceInfo} from '../lib/BlindBBS.js';
+import {readdir, readFile, writeFile} from 'fs/promises';
+import {bytesToHex} from '@noble/hashes/utils.js';
 import {dirname} from 'path';
 import {fileURLToPath} from 'url';
+
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -29,8 +29,8 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
     const rand_scalar_func = seeded_random_scalars.bind(null, seed, rng_dst);
     const [commit_with_proof_octs, secret_prover_blind] =
         await Commit(msgs_in_octets, api_id, rand_scalar_func);
-    console.log(`commit with proof (hex): ${bytesToHex(commit_with_proof_octs)}`);
-    console.log(`secret prover blind (hex): ${secret_prover_blind.toString(16)}`);
+    // console.log(`commit with proof (hex): ${bytesToHex(commit_with_proof_octs)}`);
+    // console.log(`secret prover blind (hex): ${secret_prover_blind.toString(16)}`);
     commitFixture.commitmentWithProof = bytesToHex(commit_with_proof_octs);
     commitFixture.proverBlind = secret_prover_blind.toString(16);
     const currentTrace = Object.assign({}, traceInfo.CoreCommit);
