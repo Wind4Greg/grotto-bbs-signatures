@@ -7,8 +7,8 @@ import {
   hexToBytes,
   seeded_random_scalars,
 } from "../lib/BBS.js";
-import {readdir, readFile} from "fs/promises";
-import {BlindProofGen} from "../lib/BlindBBS.js";
+import {readdir, readFile, writeFile} from "fs/promises";
+import {BlindProofGen, traceInfo} from "../lib/BlindBBS.js";
 import {bytesToHex} from "@noble/hashes/utils.js";
 
 import {dirname} from "path";
@@ -48,7 +48,10 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
       proverBlind = BigInt("0x" + sigFixture.proverBlind);
     }
     const ph = hexToBytes(proofFixture.presentationHeader);
-    const blindMessages = sigFixture.blindMessages.map(msg => [msg[0], hexToBytes(msg[1])]);
+    let blindMessages = [];
+    if(sigFixture.blindMessages !== null) {
+      blindMessages = sigFixture.blindMessages.map(msg => [msg[0], hexToBytes(msg[1])]);
+    }
     const messages = sigFixture.messages.map(msg => [msg[0], hexToBytes(msg[1])]);
     const messageDisclosures = proofFixture.messageDisclosures;
     const blindMessageDisclosures = proofFixture.blindMessageDisclosures;
@@ -77,7 +80,16 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
       api_id,
       rand_scalar_func,
     );
-    console.log(`proof: ${bytesToHex(proof)}`);
-  }
+    proofFixture.proof = bytesToHex(proof);
+    proofFixture.L = messages.length;
+    const proofTrace = traceInfo.CoreProofGen;
+    proofFixture.mockRngParameters.proof.count = proofTrace.count_random_scalars;
+    delete proofTrace.count_random_scalars;
+    proofFixture.trace = proofTrace;
+    // Write out the updated test vector to the corresponding output directory
+    const outputPath = path.replace('/inputs/', '/outputs/');
+    await writeFile(outputPath + 'proof/' + fn, JSON.stringify(proofFixture, null, 2));
+    // console.log(JSON.stringify(proofFixture, null, 2));
 
+  }
 }

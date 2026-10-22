@@ -2,13 +2,9 @@
   "caseName": "valid half prover committed messages and all signer messages revealed proof",
   "mockRngParameters": {
     "SEED": "3.141592653589793238462643383279",
-    "commit": {
-      "DST": "BBS_BLS12381G1_XMD:SHA-256_SSWU_RO_H2G_HM2S_COMMIT_MOCK_RANDOM_SCALARS_DST_",
-      "count": 7
-    },
     "proof": {
       "DST": "BBS_BLS12381G1_XMD:SHA-256_SSWU_RO_H2G_HM2S_PROOF_MOCK_RANDOM_SCALARS_DST_",
-      "count": 8
+      "count": null
     }
   },
   "signerPublicKey": "a820f230f6ae38503b86c70dc50b61c58a77e45c39ab25c0652bbaa8fa136f2851bd4781c9dcde39fc9d1d52c9e60268061e7d7632171d91aa8d460acee0e96f1e7c4cfb12d3ff9ab5d5dc91c277db75c845d649ef3c4f63aebc364cd55ded0c",
@@ -34,31 +30,9 @@
     "HIDE",
     "DISCLOSE"
   ],
-  "L": 10,
-  "proof": "a1fe94ec24e6d325d2494e10bdc395bd82e613e8dd08ca8f4eeffee294246b9321cc0e5997de7ae473a4d4c39f27b9088c815c0ff4f8ff7da0ef6d3338e048e2b28d98e148e1e8717b6ff6dfc4c74379aab5f409212986ce667c0b9ae4c48c278720d66be792af1a62989ea56f433a17f05af1f761b48b9ae2bb24418208111680d75c8b7d781186afedbe7c7f293b644cad32737358fed7adc516ec64319298fa4d22e2119db88e846f4d8665858b0930016a56245de910baa76242d3b2f48d61e78491695773063178c1f35d392198616b619fb5019a17fd6ec0bbbf6820cfe6bf8eb58801049465d86aca537126b759f76d65d2239d71584c85c371ff9bc0fd38ebd6623df2cba477ef0ffb0c0c9f35e8a6b4c2c865f4e1b0e5bc543601c0a209816a420bd9a6b71e0cf9bc330cc2078c8d74f7c741b2fc6ce3e553fe11d4ee2e02b34e81bd06074dfc892b87046a6f77fc07c8857b819c764ae92d3779b4bf76f875b4589b37daad83c6bf1889ba",
+  "L": null,
+  "proof": "",
   "result": {
     "valid": true
-  },
-  "trace": {
-    "random_scalars": {
-      "r1": "5a113c961c5d21bd78b50c3079ea482f5e861c20be37899d26e2ba565ea67093",
-      "r2": "1ce7fcf7fc75bffdf3cd0a284a5cd4acf6be87df552fa937f246a38e8c03af0b",
-      "e_tilde": "286458907bcd8e3fc535ed9575531919d1942a907ef8ed10360e292fca5ad0bb",
-      "r1_tilde": "40caa7858d917197f007c87ea7e80f638db1313b0e3d46612bb2e73798bb24c8",
-      "r3_tilde": "6d30be5b88e8cb333e4872bdf0c4d7cffe4540eddf03eafaae3d4cb1f3ad1cda",
-      "m_tilde_scalars": [
-        "342ddc1b4e04cef472c764f5bda8afae4b189e78ffcbb519075a83e640c0100c",
-        "51608282827ece21a8ed20b774e2ff129353416006317c16e409e1a925540345",
-        "0c1ff555f2b0f53e8859aff2947b22b1ef9d2be2c65621d8f6aa3252340fcaf2"
-      ]
-    },
-    "Abar": "a1fe94ec24e6d325d2494e10bdc395bd82e613e8dd08ca8f4eeffee294246b9321cc0e5997de7ae473a4d4c39f27b908",
-    "B": "8e1c3ee4b13e5936f9cb5f87342107ed9ab4417c04d6e5d712143a54bdb476aaf4240e8a4f11a67d81feb1398f889889",
-    "Bbar": "8c815c0ff4f8ff7da0ef6d3338e048e2b28d98e148e1e8717b6ff6dfc4c74379aab5f409212986ce667c0b9ae4c48c27",
-    "D": "8720d66be792af1a62989ea56f433a17f05af1f761b48b9ae2bb24418208111680d75c8b7d781186afedbe7c7f293b64",
-    "T1": "833559d2351f6942b7e49108a076b10c05a997a983f26de9153c768fa464321684cfeda210307572982c5d8cdd59f3ca",
-    "T2": "a59ff84bffafd5c607b3c441d69e98ae540a4e513bc31dfcb71a3b2c34d6d70d6e8e24404e6197409d4223642f6ea6e7",
-    "domain": "1207ed090723fa7e41c07e970ebb647d1d043079cc2a38c650c32234f1823936",
-    "challenge": "6f77fc07c8857b819c764ae92d3779b4bf76f875b4589b37daad83c6bf1889ba"
   }
 }
