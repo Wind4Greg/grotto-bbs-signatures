@@ -14,7 +14,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/signature/';
 const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/signature/';
 
-for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
+for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
   let path = SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
@@ -28,22 +28,22 @@ for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
 
   describe('Signature Verification for ' + api_id, async function() {
     for(let i = 0; i < testVectors.length; i++) { // testVectors.length
-      const commitFixture = testVectors[i];
-      it(`case: ${commitFixture.caseName}`, async function() {
-        const PK = hexToBytes(commitFixture.signerKeyPair.publicKey);
-        const header = hexToBytes(commitFixture.header);
-        const messages = commitFixture.messages.map(hexMsg => hexToBytes(hexMsg));
-        let committed_messages = [];
-        if(commitFixture.committedMessages) {
-          committed_messages = commitFixture.committedMessages.map(hexMsg => hexToBytes(hexMsg));
+      const sigFixture = testVectors[i];
+      it(`case: ${sigFixture.caseName}`, async function() {
+        const PK = hexToBytes(sigFixture.signerKeyPair.publicKey);
+        const header = hexToBytes(sigFixture.header);
+        const messages = sigFixture.messages.map(msg => [msg[0], hexToBytes(msg[1])]);
+        let blindMessages = [];
+        if(sigFixture.blindMessages !== null) {
+          blindMessages = sigFixture.blindMessages.map(msg => [msg[0], hexToBytes(msg[1])]);
         }
-        const signature = hexToBytes(commitFixture.signature);
+        const signature = hexToBytes(sigFixture.signature);
         let secret_prover_blind = 0n;
-        if(commitFixture.proverBlind) {
-          secret_prover_blind = BigInt('0x' + commitFixture.proverBlind);
+        if(sigFixture.proverBlind) {
+          secret_prover_blind = BigInt('0x' + sigFixture.proverBlind);
         }
-        const res = await BlindVerify(PK, signature, header, messages, committed_messages,
-          secret_prover_blind, api_id)
+        const res = await BlindVerify(PK, signature, header, messages, blindMessages,
+          secret_prover_blind, api_id);
         assert.isTrue(res);
       });
     }
