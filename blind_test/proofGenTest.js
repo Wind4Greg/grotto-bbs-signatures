@@ -10,81 +10,63 @@ import {
   hexToBytes,
   seeded_random_scalars,
 } from "../lib/BBS.js";
-import { readdir, readFile } from "fs/promises";
-import { assert } from "chai";
-import { BlindProofGen } from "../lib/BlindBBS.js";
-import { bytesToHex } from "@noble/hashes/utils.js";
+import {readdir, readFile} from "fs/promises";
+import {assert} from "chai";
+import {BlindProofGen} from "../lib/BlindBBS.js";
+import {bytesToHex} from "@noble/hashes/utils.js";
 
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+import {dirname} from "path";
+import {fileURLToPath} from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const SHA_PATH = __dirname + "/fixture_data/bls12-381-sha-256/proof/";
 const SHAKE_PATH = __dirname + "/fixture_data/bls12-381-shake-256/proof/";
-const allMessagesFile = __dirname + "/fixture_data/messages.json";
+const SIG_SHA_PATH = __dirname + "/fixture_data/bls12-381-sha-256/signature/";
+const SIG_SHAKE_PATH = __dirname + "/fixture_data/bls12-381-shake-256/signature/";
 
-const allMessages = JSON.parse(await readFile(allMessagesFile));
-const messages = allMessages.messages.map((hexMsg) => hexToBytes(hexMsg));
-const committedMessages = allMessages.committedMessages.map((hexMsg) =>
-  hexToBytes(hexMsg),
-);
-for (const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
-  // API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE
+for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
   let path = SHA_PATH;
-  if (api_id.includes("SHAKE-256")) {
+  let sig_path = SIG_SHA_PATH;
+  if(api_id.includes("SHAKE-256")) {
     path = SHAKE_PATH;
+    sig_path = SIG_SHAKE_PATH;
   }
   const files = await readdir(path);
   // get all the test vectors in the dir
   const testVectors = [];
 
   for(const fn of files) {
-    if(fn != "proof009ComDis.json") {
-      continue;
-    }
-    let vectorObj = JSON.parse(await readFile(path + fn));
+    const vectorObj = JSON.parse(await readFile(path + fn));
     vectorObj.filename = fn;
+    // Getting the signature file for this proof test vector
+    const sigFixture = JSON.parse(await readFile(sig_path + vectorObj.signatureFile));
+    vectorObj.sigInfo = sigFixture;
     testVectors.push(vectorObj);
   }
 
-  describe("Proof generation for " + api_id, async function () {
-    for (let i = 0; i < testVectors.length; i++) {
+  describe('Proof generation for ' + api_id, async function() {
+    for(let i = 0; i < testVectors.length; i++) {
       // testVectors.length
       const proofFixture = testVectors[i];
       it(`file: ${proofFixture.filename}, case: ${proofFixture.caseName}`, async function () {
         const PK = hexToBytes(proofFixture.signerPublicKey);
-        const signature = hexToBytes(proofFixture.signature);
+        const signature = hexToBytes(proofFixture.sigInfo.signature);
         const header = hexToBytes(proofFixture.header);
         let proverBlind = 0n;
-        if (proofFixture.proverBlind) {
-          proverBlind = BigInt("0x" + proofFixture.proverBlind);
+        if(proofFixture.sigInfo.proverBlind) {
+          proverBlind = BigInt("0x" + proofFixture.sigInfo.proverBlind);
         }
         const ph = hexToBytes(proofFixture.presentationHeader);
-        // Transitioning from index lists to disclosure maps. For now check to see
-        // which are in the vector
-        // Get indexes from objects
-        let disclosedIndexes, disclosedCommittedIndexes, usedCommittedMessages;
-        if(proofFixture.revealedMessages) {
-          const revealedCommittedMessages =
-            proofFixture.revealedCommittedMessages;
-          const revealedMessages = proofFixture.revealedMessages;
-          disclosedIndexes = Object.keys(revealedMessages).map((s) =>
-            parseInt(s),
-          );
-          disclosedCommittedIndexes = [];
-          usedCommittedMessages = [];
-          if(revealedCommittedMessages) {
-            disclosedCommittedIndexes = Object.keys(
-              revealedCommittedMessages,
-            ).map((s) => parseInt(s));
-            usedCommittedMessages = committedMessages;
-          }
-        } else { // should have messageDisclosures and blindMessageDisclosures
-          disclosedIndexes = proofFixture.messageDisclosures;
-          disclosedCommittedIndexes = proofFixture.blindMessageDisclosures;
-          usedCommittedMessages = committedMessages;
+
+        let blindMessages = [];
+        if(proofFixture.sigInfo.blindMessages !== null) {
+          blindMessages = proofFixture.sigInfo.blindMessages.map(msg => [msg[0], hexToBytes(msg[1])]);
         }
+        const messages = proofFixture.sigInfo.messages.map(msg => [msg[0], hexToBytes(msg[1])]);
+        const messageDisclosures = proofFixture.messageDisclosures;
+        const blindMessageDisclosures = proofFixture.blindMessageDisclosures;
+
         // Pseudo random (deterministic) scalar generation seed and function
         const rngParams = proofFixture.mockRngParameters;
         const te = new TextEncoder();
@@ -103,9 +85,9 @@ for (const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
           header,
           ph,
           messages,
-          usedCommittedMessages,
-          disclosedIndexes,
-          disclosedCommittedIndexes,
+          blindMessages,
+          messageDisclosures,
+          blindMessageDisclosures,
           proverBlind,
           api_id,
           rand_scalar_func,

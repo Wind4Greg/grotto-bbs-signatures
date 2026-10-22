@@ -28,9 +28,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
     path = SHAKE_PATH;
     sig_path = SIG_SHAKE_PATH;
   }
-  if(api_id.includes("SHAKE-256")) {
-    path = SHAKE_PATH;
-  }
+
   const files = await readdir(path + "proof/");
 
   for(const fn of files) {
