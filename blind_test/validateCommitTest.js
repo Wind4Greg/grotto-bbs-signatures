@@ -30,7 +30,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // , API_I
     for(const commitFixture of testVectors) {
       it(`case: ${commitFixture.caseName}`, async function() {
         const commitmentWithProof = hexToBytes(commitFixture.commitmentWithProof);
-        const M = commitFixture.committedMessages.length;
+        const M = commitFixture.blindMessages.length;
         const gens = await prepareGenerators(M + 1, 'BLIND_' + api_id);
         const commit =
             await deserialize_and_validate_commit(commitmentWithProof, gens, api_id);
