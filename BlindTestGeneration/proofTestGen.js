@@ -21,8 +21,7 @@ const SHAKE_PATH = __dirname + "/inputs/bls12-381-shake-256/";
 const SIG_SHA_PATH = __dirname + "/outputs/bls12-381-sha-256/";
 const SIG_SHAKE_PATH = __dirname + "/outputs/bls12-381-shake-256/";
 
-for(const api_id of [API_ID_BLIND_BBS_SHA]) { // , API_ID_BLIND_BBS_SHAKE
-  // API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE
+for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
   let path = SHA_PATH;
   let sig_path = SIG_SHA_PATH;
   if(api_id.includes("SHAKE-256")) {
