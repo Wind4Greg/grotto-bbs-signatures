@@ -29,8 +29,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
   describe('Commit generation for ' + api_id, async function() {
     for(const commitFixture of testVectors) {
       it(`case: ${commitFixture.caseName}`, async function() {
-        const msgs_in_octets = commitFixture.committedMessages.map(hexMsg =>
-          hexToBytes(hexMsg));
+        const msgs_in_octets = commitFixture.blindMessages.map(msg => [msg[0], hexToBytes(msg[1])]);
         const seed = new TextEncoder().encode(commitFixture.mockRngParameters.SEED);
         const rng_dst = commitFixture.mockRngParameters.commit.DST;
         const rand_scalar_func = seeded_random_scalars.bind(null, seed, rng_dst);
