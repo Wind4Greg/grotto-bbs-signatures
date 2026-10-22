@@ -23,7 +23,13 @@
     "DISCLOSE",
     "DISCLOSE"
   ],
-  "blindMessageDisclosures": ["DISCLOSE", "DISCLOSE", "DISCLOSE", "DISCLOSE"],
+  "blindMessageDisclosures": [
+    "DISCLOSE",
+    "DISCLOSE",
+    "DISCLOSE",
+    "DISCLOSE",
+    "DISCLOSE"
+  ],
   "L": null,
   "proof": "",
   "result": {

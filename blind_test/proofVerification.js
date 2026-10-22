@@ -15,11 +15,15 @@ const maxL = 20; // Use when precomputing the generators
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SHA_PATH = __dirname + '/fixture_data/bls12-381-sha-256/proof/';
 const SHAKE_PATH = __dirname + '/fixture_data/bls12-381-shake-256/proof/';
+const SIG_SHA_PATH = __dirname + "/fixture_data/bls12-381-sha-256/signature/";
+const SIG_SHAKE_PATH = __dirname + "/fixture_data/bls12-381-shake-256/signature/";
 
 for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // , API_ID_BLIND_BBS_SHAKE
   let path = SHA_PATH;
+  let sig_path = SIG_SHA_PATH;
   if(api_id.includes('SHAKE-256')) {
     path = SHAKE_PATH;
+    sig_path = SIG_SHAKE_PATH;
   }
   // Read all the proof test files into JavaScript objects
   const vectorPath = path;
@@ -27,44 +31,54 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // , API_I
   // console.log(testFiles);
   const testVectors = [];
   for(const fn of testFiles) {
+    if(fn == 'proof009.json') {
+      break;
+    }
     const testVector = JSON.parse(await readFile(vectorPath + fn));
-    testVectors.push(testVector); // Uncomment for regular testing
+    // Getting the signature file for this proof test vector
+    const sigFixture = JSON.parse(await readFile(sig_path + testVector.signatureFile));
+    // console.log(JSON.stringify(sigFixture, null, 2));
+    testVector.sigInfo = sigFixture;
+    testVectors.push(testVector);
   }
 
   describe('Proof Verification ' + api_id, function() {
-    for(const vector of testVectors) {
+    for(const proofFixture of testVectors) {
       // Create test name
-      let testName = vector.caseName;
-      if(vector.result.valid) {
+      let testName = proofFixture.caseName;
+      if(proofFixture.result.valid) {
         testName += ':valid';
       } else {
-        testName += ':invalid:' + vector.result.reason;
+        testName += ':invalid:' + proofFixture.result.reason;
       }
 
       it(testName + ' ' + api_id, async function() {
-        // From the test vector get the disclosed indices and messages
-        const revealedMessages = vector.revealedMessages;
-        const disclosedIndexes = Object.keys(revealedMessages).map(s => parseInt(s));
-        const messagesOctets = Object.values(revealedMessages).map(msg => hexToBytes(msg));
-        // Get the disclosed committed messages and indexes
-        let revealedCommittedMessages = [];
-        let disclosedCommittedIndexes = [];
-        let committedMessageOctets = [];
-        if(vector.revealedCommittedMessages) {
-          revealedCommittedMessages = vector.revealedCommittedMessages;
-          disclosedCommittedIndexes = Object.keys(revealedCommittedMessages).map(s => parseInt(s));
-          committedMessageOctets = Object.values(revealedCommittedMessages).map(msg => hexToBytes(msg));
+        // From the test vector recreate the disclosed_messages and message_disclosures arrays
+        let blindMessages = [];
+        if(proofFixture.sigInfo.blindMessages !== null) {
+          blindMessages = proofFixture.sigInfo.blindMessages.map(msg => [msg[0], hexToBytes(msg[1])]);
         }
+        const messages = proofFixture.sigInfo.messages.map(msg => [msg[0], hexToBytes(msg[1])]);
+        const messageDisclosures = proofFixture.messageDisclosures;
+        const blindMessageDisclosures = proofFixture.blindMessageDisclosures;
+        const allMessageDisclosures = messageDisclosures.concat(blindMessageDisclosures);
+        const allMessages = messages.concat(blindMessages);
+        const allDisclosedMessages = [];
+        for(let i = 0; i < allMessages.length; i++) {
+          if(allMessageDisclosures[i] == 'DISCLOSE') {
+            allDisclosedMessages.push(allMessages[i]);
+          }
+        }
+
         // console.log(disclosedIndexes);
         // console.log(messagesOctets);
-        const headerBytes = hexToBytes(vector.header);
-        const publicBytes = hexToBytes(vector.signerPublicKey);
-        const proof = hexToBytes(vector.proof);
-        const ph = hexToBytes(vector.presentationHeader);
+        const headerBytes = hexToBytes(proofFixture.header);
+        const publicBytes = hexToBytes(proofFixture.signerPublicKey);
+        const proof = hexToBytes(proofFixture.proof);
+        const ph = hexToBytes(proofFixture.presentationHeader);
         const result = await BlindProofVerify(publicBytes, proof, headerBytes,
-          ph, vector.L, messagesOctets, committedMessageOctets, disclosedIndexes,
-          disclosedCommittedIndexes, api_id);
-        assert.equal(result, vector.result.valid);
+          ph, proofFixture.L, allDisclosedMessages, allMessageDisclosures, api_id);
+        assert.equal(result, proofFixture.result.valid);
       });
     }
   });

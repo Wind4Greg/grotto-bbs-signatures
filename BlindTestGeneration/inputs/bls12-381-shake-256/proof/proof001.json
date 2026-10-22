@@ -11,7 +11,7 @@
   "signatureFile": "signature004.json",
   "header": "11223344556677889900aabbccddeeff",
   "presentationHeader": "bed231d880675ed101ead304512e043ade9958dd0241ea70b4b3957fba941501",
-   "messageDisclosures": [
+  "messageDisclosures": [
     "DISCLOSE",
     "DISCLOSE",
     "DISCLOSE",
@@ -23,7 +23,13 @@
     "DISCLOSE",
     "DISCLOSE"
   ],
-  "blindMessageDisclosures": ["DISCLOSE", "DISCLOSE", "DISCLOSE", "DISCLOSE"],
+  "blindMessageDisclosures": [
+    "DISCLOSE",
+    "DISCLOSE",
+    "DISCLOSE",
+    "DISCLOSE",
+    "DISCLOSE"
+  ],
   "L": null,
   "proof": "",
   "result": {
