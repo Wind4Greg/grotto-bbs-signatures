@@ -1,0 +1,38 @@
+{
+  "caseName": "valid partial prover reveal and commit messages and partial signer messages revealed and committed proof",
+  "mockRngParameters": {
+    "SEED": "3.141592653589793238462643383279",
+    "proof": {
+      "DST": "BBS_BLS12381G1_XOF:SHAKE-256_SSWU_RO_H2G_HM2S_PROOF_MOCK_RANDOM_SCALARS_DST_",
+      "count": null
+    }
+  },
+  "signerPublicKey": "92d37d1d6cd38fea3a873953333eab23a4c0377e3e049974eb62bd45949cdeb18fb0490edcd4429adff56e65cbce42cf188b31bddbd619e419b99c2c41b38179eb001963bc3decaae0d9f702c7a8c004f207f46c734a5eae2e8e82833f3e7ea5",
+  "signatureFile": "signature004.json",
+  "header": "11223344556677889900aabbccddeeff",
+  "presentationHeader": "bed231d880675ed101ead304512e043ade9958dd0241ea70b4b3957fba941501",
+  "messageDisclosures": [
+    "DISCLOSE",
+    "HIDE",
+    "COMMIT",
+    "HIDE",
+    "DISCLOSE",
+    "HIDE",
+    "COMMIT",
+    "HIDE",
+    "DISCLOSE",
+    "HIDE"
+  ],
+  "blindMessageDisclosures": [
+    "HIDE",
+    "COMMIT",
+    "DISCLOSE",
+    "COMMIT",
+    "HIDE"
+  ],
+  "L": null,
+  "proof": "",
+  "result": {
+    "valid": true
+  }
+}

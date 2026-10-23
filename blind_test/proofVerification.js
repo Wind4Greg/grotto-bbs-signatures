@@ -31,9 +31,9 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // , API_I
   // console.log(testFiles);
   const testVectors = [];
   for(const fn of testFiles) {
-    if(fn == 'proof009.json') {
-      break;
-    }
+    // if(fn == 'proof009.json') {
+    //   break;
+    // }
     const testVector = JSON.parse(await readFile(vectorPath + fn));
     // Getting the signature file for this proof test vector
     const sigFixture = JSON.parse(await readFile(sig_path + testVector.signatureFile));
