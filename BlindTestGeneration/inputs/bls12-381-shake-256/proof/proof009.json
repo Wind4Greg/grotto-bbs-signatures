@@ -1,5 +1,5 @@
 {
-  "caseName": "valid half prover committed messages and partial signer messages revealed and committed proof",
+  "caseName": "Valid Half Blind Reveal and Multiple Signer Revealed and Committed Disclosure Proof",
   "mockRngParameters": {
     "SEED": "3.141592653589793238462643383279",
     "proof": {

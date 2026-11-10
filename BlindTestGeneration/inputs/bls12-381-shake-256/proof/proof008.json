@@ -1,5 +1,5 @@
 {
-  "caseName": "valid no commitment, half signer messages revealed proof",
+  "caseName": "Valid No Blind Commitment, Half Signer Messages Revealed Proof",
   "mockRngParameters": {
     "SEED": "3.141592653589793238462643383279",
     "proof": {

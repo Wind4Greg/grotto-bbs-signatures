@@ -1,5 +1,5 @@
 {
-  "caseName": "valid no commitment signature",
+  "caseName": "Valid No Blind Commitment, Multiple Signer Messages Signature",
   "mockRngParameters": {
     "SEED": "3.141592653589793238462643383279"
   },
