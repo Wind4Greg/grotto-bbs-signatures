@@ -1,5 +1,5 @@
 {
-  "caseName": "valid no commitment, half signer messages revealed proof",
+  "caseName": "Valid No Blind Commitment, Half Signer Messages Revealed Proof",
   "mockRngParameters": {
     "SEED": "3.141592653589793238462643383279",
     "proof": {
@@ -28,6 +28,10 @@
   "proof": "00000000000001d08d1c07be20b1c9bed4359ea5fc9f63ef00171c185ddad5df62eca0e9919a981a46ea97221afc0ed55a39afb6710a14abac73b4f2dc5aec7219683f4a44d842a20d36eff0b61ba49906ba7ad163c8297fd84aa9d4a09b4699bc3a9d12eca61c0b8724f71c0a54cb6bf10b294dc7d7299a31a21f6454687aa0f8b9c50a023177e946947d0f8ec15f138b587c187e8123534f35a5769a94babcb73a225e019a6139748b813b9da3c13974bd746b6af14c4c2ad468a969e50b7c50cffaec25c004a7e587fea577ef38724a09824fd1352bfc439ae5f036a59d667d90553992d98002dd4fa3211d81c85843fb9e348d2b49c5308fd73e7cf163b23c26a52c4e826287fc8ea74fdc4c304ba00ebd1dd2e5ebef6b8b25a13712ba740c0f6544b8a9192540016c301bc4d50844765d1ff50424d66eaba4da584c37713edd0bf0d0341f8a743353c1e6c9be05872a2c2ff3f4613854e27abb4c4651a69a70a91eee475354c601dce79bdbe48d523b17ec50fe9f3365808112ae384d6d800cef02256b35f339e7664718c4bba5bf85ee3fb3b870be279717a2b1e1d34cccfddfe9c8e3729f6e92e28197a09459c6dcd56e3920a0d756ed91329fd16b51846ae10ae25981e01a6cec23c93d93171f44363f3d9df267",
   "result": {
     "valid": true
+  },
+  "add_zkp_info": {
+    "committed_message_scalars": [],
+    "commitment_rands": []
   },
   "trace": {
     "randomScalars": {

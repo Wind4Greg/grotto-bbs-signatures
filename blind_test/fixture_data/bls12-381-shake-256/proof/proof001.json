@@ -1,5 +1,5 @@
 {
-  "caseName": "valid all prover committed messages and signer messages revealed proof",
+  "caseName": "Valid All Blind Messages and Signer Messages Revealed Proof",
   "mockRngParameters": {
     "SEED": "3.141592653589793238462643383279",
     "proof": {
@@ -34,6 +34,10 @@
   "proof": "0000000000000130b4ad4a326cb54137cda011506544ebb1eeb3eb0632cd6f913fd6cae8288fbd8010163d9ee18d38deb798614ca1e43bc484f6e9576365f1ec96fbdcb412ee540d538b0d2302264a98a0710a227970bd1c064fcfcab256c2ae6c0574d77e1e9b0cb9c3ec3907ecc6c83d5101479a1e12efe80503ea2af8f95d7d02e95d4584fb47c1b3382b23aff17e081b21814a5c7fa94d105c453cb263958cefc92e1b4869ef937251e751d29c7170bf211fcb5aba046d0680fd866b3a324b941df68ab4499de2eca5a1034aebf0f29aa746588295d85703c73fde654eed815018e5144f5c058a983654eab40eb2426e6565ca2cbf4267b552863277f9a610e4d54d016bceef4c2530105c059c98d027bf73289c424f5431ab9f18f439ea0cb3ebbf42e32d89816045dcf1c2aa8181c8837a16f0e0ef",
   "result": {
     "valid": true
+  },
+  "add_zkp_info": {
+    "committed_message_scalars": [],
+    "commitment_rands": []
   },
   "trace": {
     "randomScalars": {

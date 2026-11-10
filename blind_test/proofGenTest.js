@@ -8,6 +8,7 @@ import {
   API_ID_BLIND_BBS_SHA,
   API_ID_BLIND_BBS_SHAKE,
   hexToBytes,
+  numberToHex,
   seeded_random_scalars,
 } from "../lib/BBS.js";
 import {readdir, readFile} from "fs/promises";
@@ -79,7 +80,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
         );
         // console.log(`disclosed idxs: ${disclosedIndexes}`);
         // console.log(`disclosed committed idxs: ${disclosedCommittedIndexes}`);
-        const proof = await BlindProofGen(
+        const [proof, add_zkp_info] = await BlindProofGen(
           PK,
           signature,
           header,
@@ -97,6 +98,10 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
         // console.log('disclosed_msgs:');
         // console.log(disclosed_msgs.map(bs => bytesToHex(bs)));
         assert.equal(bytesToHex(proof), proofFixture.proof);
+        assert.deepEqual({
+          committed_message_scalars: add_zkp_info.committed_message_scalars.map(m => numberToHex(m, 32)),
+          commitment_rands: add_zkp_info.commitment_rands.map(s => numberToHex(s, 32)),
+        }, proofFixture.add_zkp_info);
       });
     }
   });

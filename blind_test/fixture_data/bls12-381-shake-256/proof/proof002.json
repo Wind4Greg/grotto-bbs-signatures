@@ -1,5 +1,5 @@
 {
-  "caseName": "valid half prover committed messages and all signer messages revealed proof",
+  "caseName": "Valid Half Blind Messages and All Signer Messages Revealed Proof",
   "mockRngParameters": {
     "SEED": "3.141592653589793238462643383279",
     "proof": {
@@ -34,6 +34,10 @@
   "proof": "0000000000000170b036270fce3339fb6b99bdc7ee64c084307857d7cab3d46011c5c07a186e4638e4eaa916067135bd3b86a4b9ab4eae13adcb59b0e353652ab79b3ea9459cd7acd6a544d80a28e218c0e1573eeeec47a62c7d128aa0fccf438e1e272906d1530e92a0a5d8cb91492e676c285326784d63c62aa1c6b2fb23af5f55349a5d88e75193f13a1f7abca035f3a3d4993689a65c298bae2f9058e7dbd2864242b04efe023897d56a6a65b8b0382c007eeaf7fac826f651464a3031087c2659c1ffc2fd1012ac87734dafc7d6dd18c3e440c068014c7110325e1fc8774cf262bc1b160b4ba27cc972038345616401aa2fb237f314575062f466b4be26e6fffbb4db07413e8faea81a00de1c49237a48e18e8e980a32c4cef8c1b73e1a365b1231db71d51c992e6d6fae6f52721820b71f7d783a6b2abd0ada446c21e72e2c6193fe9eeed350d875ed748657ac6cbc37c354224154545de769209c95c479722b617d1f05b992510fca526bab87cf782503b26b0512",
   "result": {
     "valid": true
+  },
+  "add_zkp_info": {
+    "committed_message_scalars": [],
+    "commitment_rands": []
   },
   "trace": {
     "randomScalars": {

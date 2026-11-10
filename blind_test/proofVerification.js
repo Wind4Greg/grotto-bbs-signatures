@@ -7,7 +7,8 @@ import {API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE, hexToBytes, messages_to_sc
   prepareGenerators} from '../lib/BBS.js';
 import {readdir, readFile} from 'fs/promises';
 import {assert} from 'chai';
-import { BlindProofVerify } from '../lib/BlindBBS.js';
+import {BlindProofVerify, messages_to_scalars as blind_messages_to_scalars,
+  octets_to_proof} from '../lib/BlindBBS.js';
 import {dirname} from 'path';
 import {fileURLToPath} from 'url';
 
@@ -79,6 +80,32 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) { // , API_I
         const result = await BlindProofVerify(publicBytes, proof, headerBytes,
           ph, proofFixture.L, allDisclosedMessages, allMessageDisclosures, api_id);
         assert.equal(result, proofFixture.result.valid);
+        if(!proofFixture.result.valid) {
+          return;
+        }
+
+        // Check add_zkp_info (prover-only data for external ZKPs) against the
+        // committed disclosure commitments carried in the proof.
+        const {committed_message_scalars, commitment_rands} = proofFixture.add_zkp_info;
+        const N = commitment_rands.length;
+        const committedMessages = allMessages.filter((msg, i) => allMessageDisclosures[i] == 'COMMIT');
+        assert.equal(N, committedMessages.length, 'commitment_rands length != number of COMMIT messages');
+        assert.equal(committed_message_scalars.length, N, 'committed_message_scalars length != N');
+        if(N === 0) {
+          return;
+        }
+        // The committed message scalars must be those of the signed COMMIT messages
+        const expectedScalars = await blind_messages_to_scalars(committedMessages, api_id);
+        assert.deepEqual(committed_message_scalars.map(m => BigInt('0x' + m)), expectedScalars);
+        // Each commitment C_i in the proof must open to Y_0 * s_i + Y_1 * m_i
+        const [, commitments_proof] = octets_to_proof(proof, N);
+        const [Y_0, Y_1] = (await prepareGenerators(2, 'COM_DIS_' + api_id)).generators;
+        for(let i = 0; i < N; i++) {
+          const s_i = BigInt('0x' + commitment_rands[i]);
+          const m_i = BigInt('0x' + committed_message_scalars[i]);
+          const C_i = Y_0.multiply(s_i).add(Y_1.multiply(m_i));
+          assert.isTrue(C_i.equals(commitments_proof.commitments[i]), `commitment ${i} does not match add_zkp_info`);
+        }
       });
     }
   });

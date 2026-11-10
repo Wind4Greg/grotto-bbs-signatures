@@ -5,6 +5,7 @@ import {
   API_ID_BLIND_BBS_SHA,
   API_ID_BLIND_BBS_SHAKE,
   hexToBytes,
+  numberToHex,
   seeded_random_scalars,
 } from "../lib/BBS.js";
 import {readdir, readFile, writeFile} from "fs/promises";
@@ -64,7 +65,7 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
       rng_dst,
     );
 
-    const proof = await BlindProofGen(
+    const [proof, add_zkp_info] = await BlindProofGen(
       PK,
       signature,
       header,
@@ -79,6 +80,11 @@ for(const api_id of [API_ID_BLIND_BBS_SHA, API_ID_BLIND_BBS_SHAKE]) {
     );
     proofFixture.proof = bytesToHex(proof);
     proofFixture.L = messages.length;
+    // Additional information for external ZKPs, never sent to the verifier
+    proofFixture.add_zkp_info = {
+      committed_message_scalars: add_zkp_info.committed_message_scalars.map(m => numberToHex(m, 32)),
+      commitment_rands: add_zkp_info.commitment_rands.map(s => numberToHex(s, 32)),
+    };
     const proofTrace = traceInfo.CoreProofGen;
     proofFixture.mockRngParameters.proof.count = proofTrace.count_random_scalars;
     delete proofTrace.count_random_scalars;
