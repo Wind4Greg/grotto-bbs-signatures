@@ -1,0 +1,19 @@
+{
+  "caseName": "valid no committed messages commitment with proof",
+  "mockRngParameters": {
+    "SEED": "3.141592653589793238462643383279",
+    "commit": {
+      "DST": "BBS_BLS12381G1_XMD:SHA-256_SSWU_RO_H2G_HM2S_COMMIT_MOCK_RANDOM_SCALARS_DST_",
+      "count": null
+    }
+  },
+  "blindMessages": [],
+  "proverNyms": [
+    "6830ea571e9fca0194d9ebd5c571369d8b81655afe0bbb9c6f5efe934f699418"
+  ],
+  "proverBlind": "",
+  "commitmentWithProof": "",
+  "result": {
+    "valid": true
+  }
+}
