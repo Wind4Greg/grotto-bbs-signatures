@@ -49,17 +49,14 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) { //
         const PK = hexToBytes(sigFixture.signerKeyPair.publicKey);
         const header = hexToBytes(sigFixture.header);
         const signature = hexToBytes(sigFixture.signature);
-        // VerifyFinalizeWithNym(PK, signature, header, messages, committed_messages, prover_nym, signer_nym_entropy, secret_prover_blind, api_id)
         // const result = await BlindVerify(PK, signature, header, messages, [pid],
         //   proverBlind, 0n, api_id);
         const messages = sigFixture.messages.map(m_hex => hexToBytes(m_hex));
         const committed_messages = sigFixture.committedMessages.map(m_hex => hexToBytes(m_hex));
         // VerifyFinalizeWithNym(PK, signature, header, messages, committed_messages, prover_nym, signer_nym_entropy, secret_prover_blind, api_id)
-        const result = await VerifyFinalizeWithNym(PK, signature, header, messages, committed_messages,
+        // Throws if the signature is INVALID.
+        const rnym_secrets = await VerifyFinalizeWithNym(PK, signature, header, messages, committed_messages,
           prover_nyms, signer_nym_entropy, proverBlind, api_id);
-        const [valid, rnym_secrets] = result;
-        assert.isTrue(valid);
-        console.log(rnym_secrets.at(-1).toString(16));
         assert.deepEqual(nym_secrets, rnym_secrets);
       });
     }
