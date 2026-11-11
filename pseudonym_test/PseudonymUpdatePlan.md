@@ -6,12 +6,18 @@ The code, test-vector generation (`NymTestGeneration/`), tests, fixtures, exampl
 
 ## 1. Remaining Spec Problems
 
-1. **The verifier never checks that the nym positions stay hidden.** If a disclosed or committed index falls among the last N, then `hats[-N]` are not the nym responses. The draft should add this check to CoreProofVerifyWithNym, and the matching check to CoreProofGenWithNym. The code already does both.
-2. **Smaller issues:**
-   - `N` means both the commitment count and the nym vector length in CoreProofGenWithNym. The code uses `Nc` and `Nn`.
-   - CoreProofGenWithNym writes `messages[idx]` where it should write `proof_scalars[idx]`.
-   - `PseudonymProofInit` claims to return "three G1 elements".
-   - The test-vector templates still use singular `proverNym`/`nym_secret`, `revealedMessages` maps, and `e_tilde`. They should match the fixture format: plural `proverNyms`/`nym_secrets`, `[flag, value]` messages, DISCLOSE/HIDE/COMMIT disclosures, and `e_Tilde`.
+Fixed in the draft:
+- The nym-position checks (CoreProofGenWithNym step 8, CoreProofVerifyWithNym steps 18–19).
+- The use of `N` for two counts in CoreProofGenWithNym.
+- `messages` replaced by `proof_scalars` throughout CoreProofGenWithNym.
+- CoreProofGenWithNym's `length_nym_secrets` in step 4, `init_random_scalars` in step 8, the `add_zkp_info` output, and the commas in its signature line.
+- ProofGenWithNym's step numbering.
+- PseudonymProofInit's inputs are now described as vectors of scalars, and its output's middle item as an octet string.
+- The missing commas in ProofGenWithNym step 12 and the PseudonymProofVerifyInit signature line.
+- `api_id` is now a Parameter of PseudonymProofInit and PseudonymProofVerifyInit.
+- The output descriptions of PseudonymProofInit and PseudonymProofVerifyInit (a triple: G1 element, octet string, G1 element). Nit: both still have a double space in "G1  group".
+
+1. **Test-vector templates** still use singular `proverNym`/`nym_secret`, `revealedMessages` maps, and `e_tilde`. They should match the fixture format: plural `proverNyms`/`nym_secrets`, `[flag, value]` messages, DISCLOSE/HIDE/COMMIT disclosures, and `e_Tilde`.
 
 ## 2. Remaining Follow-ups
 
@@ -25,4 +31,4 @@ The code, test-vector generation (`NymTestGeneration/`), tests, fixtures, exampl
 - **VerifyFinalizeWithNym** follows the spec: it returns `nym_secrets` and throws on INVALID.
 - **CommitWithNym** no longer returns `length_prover_nym_vector`.
 - **ProofGenWithNym** returns `[proof, pseudonym, add_zkp_info]`.
-- **Fixture field names** are plural `proverNyms`/`nym_secrets`. The draft's templates should be updated to match (see 1.2).
+- **Fixture field names** are plural `proverNyms`/`nym_secrets`. The draft's templates should be updated to match (see 1.1).
