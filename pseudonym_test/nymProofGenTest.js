@@ -54,17 +54,11 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) {
         const nym_secrets = proofFixture.nym_secrets.map((nym_secret) =>
           BigInt("0x" + nym_secret)
         );
-        // Get selected indexes
-        const disclosedIndexes = Object.keys(proofFixture.revealedMessages)
-          .map((key) => parseInt(key))
-          .sort();
-        // const disclosedIndexes = proofFixture.disclosedIndexes;
-        // const disclosed_commitment_indexes = proofFixture.disclosedComIndexes;
-        const disclosed_commitment_indexes = Object.keys(
-          proofFixture.revealedCommittedMessages
-        )
-          .map((key) => parseInt(key))
-          .sort();
+        // Convert revealed message maps to DISCLOSE/HIDE disclosure arrays
+        const message_disclosures = proofFixture.messages.map((m, i) =>
+          (i.toString() in proofFixture.revealedMessages ? 'DISCLOSE' : 'HIDE'));
+        const blind_message_disclosures = proofFixture.committedMessages.map((m, i) =>
+          (i.toString() in proofFixture.revealedCommittedMessages ? 'DISCLOSE' : 'HIDE'));
         const proverBlind = BigInt("0x" + proofFixture.proverBlind);
         // Pseudo random (deterministic) scalar generation seed and function
         let rand_scalar_func;
@@ -79,15 +73,13 @@ for(const api_id of [API_ID_PSEUDONYM_BBS_SHA, API_ID_PSEUDONYM_BBS_SHAKE]) {
         }
         const messages = proofFixture.messages.map(hexMsg => hexToBytes(hexMsg));
         const committed_messages = proofFixture.committedMessages.map(hexMsg => hexToBytes(hexMsg));
-        // const proof = await HiddenPidProofGen(PK, signature, pseudonym_bytes, verifier_id,
-        //   pid, header, ph, messages, disclosedIndexes, proverBlind,
-        //   0n, api_id, rand_scalar_func);
-        const [proof, pseudonym] = await ProofGenWithNym(PK, signature, header, ph,
-          nym_secrets, context_id, messages, committed_messages, disclosedIndexes,
-          disclosed_commitment_indexes, proverBlind, api_id, rand_scalar_func
+        const [proof, pseudonym, add_zkp_info] = await ProofGenWithNym(PK, signature, header, ph,
+          nym_secrets, context_id, messages, committed_messages, message_disclosures,
+          blind_message_disclosures, proverBlind, api_id, rand_scalar_func
         );
+        // No committed disclosure in these fixtures
+        assert.deepEqual(add_zkp_info, {committed_message_scalars: [], commitment_rands: []});
         if(proofFixture.mockRngParameters) {
-          console.log(`proof: ${bytesToHex(proof)}`);
           assert.equal(bytesToHex(proof), proofFixture.proof);
           assert.equal(
             bytesToHex(pseudonym.toBytes(true)),
