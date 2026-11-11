@@ -128,11 +128,21 @@ You may have noticed that the proofs in these two examples have different sizes.
 
 ## Library Usage
 
-**To be updated**
+The library has three modules, one for each specification:
 
-### Key Generation
+| Module | Specification | Examples |
+| --- | --- | --- |
+| `lib/BBS.js` | BBS Signatures | [examples/](examples/) |
+| `lib/BlindBBS.js` | Blind BBS Signatures | [examples/blind/](examples/blind/) |
+| `lib/PseudonymBBS.js` | BBS Pseudonyms | [examples/pseudonym/](examples/pseudonym/) |
 
-For signing a *secret* (also known as a private) key is needed. For signature and proof verification the verifiers need the corresponding *public* key. A recomended procedure for deriving an appropriate secret key from some initial random bytes is given in the BBS specification and available via the `keyGen()` function. See the [KeyGenExample.js](examples/KeyGenExample.js) file for details.
+The package entry point, `@grottonetworking/bbs-signatures`, is `lib/BBS.js`. The Blind BBS and Pseudonym examples below import from the `lib/` files directly. The signature, proof, commitment and generator functions are `async`, so call them with `await`.
+
+### BBS Signatures
+
+#### Key Generation
+
+For signing a *secret* (also known as a private) key is needed. For signature and proof verification the verifiers need the corresponding *public* key. A recommended procedure for deriving an appropriate secret key from some initial random bytes is given in the BBS specification and available via the `keyGen()` function. See the [KeyGenExample.js](examples/KeyGenExample.js) file for details.
 
 ```javascript
 import {API_ID_BBS_SHAKE, bytesToHex, keyGen, publicFromPrivate} from '@grottonetworking/bbs-signatures';
@@ -142,7 +152,8 @@ const bytesLength = 40; // >= 32 bytes
 // Generate random initial key material -- Node.js
 const keyMaterial = new Uint8Array(crypto.randomBytes(bytesLength).buffer);
 const keyInfo = new TextEncoder().encode('BBS-Example Key info');
-const sk_bytes = await keyGen(keyMaterial, keyInfo, API_ID_BBS_SHAKE);
+// keyGen(key_material, key_info, key_dst, api_id), '' gives the default key_dst
+const sk_bytes = await keyGen(keyMaterial, keyInfo, '', API_ID_BBS_SHAKE);
 console.log(`Private key, length ${sk_bytes.length}, (hex):`);
 console.log(bytesToHex(sk_bytes));
 const pub_bytes = publicFromPrivate(sk_bytes);
@@ -150,9 +161,9 @@ console.log(`Public key, length ${pub_bytes.length}, (hex):`);
 console.log(bytesToHex(pub_bytes));
 ```
 
-### Message Encoding
+#### Message Encoding
 
-Since BBS works works with multiple *messages* the encoding (really cryptographic processing) of the messages is done as separate step. This is accomplished with the `messages_to_scalars()` function. For example:
+Since BBS works with multiple *messages* the encoding (really cryptographic processing) of the messages is done as a separate step. This is accomplished with the `messages_to_scalars()` function, which takes the messages as byte arrays. See [MessageEncodeExample.js](examples/MessageEncodeExample.js). For example:
 
 ```javascript
 import {API_ID_BBS_SHAKE, messages_to_scalars, numberToHex} from '@grottonetworking/bbs-signatures';
@@ -178,45 +189,49 @@ for(let i = 0; i < messages.length; i++) {
 }
 ```
 
-### Generator Preparation
+#### Generator Preparation
 
-All major BBS operations (signing, signature verification, proof generation, and proof verification) require the use of cryptographic group "generators". There need to be as many "generators" as messages that are or were originally signed. These take a bit of time to compute but can be reused in all the aforementioned operations and do not take up too much space. Hence we break out the preparation of these "generators" into a separate step via the `prepareGenerators()` function.
+All major BBS operations (signing, signature verification, proof generation, and proof verification) require the use of cryptographic group "generators". There need to be one more generator than the number of messages that are or were originally signed: `Q1` followed by one generator per message. These take a bit of time to compute but can be reused in all the aforementioned operations and do not take up too much space. Hence we break out the preparation of these generators into a separate step via the `prepareGenerators()` function. It returns an object whose `generators` array holds `Q1, H_0, H_1, ...` (and also the point `P1`).
 
-Below we show an example that creates the generators and these can be confirmed against the "message generator" test vectors given in the specification. You would never have a need to look at these in a real application.
+Below we show an example that creates the generators and these can be confirmed against the "message generator" test vectors given in the specification. You would never have a need to look at these in a real application. See [GeneratorPrepExample.js](examples/GeneratorPrepExample.js).
 
 ```javascript
 import {API_ID_BBS_SHAKE, prepareGenerators} from '@grottonetworking/bbs-signatures';
 
-const L = 10;
-const gens = await prepareGenerators(L, API_ID_BBS_SHAKE); // Default SHA-256 hash
-console.log(`Q1:${gens.Q1.toHex(true)}`); // Elliptic point to compressed hex
-console.log(`Q2:${gens.Q2.toHex(true)}`);
-for(let i = 0; i < gens.H.length; i++) {
-  console.log(`H${i}:${gens.H[i].toHex(true)}`);
+const L = 10; // Number of messages
+const gens = await prepareGenerators(L + 1, API_ID_BBS_SHAKE);
+const [Q1, ...H] = gens.generators;
+console.log(`Q1:${Q1.toHex(true)}`); // Elliptic point to compressed hex
+for(let i = 0; i < H.length; i++) {
+  console.log(`H${i}:${H[i].toHex(true)}`);
 }
 ```
 
-### Signing and Verifying
+#### Signing and Verifying
 
-Generate a signature for a list of messages we need the following: (1) private/public key pair, (2) list of encoded messages, (3) prepared generators. Optionally a "header" (as a byte array) maybe supplied that contains context or application information. To verify a signature we need all of the above but not the private key. This is shown below with the full example given in [TreeDMVExample.js](examples/TreeDMVExample.js). An additional example is given in [SignVerifyExaple.js](examples/SignVerifyExample.js).
+To generate a signature for a list of messages we need the following: (1) private/public key pair, (2) list of encoded messages, (3) prepared generators. Optionally a "header" (as a byte array) may be supplied that contains context or application information. To verify a signature we need all of the above but not the private key. This is shown below with the full example given in [TreeDMVExample.js](examples/TreeDMVExample.js). An additional example is given in [SignVerifyExample.js](examples/SignVerifyExample.js).
 
 ```javascript
-// Excerp from TreeDMVExample.js
+// Excerpt from TreeDMVExample.js
+const gens = await prepareGenerators(messages.length + 1, API_ID_BBS_SHAKE);
 const header = hexToBytes('11223344556677889900aabbccddeeff');
-const signature = await sign(sk_bytes, pk_bytes, header, msg_scalars, gens, API_ID_BBS_SHAKE);
+const signature = await sign(sk_bytes, pk_bytes, header, msg_scalars, gens,
+  API_ID_BBS_SHAKE);
 console.log('Signature:');
 console.log(bytesToHex(signature));
 
-const verified = await verify(pk_bytes, signature, header, msg_scalars, gens, API_ID_BBS_SHAKE);
+const verified = await verify(pk_bytes, signature, header, msg_scalars, gens,
+  API_ID_BBS_SHAKE);
 console.log(`Algorithm verified: ${verified}`);
 ```
 
-### Proof Generation and Verification
+#### Proof Generation and Verification
 
 For proof generation the *holder* needs the signature, messages, and public key. Then they need to decide which messages they want to disclose. This can be done in code as shown below with the full example given in [TreeDMVExample.js](examples/TreeDMVExample.js). An additional example is contained in [ProofGenVerifyExample.js](examples/ProofGenVerifyExample.js).
 
 ```javascript
-const ph = new Uint8Array();
+// Excerpt from TreeDMVExample.js
+const ph = new Uint8Array(); // Presentation header
 const disclosed_indexes = [3, 7]; // Selective disclosure
 const proof = await proofGen(pk_bytes, signature, header, ph, msg_scalars,
   disclosed_indexes, gens, API_ID_BBS_SHAKE);
@@ -226,8 +241,90 @@ console.log(bytesToHex(proof));
 const disclosedMsgs = msg_scalars.filter(
   (m, i) => disclosed_indexes.includes(i)); // Only the disclosed messages!
 const proofValid = await proofVerify(pk_bytes, proof, header, ph, disclosedMsgs,
-  disclosed_indexes, gens);
+  disclosed_indexes, gens, API_ID_BBS_SHAKE);
 console.log(`Proof verified: ${proofValid}`);
+```
+
+### Blind BBS Signatures
+
+With Blind BBS the *prover* (holder) can have messages signed that the *signer* (issuer) never sees. The prover commits to these *blind messages*, the signer signs its own messages together with the commitment, and the prover later creates proofs over both sets of messages.
+
+The Blind BBS and Pseudonym APIs differ from the BBS API above:
+
+- Messages are `[flag, value]` pairs, where `value` is a byte array and `flag` is `'HASH'` (hash the message to a scalar) or `'RAW'` (use the message bytes as a scalar, which must be less than the group order). The functions convert the messages to scalars and prepare the generators themselves.
+- Instead of disclosed indexes, a proof takes one disclosure per message: `'DISCLOSE'`, `'HIDE'` or `'COMMIT'`. `'COMMIT'` is *committed disclosure*: the message stays hidden, but the proof includes a commitment to it, and `add_zkp_info` returns the values needed to use that commitment in additional zero knowledge proofs.
+
+The full example is [examples/blind/walkthroughSimple.js](examples/blind/walkthroughSimple.js).
+
+```javascript
+import {API_ID_BLIND_BBS_SHA} from './lib/BBS.js';
+import {BlindProofGen, BlindProofVerify, BlindSign, BlindVerify, Commit}
+  from './lib/BlindBBS.js';
+const api_id = API_ID_BLIND_BBS_SHA;
+
+// Prover: commit to the blind messages, keep secret_prover_blind
+const [commit_with_proof, secret_prover_blind] =
+  await Commit(blind_messages, api_id);
+
+// Signer: sign its messages and the commitment (throws on a bad commitment)
+const signature = await BlindSign(SK, PK, commit_with_proof, header, messages,
+  api_id);
+
+// Prover: verify the signature
+const sigValid = await BlindVerify(PK, signature, header, messages,
+  blind_messages, secret_prover_blind, api_id);
+
+// Prover: create a proof with one disclosure per message
+const message_disclosures = ['HIDE', 'HIDE', 'DISCLOSE', 'HIDE', 'COMMIT'];
+const blind_message_disclosures = ['HIDE', 'DISCLOSE'];
+const [proof, add_zkp_info] = await BlindProofGen(PK, signature, header, ph,
+  messages, blind_messages, message_disclosures, blind_message_disclosures,
+  secret_prover_blind, api_id);
+
+// Verifier: needs the number of signer messages, the disclosed messages, and
+// the disclosures for the signer messages followed by the blind messages
+const allDisclosures = [...message_disclosures, ...blind_message_disclosures];
+const disclosedMessages = [...messages, ...blind_messages].filter((msg, i) =>
+  allDisclosures[i] === 'DISCLOSE');
+const proofValid = await BlindProofVerify(PK, proof, header, ph,
+  messages.length, disclosedMessages, allDisclosures, api_id);
+```
+
+### BBS Pseudonyms
+
+BBS Pseudonyms build on Blind BBS. The prover commits to a vector of secret `prover_nyms` (along with any blind messages), and the signer adds its own `signer_nym_entropy`, giving the prover's `nym_secrets`. In a proof the prover computes a *pseudonym* for a verifier's `context_id`: the same prover always gets the same pseudonym with the same verifier, but pseudonyms for different verifiers cannot be linked. Messages and disclosures work as for Blind BBS.
+
+The full example is [examples/pseudonym/walkthroughSimple.js](examples/pseudonym/walkthroughSimple.js).
+
+```javascript
+import {API_ID_PSEUDONYM_BBS_SHA} from './lib/BBS.js';
+import {BlindSignWithNym, CommitWithNym, ProofGenWithNym, ProofVerifyWithNym,
+  VerifyFinalizeWithNym} from './lib/PseudonymBBS.js';
+const api_id = API_ID_PSEUDONYM_BBS_SHA;
+
+// Prover: commit to blind messages and prover_nyms (an array of scalars)
+const [commit_with_proof, secret_prover_blind] =
+  await CommitWithNym(blind_messages, prover_nyms, api_id);
+
+// Signer: sign, adding its signer_nym_entropy (a scalar)
+const signature = await BlindSignWithNym(SK, PK, commit_with_proof,
+  prover_nyms.length, signer_nym_entropy, header, messages, api_id);
+
+// Prover: verify the signature and get nym_secrets (throws if INVALID)
+const nym_secrets = await VerifyFinalizeWithNym(PK, signature, header,
+  messages, blind_messages, prover_nyms, signer_nym_entropy,
+  secret_prover_blind, api_id);
+
+// Prover: create a proof and the pseudonym for the verifier's context_id
+const [proof, pseudonym, add_zkp_info] = await ProofGenWithNym(PK, signature,
+  header, ph, nym_secrets, context_id, messages, blind_messages,
+  message_disclosures, blind_message_disclosures, secret_prover_blind, api_id);
+
+// Verifier: also needs the pseudonym and the length of the nym vector
+const proofValid = await ProofVerifyWithNym(PK, proof, header, ph,
+  pseudonym.toBytes(true), context_id, nym_secrets.length, messages.length,
+  disclosedMessages, [...message_disclosures, ...blind_message_disclosures],
+  api_id);
 ```
 
 # API
