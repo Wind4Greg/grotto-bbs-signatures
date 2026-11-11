@@ -9,11 +9,11 @@ signature suite. There are currently three specification in this suite:
 
 All are being developed within [Crypto Forum Research Group (CFRG) of the IRTF](https://datatracker.ietf.org/rg/cfrg/about/).
 
-## Status as of 2026-11-10
+## Status as of 2026-11-11
 
 1. The `lib/BBS.js` implementation *validates* against the test vectors in the **14** draft.
 2. The `lib/BlindBBS.js` implementation was used to generate the test vectors in the current Blind BBS draft (see the `fixtures/fixture_data` directory in the [Blind BBS document repo](https://github.com/cfrg/draft-irtf-cfrg-bbs-blind-signatures)).
-3. The `lib/PseudonymsBBS.js` is currently being updated along with the draft specification and will generate updated test vectors for the specification.
+3. The `lib/PseudonymsBBS.js` has been updated along with the draft specification. This implementation was used to generate the test vectors.
 
 Note that there are other draft implementations available notably in Rust, Typescript, etc... This is a straightforward *JavaScript only* implementation with a single dependency on the [noble-curves](https://github.com/paulmillr/noble-curves) project which has a single dependency on the [noble-hash](https://github.com/paulmillr/noble-hashes) project. This implementation can be used with Node.js or in the browser. We provide Node.js based example code and you can see our [BBS Signature Demo](https://www.grotto-networking.com/BBSDemo/) where we use this library in the browser to demonstrate interactively the properties of BBS signatures.
 
