@@ -3,10 +3,11 @@
   "mockRngParameters": {
     "SEED": "3.141592653589793238462643383279",
     "commit": {
-      "DST": "BBS_BLS12381G1_XMD:SHA-256_SSWU_RO_H2G_HM2S_COMMIT_MOCK_RANDOM_SCALARS_DST_"
+      "DST": "BBS_BLS12381G1_XMD:SHA-256_SSWU_RO_H2G_HM2S_COMMIT_MOCK_RANDOM_SCALARS_DST_",
+      "count": 12
     }
   },
-  "committedMessages": [],
+  "blindMessages": [],
   "proverNyms": [
     "359a3ff97fe4554a128ccca9e4940d72776324148625064ed7f8c9e076267872",
     "31a3eef9c4f64660fd3cf4b5415c5664b0428fbb1a67e55a15fb64f679052dce",
