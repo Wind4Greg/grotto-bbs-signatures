@@ -1,5 +1,5 @@
 {
-  "caseName": "valid multiple signer and prover committed messages signature, mixed RAW and HASH messages",
+  "caseName": "Valid Multiple Blind Messages, Mixed RAW and HASH Signer Messages Signature",
   "mockRngParameters": {
     "SEED": "3.141592653589793238462643383279",
     "commit": {

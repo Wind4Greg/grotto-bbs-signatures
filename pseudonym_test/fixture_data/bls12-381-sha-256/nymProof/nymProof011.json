@@ -1,5 +1,5 @@
 {
-  "caseName": "valid signer and prover committed messages revealed and committed disclosure proof, mixed RAW and HASH messages",
+  "caseName": "Valid Blind and Signer Messages Revealed and Committed, Mixed RAW and HASH Proof",
   "mockRngParameters": {
     "SEED": "3.141592653589793238462643383279",
     "proof": {

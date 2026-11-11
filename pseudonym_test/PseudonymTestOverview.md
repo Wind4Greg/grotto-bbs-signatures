@@ -12,10 +12,10 @@ BLS12-381-SHAKE-256. Messages are `[flag, value]` pairs with flag `HASH` or
 Tests: `nymCommitTest.js` (generation), `nymValidateCommitTest.js` (signer side
 validation and a tampered commitment).
 
-1. valid no committed messages commitment with proof
-2. valid multiple committed messages commitment with proof
-3. valid no committed messages commitment with proof, 10 prover nyms
-4. valid multiple committed messages commitment with proof, 10 prover nyms
+1. Valid Zero Blind Messages, One Prover Nym Commitment with Proof
+2. Valid Multiple Blind Messages, One Prover Nym Commitment with Proof
+3. Valid Zero Blind Messages, Ten Prover Nyms Commitment with Proof
+4. Valid Multiple Blind Messages, Ten Prover Nyms Commitment with Proof
 
 ## Blind Sign with Nym, Verify and Finalize
 
@@ -30,13 +30,13 @@ the signature test vectors, which also hold `nym_secrets` and the trace of `B`
 Tests: `nymSignTest.js` (signature and trace), `nymVerifyTest.js` (nym_secrets,
 plus wrong signer_nym_entropy, wrong length prover_nyms and tampered signature).
 
-1. valid no prover committed messages, no signer messages signature
-2. valid multi prover committed messages, no signer messages signature
-3. valid no prover committed messages, multiple signer messages signature
-4. valid multiple signer and prover committed messages signature
-5. valid no prover committed messages, multiple signer messages signature, 10 nym secrets
-6. valid multiple signer and prover committed messages signature, 10 nym secrets
-7. valid multiple signer and prover committed messages signature, mixed RAW and HASH messages
+1. Valid Zero Blind Messages, Zero Signer Messages Signature
+2. Valid Multiple Blind Messages, Zero Signer Messages Signature
+3. Valid Zero Blind Messages, Multiple Signer Messages Signature
+4. Valid Multiple Blind Messages, Multiple Signer Messages Signature
+5. Valid Zero Blind Messages, Multiple Signer Messages, Ten Nym Secrets Signature
+6. Valid Multiple Blind Messages, Multiple Signer Messages, Ten Nym Secrets Signature
+7. Valid Multiple Blind Messages, Mixed RAW and HASH Signer Messages Signature
 
 ## Proof Generation and Verification with Nym
 
@@ -56,28 +56,28 @@ disclosed message and a COMMIT relabelled as HIDE.
 
 Based on signature 004 (1 nym secret):
 
-1. valid all prover committed messages and signer messages revealed proof
-2. valid half prover committed messages and all signer messages revealed proof
-3. valid all prover committed messages and half signer messages revealed proof
-4. valid half prover committed messages and half signer messages revealed proof
-5. valid no prover committed messages and half signer messages revealed proof
-6. valid half prover committed messages and no signer messages revealed proof
-7. valid no prover committed messages and no signer messages revealed proof
-8. committed disclosure of signer messages
-9. committed disclosure of prover committed messages
-10. committed disclosure of both signer and prover committed messages
+1. Valid All Blind Messages and All Signer Messages Revealed Proof
+2. Valid Half Blind Messages and All Signer Messages Revealed Proof
+3. Valid All Blind Messages and Half Signer Messages Revealed Proof
+4. Valid Half Blind Messages and Half Signer Messages Revealed Proof
+5. Valid Zero Blind Messages and Half Signer Messages Revealed Proof
+6. Valid Half Blind Messages and Zero Signer Messages Revealed Proof
+7. Valid Zero Blind Messages and Zero Signer Messages Revealed Proof
+8. Valid Half Blind Messages Revealed, Signer Messages Revealed and Committed Proof
+9. Valid Blind Messages Revealed and Committed, Half Signer Messages Revealed Proof
+10. Valid Blind and Signer Messages Revealed and Committed Proof
 
 Based on signature 007 (mixed RAW and HASH messages):
 
-11. committed disclosure of both signer and prover committed messages
+11. Valid Blind and Signer Messages Revealed and Committed, Mixed RAW and HASH Proof
 
 Based on signature 006 (10 nym secrets):
 
-101. valid all prover committed messages and signer messages revealed proof
-102. valid half prover committed messages and all signer messages revealed proof
-103. valid all prover committed messages and half signer messages revealed proof
-104. valid half prover committed messages and half signer messages revealed proof
-105. committed disclosure of both signer and prover committed messages
+101. Valid All Blind Messages and All Signer Messages Revealed Proof, Ten Nym Secrets
+102. Valid Half Blind Messages and All Signer Messages Revealed Proof, Ten Nym Secrets
+103. Valid All Blind Messages and Half Signer Messages Revealed Proof, Ten Nym Secrets
+104. Valid Half Blind Messages and Half Signer Messages Revealed Proof, Ten Nym Secrets
+105. Valid Blind and Signer Messages Revealed and Committed Proof, Ten Nym Secrets
 
 The earlier 1000 nym secret cases have been dropped from the fixtures; they
 remain in the git history.

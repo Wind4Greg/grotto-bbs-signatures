@@ -1,5 +1,5 @@
 {
-  "caseName": "valid multi prover committed messages, no signer messages signature",
+  "caseName": "Valid Multiple Blind Messages, Zero Signer Messages Signature",
   "mockRngParameters": {
     "SEED": "3.141592653589793238462643383279",
     "commit": {

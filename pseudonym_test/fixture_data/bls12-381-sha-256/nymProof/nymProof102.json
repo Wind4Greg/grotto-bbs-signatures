@@ -1,5 +1,5 @@
 {
-  "caseName": "valid half prover committed messages and all signer messages revealed proof, 10 nym secrets",
+  "caseName": "Valid Half Blind Messages and All Signer Messages Revealed Proof, Ten Nym Secrets",
   "mockRngParameters": {
     "SEED": "3.141592653589793238462643383279",
     "proof": {

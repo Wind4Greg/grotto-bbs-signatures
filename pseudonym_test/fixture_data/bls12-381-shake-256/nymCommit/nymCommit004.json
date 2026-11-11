@@ -1,5 +1,5 @@
 {
-  "caseName": "valid multiple committed messages commitment with proof, 10 prover nyms",
+  "caseName": "Valid Multiple Blind Messages, Ten Prover Nyms Commitment with Proof",
   "mockRngParameters": {
     "SEED": "3.141592653589793238462643383279",
     "commit": {
